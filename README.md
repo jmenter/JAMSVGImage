@@ -4,6 +4,7 @@ JAMSVGImage
 A class for parsing and displaying resolution independent SVG image graphics in iOS.
 
 Use JAMSVGImage and JAMSVGImageView in lots of places where you would normally use UIImage and UIImageView. The benefits of using SVG are:
+
 1. Graphics are scalable to any size
 2. Graphic file sizes tent to be much smaller
 3. Built-in "flat look" (haha)
