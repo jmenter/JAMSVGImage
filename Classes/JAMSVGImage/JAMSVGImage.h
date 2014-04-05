@@ -1,0 +1,39 @@
+/*
+ 
+ Copyright (c) 2013 Jeff Menter
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ 
+ */
+
+#import <Foundation/Foundation.h>
+
+@interface JAMSVGImage : NSObject
+
+/** Size of the SVG image, in points. This reflects the size of the 'viewBox' element of the SVG image. */
+@property (nonatomic, readonly) CGSize size;
+
+/** Scale at which the SVG image will be drawn. Default is 1.0. */
+@property (nonatomic) CGFloat scale;
+
+/** Returns a CGImageRef or UIImage of the SVG image at the current scale. */
+@property (nonatomic, readonly) CGImageRef CGImage;
+@property (nonatomic, readonly) UIImage *image;
+
+//* Initializes a new SVG image from a file or data source. */
++ (JAMSVGImage *)imageNamed:(NSString *)name;
+//+ (UIImage *)imageWithContentsOfFile:(NSString *)path;
+//+ (UIImage *)imageWithData:(NSData *)data;
+//- (id)initWithContentsOfFile:(NSString *)path;
+//- (id)initWithData:(NSData *)data;
+
+//* Draws the SVG image either in the current context, or at a specific point, or in a specific rect. */
+- (void)drawInCurrentContext;
+- (void)drawAtPoint:(CGPoint)point;
+- (void)drawInRect:(CGRect)rect;
+
+@end
