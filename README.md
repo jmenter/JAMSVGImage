@@ -1,4 +1,4 @@
 JAMSVGImage
 ===========
 
-A class for parsing and displaying SVG images in iOS.
+A class for parsing and displaying resolution independent SVG image graphics in iOS.
