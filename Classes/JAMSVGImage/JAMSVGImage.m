@@ -39,6 +39,19 @@
     return image;
 }
 
++ (JAMSVGImage *)imageWithSVGData:(NSData *)svgData;
+{
+    JAMSVGImage *image = JAMSVGImage.new;
+    JAMSVGParser *parser = [JAMSVGParser.alloc initWithSVGData:svgData];
+    if (!parser) return nil;
+    
+    [parser parseSVGDocument];
+    image.styledPaths = parser.paths;
+    image.size = parser.viewBox.size;
+    image.scale = 1;
+    return image;
+}
+
 - (UIImage *)image;
 {
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(self.size.width * self.scale,

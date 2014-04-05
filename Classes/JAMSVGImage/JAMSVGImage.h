@@ -12,6 +12,7 @@
 
 #import <Foundation/Foundation.h>
 
+/** JAMSVGImage class is used for drawing resolution-independent vector graphics from an SVG file or data. Use JAMSVGImage to draw in any graphics context (most likely your custom view's drawRect: method) or, use it to populate a JAMSVGImageView and enjoy resolution-independent graphics at any size anywhere in your app! */
 @interface JAMSVGImage : NSObject
 
 /** Size of the SVG image, in points. This reflects the size of the 'viewBox' element of the SVG document. */
@@ -27,9 +28,7 @@
 //* Initializes a new SVG image from a file or data source. */
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 + (JAMSVGImage *)imageWithContentsOfFile:(NSString *)path;
-//+ (UIImage *)imageWithData:(NSData *)data;
-//- (id)initWithContentsOfFile:(NSString *)path;
-//- (id)initWithData:(NSData *)data;
++ (JAMSVGImage *)imageWithSVGData:(NSData *)svgData;
 
 //* Draws the SVG image either in the current context, or at a specific point, or in a specific rect. */
 - (void)drawInCurrentContext;

@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013 Jeff Menter
+ Copyright (c) 2014 Jeff Menter
  
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  
@@ -20,24 +20,6 @@
 @end
 
 @implementation JAMSVGParser
-
-+ (NSArray *)parseFileNamed:(NSString *)fileName;
-{
-    JAMSVGParser *svgParser = [JAMSVGParser.alloc initWithSVGDocument:[NSBundle.mainBundle pathForResource:fileName ofType:@"svg"]];
-    if ([svgParser parseSVGDocument])
-        return svgParser.paths;
-
-    return nil;
-}
-
-+ (NSArray *)parseData:(NSData *)data;
-{
-    JAMSVGParser *svgParser = [JAMSVGParser.alloc initWithSVGData:data];
-    if ([svgParser parseSVGDocument])
-        return svgParser.paths;
-    
-    return nil;
-}
 
 - (id)initWithSVGDocument:(NSString *)path;
 {

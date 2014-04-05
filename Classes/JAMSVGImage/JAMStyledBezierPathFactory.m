@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013 Jeff Menter
+ Copyright (c) 2014 Jeff Menter
  
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  
@@ -12,6 +12,13 @@
 
 #import "JAMStyledBezierPathFactory.h"
 #import "JAMStyledBezierPath.h"
+
+@interface JAMStyledBezierPath (Private)
+@property (nonatomic) UIBezierPath *path;
+@property (nonatomic) UIColor *fillColor;
+@property (nonatomic) UIColor *strokeColor;
+@end
+
 
 @interface UIColor (HexUtilities)
 + (UIColor *)colorFromHexString:(NSString *)hexString;
@@ -175,6 +182,8 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 @implementation JAMStyledBezierPathFactory
 
+#pragma mark - Main Factory
+
 - (JAMStyledBezierPath *)styledPathFromElementName:(NSString *)elementName attributes:(NSDictionary *)attributes;
 {
     if ([elementName isEqualToString:@"circle"])
@@ -251,16 +260,46 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     return [self createStyledPath:path withAttributes:attributes];
 }
 
+#pragma mark - Styled Path Creation Methods
+
 - (JAMStyledBezierPath *)createStyledPath:(UIBezierPath *)path withAttributes:(NSDictionary *)attributes;
 {
-    return [JAMStyledBezierPath styledPathWithBezierPath:path
-                                        fillColor:[attributes fillColorForKey:@"fill"]
-                                      strokeColor:[attributes strokeColorForKey:@"stroke"]
-                                     strokeWeight:[attributes strokeWeightForKey:@"stroke-width"]
-                                        dashArray:[attributes dashArrayForKey:@"stroke-dasharray"]
-                                       miterLimit:[attributes miterLimitForKey:@"stroke-miterlimit"]
-                                     lineCapStyle:[attributes lineCapForKey:@"stroke-linecap"]
-                                    lineJoinStyle:[attributes lineJoinForKey:@"stroke-linejoin"]];
+    return [self styledPathWithBezierPath:path
+                                fillColor:[attributes fillColorForKey:@"fill"]
+                              strokeColor:[attributes strokeColorForKey:@"stroke"]
+                             strokeWeight:[attributes strokeWeightForKey:@"stroke-width"]
+                                dashArray:[attributes dashArrayForKey:@"stroke-dasharray"]
+                               miterLimit:[attributes miterLimitForKey:@"stroke-miterlimit"]
+                             lineCapStyle:[attributes lineCapForKey:@"stroke-linecap"]
+                            lineJoinStyle:[attributes lineJoinForKey:@"stroke-linejoin"]];
+}
+
+- (JAMStyledBezierPath *)styledPathWithBezierPath:(UIBezierPath *)bezierPath
+                                        fillColor:(UIColor *)fillColor
+                                      strokeColor:(UIColor *)strokeColor
+                                     strokeWeight:(CGFloat)strokeWeight
+                                        dashArray:(NSArray *)dashArray
+                                       miterLimit:(CGFloat)miterLimit
+                                     lineCapStyle:(CGLineCap)lineCapStyle
+                                    lineJoinStyle:(CGLineJoin)lineJoinStyle;
+{
+    JAMStyledBezierPath *styledBezierPath = JAMStyledBezierPath.new;
+    styledBezierPath.fillColor = fillColor;
+    styledBezierPath.strokeColor = strokeColor;
+    
+    styledBezierPath.path = bezierPath;
+    styledBezierPath.path.lineWidth = strokeWeight;
+    styledBezierPath.path.miterLimit = miterLimit;
+    styledBezierPath.path.lineJoinStyle = lineJoinStyle;
+    styledBezierPath.path.lineCapStyle = lineCapStyle;
+    if (dashArray) {
+        CGFloat values[dashArray.count];
+        for (int i = 0; i < dashArray.count; i++) {
+            values[i] = [dashArray[i] floatValue];
+        }
+        [styledBezierPath.path setLineDash:values count:dashArray.count phase:0.f];
+    }
+    return styledBezierPath;
 }
 
 #pragma mark - Command List Methods
@@ -332,7 +371,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)addMoveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint moveToPoint;
+    CGPoint moveToPoint = CGPointZero;
     [commandScanner scanPoint:&moveToPoint];
     
     if ([commandScanner.initialCharacter isEqualToString:@"m"])
@@ -342,7 +381,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)addLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint lineToPoint;
+    CGPoint lineToPoint = CGPointZero;
     [commandScanner scanPoint:&lineToPoint];
     
     if ([commandScanner.initialCharacter isEqualToString:@"l"])
@@ -376,9 +415,9 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)addCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint curveToPoint;
-    CGPoint controlPoint1;
-    CGPoint controlPoint2;
+    CGPoint curveToPoint = CGPointZero;
+    CGPoint controlPoint1 = CGPointZero;
+    CGPoint controlPoint2 = CGPointZero;
     [commandScanner scanPoint:&controlPoint1];
     [commandScanner scanPoint:&controlPoint2];
     [commandScanner scanPoint:&curveToPoint];
@@ -396,8 +435,8 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 {
     CGPoint smoothedPrevious = CGPointSubtractPoints(path.currentPoint, self.previousControlPoint);
     CGPoint controlPoint1 = CGPointAddPoints(path.currentPoint, smoothedPrevious);
-    CGPoint controlPoint2;
-    CGPoint curveToPoint;
+    CGPoint controlPoint2 = CGPointZero;
+    CGPoint curveToPoint = CGPointZero;
     [commandScanner scanPoint:&controlPoint2];
     [commandScanner scanPoint:&curveToPoint];
     
@@ -411,8 +450,8 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)addQuadCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint controlPoint;
-    CGPoint quadCurveToPoint;
+    CGPoint controlPoint = CGPointZero;
+    CGPoint quadCurveToPoint = CGPointZero;
     [commandScanner scanPoint:&controlPoint];
     [commandScanner scanPoint:&quadCurveToPoint];
     

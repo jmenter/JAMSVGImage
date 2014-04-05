@@ -13,7 +13,6 @@
 		63A36B3718EF512F00AE444E /* JAMSVGParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B3318EF512F00AE444E /* JAMSVGParser.m */; };
 		63A36B3A18EF67A300AE444E /* JAMSVGImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B3918EF67A300AE444E /* JAMSVGImageView.m */; };
 		63A36B3C18EF8D9B00AE444E /* face.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63A36B3B18EF8D9B00AE444E /* face.svg */; };
-		63A36B3F18EF8EC600AE444E /* JAMView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B3E18EF8EC600AE444E /* JAMView.m */; };
 		63A36B4118EF8F8800AE444E /* tiger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63A36B4018EF8F8800AE444E /* tiger.svg */; };
 		63D2067718EF501F00FAC851 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D2067618EF501F00FAC851 /* Foundation.framework */; };
 		63D2067918EF501F00FAC851 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D2067818EF501F00FAC851 /* CoreGraphics.framework */; };
@@ -37,8 +36,6 @@
 		63A36B3818EF67A300AE444E /* JAMSVGImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMSVGImageView.h; sourceTree = "<group>"; };
 		63A36B3918EF67A300AE444E /* JAMSVGImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMSVGImageView.m; sourceTree = "<group>"; };
 		63A36B3B18EF8D9B00AE444E /* face.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = face.svg; sourceTree = "<group>"; };
-		63A36B3D18EF8EC600AE444E /* JAMView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMView.h; sourceTree = "<group>"; };
-		63A36B3E18EF8EC600AE444E /* JAMView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMView.m; sourceTree = "<group>"; };
 		63A36B4018EF8F8800AE444E /* tiger.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tiger.svg; sourceTree = "<group>"; };
 		63D2067318EF501F00FAC851 /* JAMSVGImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JAMSVGImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63D2067618EF501F00FAC851 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -131,8 +128,6 @@
 				63D2068618EF501F00FAC851 /* JAMAppDelegate.m */,
 				63D2068E18EF501F00FAC851 /* JAMViewController.h */,
 				63D2068F18EF501F00FAC851 /* JAMViewController.m */,
-				63A36B3D18EF8EC600AE444E /* JAMView.h */,
-				63A36B3E18EF8EC600AE444E /* JAMView.m */,
 				63D2069118EF501F00FAC851 /* Images.xcassets */,
 				63D2067D18EF501F00FAC851 /* Supporting Files */,
 			);
@@ -219,7 +214,6 @@
 			files = (
 				63A36B3518EF512F00AE444E /* JAMStyledBezierPathFactory.m in Sources */,
 				63D2068318EF501F00FAC851 /* main.m in Sources */,
-				63A36B3F18EF8EC600AE444E /* JAMView.m in Sources */,
 				63A36B3A18EF67A300AE444E /* JAMSVGImageView.m in Sources */,
 				63A36B3618EF512F00AE444E /* JAMSVGImage.m in Sources */,
 				63D2068718EF501F00FAC851 /* JAMAppDelegate.m in Sources */,

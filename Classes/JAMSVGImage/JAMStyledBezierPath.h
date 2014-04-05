@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013 Jeff Menter
+ Copyright (c) 2014 Jeff Menter
  
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  
@@ -12,18 +12,10 @@
 
 #import <Foundation/Foundation.h>
 
+/** The JAMStyledBezierPath class encapsulates a UIBezierPath object and styling information (fill, stroke, etc.) */
 @interface JAMStyledBezierPath : NSObject
 
-+ (JAMStyledBezierPath *)styledPathWithBezierPath:(UIBezierPath *)bezierPath
-                                        fillColor:(UIColor *)fillColor
-                                      strokeColor:(UIColor *)strokeColor
-                                     strokeWeight:(CGFloat)strokeWeight
-                                        dashArray:(NSArray *)dashArray
-                                       miterLimit:(CGFloat)miterLimit
-                                     lineCapStyle:(CGLineCap)lineCapStyle
-                                    lineJoinStyle:(CGLineJoin)lineJoinStyle;
-
-// Draws the styled path in the current graphics context.
+/** Draws the styled path in the current graphics context. */
 - (void)drawStyledPath;
 
 @end

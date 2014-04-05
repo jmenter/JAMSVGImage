@@ -1,6 +1,6 @@
 /*
  
- Copyright (c) 2013 Jeff Menter
+ Copyright (c) 2014 Jeff Menter
  
  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  
@@ -14,9 +14,10 @@
 
 @class JAMStyledBezierPath;
 
+/** The JAMStyledBezierPathFactory takes SVG element names and attributes from the SVG parser and generates JAMStyledBezierPaths. */
 @interface JAMStyledBezierPathFactory : NSObject
 
-// Generates a JMStyledPath based on the elementName and attributes from the JMSVGParser.
+/** Generates a JMStyledPath based on the elementName and attributes from the JMSVGParser. */
 - (JAMStyledBezierPath *)styledPathFromElementName:(NSString *)elementName attributes:(NSDictionary *)attributes;
 
 @end
