@@ -151,8 +151,8 @@
 
 - (BOOL)scanPoint:(CGPoint *)point;
 {
-    CGFloat xCoord;
-    CGFloat yCoord;
+    float xCoord;
+    float yCoord;
     [self conditionallyIncrement];
     BOOL didScanX = [self scanFloat:&xCoord];
     [self conditionallyIncrement];
@@ -391,10 +391,10 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)addHorizontalLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint horizontalLineToPoint;
+    float xPosition;
     [commandScanner conditionallyIncrement];
-    [commandScanner scanFloat:&horizontalLineToPoint.x];
-    horizontalLineToPoint.y = path.currentPoint.y;
+    [commandScanner scanFloat:&xPosition];
+    CGPoint horizontalLineToPoint = CGPointMake(xPosition, path.currentPoint.y);
     
     if ([commandScanner.initialCharacter isEqualToString:@"h"])
         horizontalLineToPoint.x += path.currentPoint.x;
@@ -403,10 +403,10 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)addVerticalLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint verticalLineToPoint;
+    float yPosition;
     [commandScanner conditionallyIncrement];
-    [commandScanner scanFloat:&verticalLineToPoint.y];
-    verticalLineToPoint.x = path.currentPoint.x;
+    [commandScanner scanFloat:&yPosition];
+    CGPoint verticalLineToPoint = CGPointMake(path.currentPoint.x, yPosition);
     
     if ([commandScanner.initialCharacter isEqualToString:@"v"])
         verticalLineToPoint.y += path.currentPoint.y;

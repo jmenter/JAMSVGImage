@@ -46,11 +46,6 @@
     JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
     self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.svgImageView.layer.shadowColor = UIColor.blackColor.CGColor;
-    self.svgImageView.layer.shadowRadius = 5;
-    self.svgImageView.layer.shadowOpacity = 0.5;
-    self.svgImageView.layer.shadowOffset = CGSizeMake(0, 2.5);
-    self.svgImageView.clipsToBounds = YES;
     [self.view addSubview:self.svgImageView];
 }
 

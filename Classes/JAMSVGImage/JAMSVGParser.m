@@ -65,15 +65,15 @@
 
 - (void)parseRootElement:(NSDictionary *)attributeDict;
 {
-    CGRect viewBox = CGRectZero;
-    
+    float xPosition, yPosition, width, height;
     NSScanner *viewBoxScanner = [NSScanner scannerWithString:attributeDict[@"viewBox"]];
-    [viewBoxScanner scanFloat:&viewBox.origin.x];
-    [viewBoxScanner scanFloat:&viewBox.origin.y];
-    [viewBoxScanner scanFloat:&viewBox.size.width];
-    [viewBoxScanner scanFloat:&viewBox.size.height];
+    
+    [viewBoxScanner scanFloat:&xPosition];
+    [viewBoxScanner scanFloat:&yPosition];
+    [viewBoxScanner scanFloat:&width];
+    [viewBoxScanner scanFloat:&height];
 
-    self.viewBox = viewBox;
+    self.viewBox = CGRectMake(xPosition, yPosition, width, height);
 }
 
 @end
