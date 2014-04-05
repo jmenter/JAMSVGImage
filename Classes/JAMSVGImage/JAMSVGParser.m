@@ -65,6 +65,8 @@
 
 - (void)parseRootElement:(NSDictionary *)attributeDict;
 {
+    if (!attributeDict[@"viewBox"]) return;
+
     float xPosition, yPosition, width, height;
     NSScanner *viewBoxScanner = [NSScanner scannerWithString:attributeDict[@"viewBox"]];
     
