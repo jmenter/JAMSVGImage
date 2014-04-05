@@ -4,6 +4,9 @@
 #import "JAMSVGImage.h"
 #import "JAMSVGImageView.h"
 
+@interface JAMViewController ()
+@property (nonatomic) JAMSVGImageView *svgImageView;
+@end
 @implementation JAMViewController
 
 - (void)viewDidLoad
@@ -19,10 +22,16 @@
 {
     [super viewWillAppear:animated];
     
-    JAMSVGImage *svgImage = [JAMSVGImage imageNamed:@"face"];
-    JAMSVGImageView *svgImageView = [JAMSVGImageView.alloc initWithSVGImage:[JAMSVGImage imageNamed:@"face"]];
-    svgImageView.frame = CGRectMake(20, 20, svgImage.size.width, svgImage.size.height);
-    [self.view addSubview:svgImageView];
+    JAMSVGImage *svgImage = [JAMSVGImage imageNamed:@"tiger"];
+    self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
+    self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [self.view addSubview:self.svgImageView];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    self.svgImageView.frame = CGRectMake(0, 0, [touch locationInView:self.view].x, [touch locationInView:self.view].y);
 }
 
 @end

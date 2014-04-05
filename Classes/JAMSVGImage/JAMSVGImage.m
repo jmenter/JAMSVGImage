@@ -23,14 +23,15 @@
 
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 {
-    JAMSVGImage *image = JAMSVGImage.new;
-    
-    NSString *svgDocumentPath = [NSBundle.mainBundle pathForResource:name ofType:@"svg"];
-    if (!svgDocumentPath) return nil;
-    
-    JAMSVGParser *parser = [JAMSVGParser.alloc initWithSVGDocument:svgDocumentPath];
-    if (!parser) return nil;
+    return [JAMSVGImage imageWithContentsOfFile:[NSBundle.mainBundle pathForResource:name ofType:@"svg"]];
+}
 
++ (JAMSVGImage *)imageWithContentsOfFile:(NSString *)path;
+{
+    JAMSVGImage *image = JAMSVGImage.new;
+    JAMSVGParser *parser = [JAMSVGParser.alloc initWithSVGDocument:path];
+    if (!parser) return nil;
+    
     [parser parseSVGDocument];
     image.styledPaths = parser.paths;
     image.size = parser.viewBox.size;

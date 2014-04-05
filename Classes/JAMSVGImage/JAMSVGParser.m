@@ -30,11 +30,31 @@
     return nil;
 }
 
++ (NSArray *)parseData:(NSData *)data;
+{
+    JAMSVGParser *svgParser = [JAMSVGParser.alloc initWithSVGData:data];
+    if ([svgParser parseSVGDocument])
+        return svgParser.paths;
+    
+    return nil;
+}
+
 - (id)initWithSVGDocument:(NSString *)path;
 {
     if (!(self = [super init])) return nil;
     
     self.xmlParser = [NSXMLParser.alloc initWithContentsOfURL:[NSURL fileURLWithPath:path]];
+    self.xmlParser.delegate = self;
+    self.paths = NSMutableArray.new;
+    self.pathFactory = JAMStyledBezierPathFactory.new;
+    return self;
+}
+
+- (id)initWithSVGData:(NSData *)data;
+{
+    if (!(self = [super init])) return nil;
+    
+    self.xmlParser = [NSXMLParser.alloc initWithData:data];
     self.xmlParser.delegate = self;
     self.paths = NSMutableArray.new;
     self.pathFactory = JAMStyledBezierPathFactory.new;

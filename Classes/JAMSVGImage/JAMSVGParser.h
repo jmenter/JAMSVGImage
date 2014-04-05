@@ -19,8 +19,12 @@
 
 // Parses SVG document with name and returns array of JMStyledPaths.
 + (NSArray *)parseFileNamed:(NSString *)fileName;
++ (NSArray *)parseData:(NSData *)data;
 
+/** Initializers for file path and data. These should not be used. The SVGImage and SVGImageView use the class methods above to do their work. */
 - (id)initWithSVGDocument:(NSString *)path;
+- (id)initWithSVGData:(NSData *)data;
+
 - (BOOL)parseSVGDocument;
 
 @end
