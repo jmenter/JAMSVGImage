@@ -31,7 +31,7 @@
     JAMSVGParser *parser = [JAMSVGParser.alloc initWithSVGDocument:svgDocumentPath];
     if (!parser) return nil;
 
-    [parser parse];
+    [parser parseSVGDocument];
     image.styledPaths = parser.paths;
     image.size = parser.viewBox.size;
     image.scale = 1;

@@ -21,6 +21,6 @@
 + (NSArray *)parseFileNamed:(NSString *)fileName;
 
 - (id)initWithSVGDocument:(NSString *)path;
-- (BOOL)parse;
+- (BOOL)parseSVGDocument;
 
 @end

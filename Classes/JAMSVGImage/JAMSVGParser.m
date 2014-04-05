@@ -24,7 +24,7 @@
 + (NSArray *)parseFileNamed:(NSString *)fileName;
 {
     JAMSVGParser *svgParser = [JAMSVGParser.alloc initWithSVGDocument:[NSBundle.mainBundle pathForResource:fileName ofType:@"svg"]];
-    if ([svgParser parse])
+    if ([svgParser parseSVGDocument])
         return svgParser.paths;
 
     return nil;
@@ -41,7 +41,7 @@
     return self;
 }
 
-- (BOOL)parse;
+- (BOOL)parseSVGDocument;
 {
     BOOL didSucceed = [self.xmlParser parse];
     if (self.xmlParser.parserError)

@@ -14,7 +14,7 @@
 
 @interface JAMSVGImage : NSObject
 
-/** Size of the SVG image, in points. This reflects the size of the 'viewBox' element of the SVG image. */
+/** Size of the SVG image, in points. This reflects the size of the 'viewBox' element of the SVG document. */
 @property (nonatomic, readonly) CGSize size;
 
 /** Scale at which the SVG image will be drawn. Default is 1.0. */
