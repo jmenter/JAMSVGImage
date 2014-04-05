@@ -21,8 +21,6 @@
 		63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 63D2067F18EF501F00FAC851 /* InfoPlist.strings */; };
 		63D2068318EF501F00FAC851 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D2068218EF501F00FAC851 /* main.m */; };
 		63D2068718EF501F00FAC851 /* JAMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D2068618EF501F00FAC851 /* JAMAppDelegate.m */; };
-		63D2068A18EF501F00FAC851 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63D2068818EF501F00FAC851 /* Main_iPhone.storyboard */; };
-		63D2068D18EF501F00FAC851 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63D2068B18EF501F00FAC851 /* Main_iPad.storyboard */; };
 		63D2069018EF501F00FAC851 /* JAMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D2068F18EF501F00FAC851 /* JAMViewController.m */; };
 		63D2069218EF501F00FAC851 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63D2069118EF501F00FAC851 /* Images.xcassets */; };
 /* End PBXBuildFile section */
@@ -52,8 +50,6 @@
 		63D2068418EF501F00FAC851 /* JAMSVGImage-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "JAMSVGImage-Prefix.pch"; sourceTree = "<group>"; };
 		63D2068518EF501F00FAC851 /* JAMAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JAMAppDelegate.h; sourceTree = "<group>"; };
 		63D2068618EF501F00FAC851 /* JAMAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JAMAppDelegate.m; sourceTree = "<group>"; };
-		63D2068918EF501F00FAC851 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		63D2068C18EF501F00FAC851 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		63D2068E18EF501F00FAC851 /* JAMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JAMViewController.h; sourceTree = "<group>"; };
 		63D2068F18EF501F00FAC851 /* JAMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JAMViewController.m; sourceTree = "<group>"; };
 		63D2069118EF501F00FAC851 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -133,8 +129,6 @@
 				63A36B4018EF8F8800AE444E /* tiger.svg */,
 				63D2068518EF501F00FAC851 /* JAMAppDelegate.h */,
 				63D2068618EF501F00FAC851 /* JAMAppDelegate.m */,
-				63D2068818EF501F00FAC851 /* Main_iPhone.storyboard */,
-				63D2068B18EF501F00FAC851 /* Main_iPad.storyboard */,
 				63D2068E18EF501F00FAC851 /* JAMViewController.h */,
 				63D2068F18EF501F00FAC851 /* JAMViewController.m */,
 				63A36B3D18EF8EC600AE444E /* JAMView.h */,
@@ -209,11 +203,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63D2068D18EF501F00FAC851 /* Main_iPad.storyboard in Resources */,
 				63D2069218EF501F00FAC851 /* Images.xcassets in Resources */,
 				63A36B4118EF8F8800AE444E /* tiger.svg in Resources */,
 				63A36B3C18EF8D9B00AE444E /* face.svg in Resources */,
-				63D2068A18EF501F00FAC851 /* Main_iPhone.storyboard in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,22 +238,6 @@
 				63D2068018EF501F00FAC851 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		63D2068818EF501F00FAC851 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				63D2068918EF501F00FAC851 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		63D2068B18EF501F00FAC851 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				63D2068C18EF501F00FAC851 /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
