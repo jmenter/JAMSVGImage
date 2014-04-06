@@ -45,7 +45,7 @@
     NSData *cloudData = [self.cloudString dataUsingEncoding:NSUTF8StringEncoding];
     JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
-    self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
+    self.svgImageView.contentMode = UIViewContentModeScaleToFill;
     [self.view addSubview:self.svgImageView];
 }
 
