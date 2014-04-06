@@ -5,11 +5,11 @@ A class for parsing and displaying resolution independent SVG image graphics in 
 
 Use JAMSVGImage and JAMSVGImageView in lots of places where you would normally use UIImage and UIImageView. The benefits of using SVG are:
 
-1. Graphics are scalable to any size
-2. Graphic file sizes tent to be much smaller
+1. Graphics are scalable and maintain quality at any size
+2. Graphic file sizes tend to be much smaller
 3. Built-in "flat look" (haha)
 
-There are two main ways to use this. The first is to simply create a new JMSVGImage object and use the drawing methods, like so:
+There are two main ways to use these classes. The first is to simply create a new JMSVGImage object and use the drawing methods, like so:
 
     JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
     [tiger drawInCurrentContext];
@@ -21,13 +21,13 @@ The second way to use is to put the JMSVGImage in a JMSVGImageView and add that 
     JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
     JAMSVGImageView *tigerImageView = [JAMSVGImageView.alloc initWithSVGImage:tiger];
     tigerImageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.view addSubview:self.tigerImageView];
+    [self.view addSubview:tigerImageView];
 
-This creates a JAMSVGImageView, pupulated with the tiger svg, sets the contentMode, and adds it to the view heirarchy. The JAMSVGImageView respects all UIViewContentMode types and draws itself in high-resolution no matter what size the view is scaled to.
+This creates a JAMSVGImageView, populated with the tiger svg, sets the contentMode, and adds it to the view heirarchy. The JAMSVGImageView respects all UIViewContentMode types and draws itself in high-resolution no matter what size the view is scaled to.
 
 You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef.
 
-Note: the parser only supports the most common subset of graphics primitives. Supported shapes/features:
+Note: the parser only supports the common subset of graphics primitives. Supported shapes/features:
 
 Shape Primitives:
 - Circle
