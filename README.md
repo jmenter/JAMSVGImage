@@ -27,7 +27,7 @@ This creates a JAMSVGImageView, populated with the tiger svg, sets the contentMo
 
 You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef.
 
-Note: the parser only supports the common subset of graphics primitives. Supported shapes/features:
+Note: the parser only supports the common subset of graphics primitives and assumes points for the length units. Supported shapes/features:
 
 Shape Primitives:
 - Circle
