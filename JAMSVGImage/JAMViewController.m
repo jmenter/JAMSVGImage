@@ -16,11 +16,11 @@
     [tiger drawInRect:CGRectMake(100, 100, 500, 20)];
     
     // Get a low res image from the svg and blow that up, shows what happens when you upsize raster images.
-    JAMSVGImage *face = [JAMSVGImage imageNamed:@"face"];
-    face.scale = 0.5;
-    UIImage *faceImage = face.image;
-    
-    [faceImage drawInRect:CGRectMake(150, 150, 256, 256)];
+//    JAMSVGImage *face = [JAMSVGImage imageNamed:@"gradients"];
+//    face.scale = 0.5;
+//    UIImage *faceImage = face.image;
+//    
+//    [faceImage drawInRect:CGRectMake(150, 150, 256, 256)];
 }
 @end
 
@@ -44,6 +44,7 @@
     [super viewWillAppear:animated];
     NSData *cloudData = [self.cloudString dataUsingEncoding:NSUTF8StringEncoding];
     JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
+    svgImage = [JAMSVGImage imageNamed:@"moreGradients"];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
     self.svgImageView.contentMode = UIViewContentModeScaleToFill;
     [self.view addSubview:self.svgImageView];

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		638E660418F31163007A2EAA /* gradients.svg in Resources */ = {isa = PBXBuildFile; fileRef = 638E660318F31163007A2EAA /* gradients.svg */; };
+		638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */ = {isa = PBXBuildFile; fileRef = 638E660618F39529007A2EAA /* JAMSVGGradientParts.m */; };
+		638E660918F3AD8F007A2EAA /* moreGradients.svg in Resources */ = {isa = PBXBuildFile; fileRef = 638E660818F3AD8F007A2EAA /* moreGradients.svg */; };
 		63A36B3418EF512F00AE444E /* JAMStyledBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B2D18EF512F00AE444E /* JAMStyledBezierPath.m */; };
 		63A36B3518EF512F00AE444E /* JAMStyledBezierPathFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B2F18EF512F00AE444E /* JAMStyledBezierPathFactory.m */; };
 		63A36B3618EF512F00AE444E /* JAMSVGImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B3118EF512F00AE444E /* JAMSVGImage.m */; };
@@ -25,6 +28,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		638E660318F31163007A2EAA /* gradients.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gradients.svg; sourceTree = "<group>"; };
+		638E660518F39529007A2EAA /* JAMSVGGradientParts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMSVGGradientParts.h; sourceTree = "<group>"; };
+		638E660618F39529007A2EAA /* JAMSVGGradientParts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMSVGGradientParts.m; sourceTree = "<group>"; };
+		638E660818F3AD8F007A2EAA /* moreGradients.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = moreGradients.svg; sourceTree = "<group>"; };
 		63A36B2C18EF512F00AE444E /* JAMStyledBezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMStyledBezierPath.h; sourceTree = "<group>"; };
 		63A36B2D18EF512F00AE444E /* JAMStyledBezierPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMStyledBezierPath.m; sourceTree = "<group>"; };
 		63A36B2E18EF512F00AE444E /* JAMStyledBezierPathFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMStyledBezierPathFactory.h; sourceTree = "<group>"; };
@@ -87,6 +94,8 @@
 				63A36B2D18EF512F00AE444E /* JAMStyledBezierPath.m */,
 				63A36B2E18EF512F00AE444E /* JAMStyledBezierPathFactory.h */,
 				63A36B2F18EF512F00AE444E /* JAMStyledBezierPathFactory.m */,
+				638E660518F39529007A2EAA /* JAMSVGGradientParts.h */,
+				638E660618F39529007A2EAA /* JAMSVGGradientParts.m */,
 			);
 			path = JAMSVGImage;
 			sourceTree = "<group>";
@@ -122,6 +131,8 @@
 		63D2067C18EF501F00FAC851 /* JAMSVGImage */ = {
 			isa = PBXGroup;
 			children = (
+				638E660818F3AD8F007A2EAA /* moreGradients.svg */,
+				638E660318F31163007A2EAA /* gradients.svg */,
 				63A36B3B18EF8D9B00AE444E /* face.svg */,
 				63A36B4018EF8F8800AE444E /* tiger.svg */,
 				63D2068518EF501F00FAC851 /* JAMAppDelegate.h */,
@@ -199,6 +210,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				63D2069218EF501F00FAC851 /* Images.xcassets in Resources */,
+				638E660918F3AD8F007A2EAA /* moreGradients.svg in Resources */,
+				638E660418F31163007A2EAA /* gradients.svg in Resources */,
 				63A36B4118EF8F8800AE444E /* tiger.svg in Resources */,
 				63A36B3C18EF8D9B00AE444E /* face.svg in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,
@@ -219,6 +232,7 @@
 				63D2068718EF501F00FAC851 /* JAMAppDelegate.m in Sources */,
 				63A36B3418EF512F00AE444E /* JAMStyledBezierPath.m in Sources */,
 				63D2069018EF501F00FAC851 /* JAMViewController.m in Sources */,
+				638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */,
 				63A36B3718EF512F00AE444E /* JAMSVGParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

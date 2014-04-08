@@ -27,6 +27,8 @@
     
     self.xmlParser = [NSXMLParser.alloc initWithContentsOfURL:[NSURL fileURLWithPath:path]];
     self.xmlParser.delegate = self;
+    self.xmlParser.shouldProcessNamespaces = YES;
+    self.xmlParser.shouldReportNamespacePrefixes = YES;
     self.paths = NSMutableArray.new;
     self.pathFactory = JAMStyledBezierPathFactory.new;
     return self;
@@ -56,6 +58,10 @@
 {
     if ([elementName isEqualToString:@"svg"]) {
         [self parseRootElement:attributeDict];
+        return;
+    }
+    if ([elementName isEqualToString:@"stop"]) {
+        [self.pathFactory addGradientStopWithAttributes:attributeDict];
         return;
     }
     JAMStyledBezierPath *path = [self.pathFactory styledPathFromElementName:elementName attributes:attributeDict];
