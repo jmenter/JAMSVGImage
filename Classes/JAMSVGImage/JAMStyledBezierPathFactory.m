@@ -235,10 +235,35 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     [lastGradient.colorStops addObject:colorStop];
 }
 
+- (CGRect)getViewboxFromAttributes:(NSDictionary *)attributes;
+{
+    if (!attributes[@"viewBox"]) return CGRectZero;
+    
+    float xPosition, yPosition, width, height;
+    NSScanner *viewBoxScanner = [NSScanner scannerWithString:attributes[@"viewBox"]];
+    
+    [viewBoxScanner scanFloat:&xPosition];
+    [viewBoxScanner scanFloat:&yPosition];
+    [viewBoxScanner scanFloat:&width];
+    [viewBoxScanner scanFloat:&height];
+    
+    return CGRectMake(xPosition, yPosition, width, height);
+}
+
 - (UIColor *)parseStyleColor:(NSString *)styleColor;
 {
-    NSString *justColor = [styleColor stringByReplacingOccurrencesOfString:@"stop-color:" withString:@""];
-    return [UIColor colorFromHexString:justColor];
+    UIColor *color;
+    NSScanner *colorScanner = [NSScanner scannerWithString:styleColor];
+    if ([colorScanner scanString:@"stop-color:" intoString:NULL]) {
+        color = [UIColor colorFromHexString:[styleColor substringFromIndex:colorScanner.scanLocation]];
+    };
+    if ([colorScanner scanUpToString:@"stop-opacity:" intoString:NULL]) {
+        [colorScanner scanString:@"stop-opacity:" intoString:NULL];
+        float opacity = 1;
+        [colorScanner scanFloat:&opacity];
+        color = [color colorWithAlphaComponent:opacity];
+    }
+    return color;
 }
 
 - (void)saveLinearGradient:(NSDictionary *)attributes;
@@ -247,6 +272,9 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     gradient.identifier = attributes[@"id"];
     gradient.startPosition = CGPointMake([attributes[@"x1"] floatValue], [attributes[@"y1"] floatValue]);
     gradient.endPosition = CGPointMake([attributes[@"x2"] floatValue], [attributes[@"y2"] floatValue]);
+    if (attributes[@"gradientTransform"]) {
+        gradient.gradientTransform = [NSValue valueWithCGAffineTransform:[self transformFromString:attributes[@"gradientTransform"]]];
+    }
     [self.gradients addObject:gradient];
 }
 
@@ -256,7 +284,24 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     gradient.identifier = attributes[@"id"];
     gradient.position = CGPointMake([attributes[@"cx"] floatValue], [attributes[@"cy"] floatValue]);
     gradient.radius = [attributes[@"r"] floatValue];
+    if (attributes[@"gradientTransform"]) {
+        gradient.gradientTransform = [NSValue valueWithCGAffineTransform:[self transformFromString:attributes[@"gradientTransform"]]];
+    }
     [self.gradients addObject:gradient];
+}
+
+- (CGAffineTransform)transformFromString:(NSString *)string;
+{
+    float a, b, c, d, tx, ty;
+    NSScanner *floatScanner = [NSScanner scannerWithString:string];
+    [floatScanner scanString:@"matrix(" intoString:NULL];
+    [floatScanner scanFloat:&a];
+    [floatScanner scanFloat:&b];
+    [floatScanner scanFloat:&c];
+    [floatScanner scanFloat:&d];
+    [floatScanner scanFloat:&tx];
+    [floatScanner scanFloat:&ty];
+    return CGAffineTransformMake(a, b, c, d, tx, ty);
 }
 
 #pragma mark - Basic Element Factory Methods

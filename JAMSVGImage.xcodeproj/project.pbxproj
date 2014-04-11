@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		633FDA7F18F4368900C8BEC4 /* curvy.svg in Resources */ = {isa = PBXBuildFile; fileRef = 633FDA7E18F4368900C8BEC4 /* curvy.svg */; };
+		6347286218F87BF9003E02E0 /* gradient.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6347286118F87BF9003E02E0 /* gradient.svg */; };
 		638E660418F31163007A2EAA /* gradients.svg in Resources */ = {isa = PBXBuildFile; fileRef = 638E660318F31163007A2EAA /* gradients.svg */; };
 		638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */ = {isa = PBXBuildFile; fileRef = 638E660618F39529007A2EAA /* JAMSVGGradientParts.m */; };
 		638E660918F3AD8F007A2EAA /* moreGradients.svg in Resources */ = {isa = PBXBuildFile; fileRef = 638E660818F3AD8F007A2EAA /* moreGradients.svg */; };
@@ -28,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		633FDA7E18F4368900C8BEC4 /* curvy.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = curvy.svg; sourceTree = "<group>"; };
+		6347286118F87BF9003E02E0 /* gradient.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gradient.svg; sourceTree = "<group>"; };
 		638E660318F31163007A2EAA /* gradients.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = gradients.svg; sourceTree = "<group>"; };
 		638E660518F39529007A2EAA /* JAMSVGGradientParts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMSVGGradientParts.h; sourceTree = "<group>"; };
 		638E660618F39529007A2EAA /* JAMSVGGradientParts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMSVGGradientParts.m; sourceTree = "<group>"; };
@@ -131,6 +135,8 @@
 		63D2067C18EF501F00FAC851 /* JAMSVGImage */ = {
 			isa = PBXGroup;
 			children = (
+				6347286118F87BF9003E02E0 /* gradient.svg */,
+				633FDA7E18F4368900C8BEC4 /* curvy.svg */,
 				638E660818F3AD8F007A2EAA /* moreGradients.svg */,
 				638E660318F31163007A2EAA /* gradients.svg */,
 				63A36B3B18EF8D9B00AE444E /* face.svg */,
@@ -209,10 +215,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6347286218F87BF9003E02E0 /* gradient.svg in Resources */,
 				63D2069218EF501F00FAC851 /* Images.xcassets in Resources */,
 				638E660918F3AD8F007A2EAA /* moreGradients.svg in Resources */,
 				638E660418F31163007A2EAA /* gradients.svg in Resources */,
 				63A36B4118EF8F8800AE444E /* tiger.svg in Resources */,
+				633FDA7F18F4368900C8BEC4 /* curvy.svg in Resources */,
 				63A36B3C18EF8D9B00AE444E /* face.svg in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,
 			);

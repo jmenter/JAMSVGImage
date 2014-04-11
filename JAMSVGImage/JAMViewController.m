@@ -44,7 +44,7 @@
     [super viewWillAppear:animated];
     NSData *cloudData = [self.cloudString dataUsingEncoding:NSUTF8StringEncoding];
     JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
-    svgImage = [JAMSVGImage imageNamed:@"moreGradients"];
+    svgImage = [JAMSVGImage imageNamed:@"curvy"];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
     self.svgImageView.contentMode = UIViewContentModeScaleToFill;
     [self.view addSubview:self.svgImageView];

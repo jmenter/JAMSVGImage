@@ -53,6 +53,11 @@
     CGContextSaveGState(UIGraphicsGetCurrentContext());
     [self.path addClip];
     
+    if (self.gradient.gradientTransform) {
+        CGContextSaveGState(UIGraphicsGetCurrentContext());
+        CGContextConcatCTM(UIGraphicsGetCurrentContext(), self.gradient.gradientTransform.CGAffineTransformValue);
+    }
+
     if ([self.gradient isKindOfClass:JAMSVGRadialGradient.class]) {
         JAMSVGRadialGradient *radialGradient = (JAMSVGRadialGradient *)self.gradient;
         CGContextDrawRadialGradient(UIGraphicsGetCurrentContext(), gradient, radialGradient.position, 0.f, radialGradient.position, radialGradient.radius, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
@@ -60,8 +65,13 @@
         JAMSVGLinearGradient *linearGradient = (JAMSVGLinearGradient *)self.gradient;
         CGContextDrawLinearGradient(UIGraphicsGetCurrentContext(), gradient, linearGradient.startPosition, linearGradient.endPosition, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
     }
+    if (self.gradient.gradientTransform) {
+        CGContextRestoreGState(UIGraphicsGetCurrentContext());
+    }
+
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
     CGColorSpaceRelease(colorSpace);
+    CGGradientRelease(gradient);
 }
 
 - (NSString *)description

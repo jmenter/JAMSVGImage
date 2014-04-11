@@ -25,13 +25,7 @@
 {
     if (!(self = [super init])) return nil;
     
-    self.xmlParser = [NSXMLParser.alloc initWithContentsOfURL:[NSURL fileURLWithPath:path]];
-    self.xmlParser.delegate = self;
-    self.xmlParser.shouldProcessNamespaces = YES;
-    self.xmlParser.shouldReportNamespacePrefixes = YES;
-    self.paths = NSMutableArray.new;
-    self.pathFactory = JAMStyledBezierPathFactory.new;
-    return self;
+    return [self initWithSVGData:[NSData dataWithContentsOfFile:path]];
 }
 
 - (id)initWithSVGData:(NSData *)data;
@@ -57,7 +51,7 @@
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict
 {
     if ([elementName isEqualToString:@"svg"]) {
-        [self parseRootElement:attributeDict];
+        self.viewBox = [self.pathFactory getViewboxFromAttributes:attributeDict];
         return;
     }
     if ([elementName isEqualToString:@"stop"]) {
@@ -67,21 +61,6 @@
     JAMStyledBezierPath *path = [self.pathFactory styledPathFromElementName:elementName attributes:attributeDict];
     if (path)
         [self.paths addObject:path];
-}
-
-- (void)parseRootElement:(NSDictionary *)attributeDict;
-{
-    if (!attributeDict[@"viewBox"]) return;
-
-    float xPosition, yPosition, width, height;
-    NSScanner *viewBoxScanner = [NSScanner scannerWithString:attributeDict[@"viewBox"]];
-    
-    [viewBoxScanner scanFloat:&xPosition];
-    [viewBoxScanner scanFloat:&yPosition];
-    [viewBoxScanner scanFloat:&width];
-    [viewBoxScanner scanFloat:&height];
-
-    self.viewBox = CGRectMake(xPosition, yPosition, width, height);
 }
 
 @end
