@@ -18,6 +18,7 @@
 @property (nonatomic) UIColor *fillColor;
 @property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) JAMSVGGradient *gradient;
+@property (nonatomic) NSValue *transform;
 @end
 
 @implementation JAMStyledBezierPath
@@ -25,6 +26,10 @@
 
 - (void)drawStyledPath;
 {
+    if (self.transform) {
+        CGContextSaveGState(UIGraphicsGetCurrentContext());
+        CGContextConcatCTM(UIGraphicsGetCurrentContext(), self.transform.CGAffineTransformValue);
+    }
     if (self.gradient) {
         [self fillWithGradient];
     } else if (self.fillColor) {
@@ -34,6 +39,9 @@
     if (self.strokeColor && self.path.lineWidth > 0.f) {
         [self.strokeColor setStroke];
         [self.path stroke];
+    }
+    if (self.transform) {
+        CGContextRestoreGState(UIGraphicsGetCurrentContext());
     }
 }
 

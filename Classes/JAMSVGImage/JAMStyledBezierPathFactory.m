@@ -19,6 +19,7 @@
 @property (nonatomic) UIColor *fillColor;
 @property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) JAMSVGGradient *gradient;
+@property (nonatomic) NSValue *transform;
 @end
 
 
@@ -122,6 +123,23 @@
 {
     NSString *miterLimit = [self valueForKey:key];
     return miterLimit ? miterLimit.floatValue : 10.f;
+}
+
+- (NSValue *)transformForKey:(NSString *)key;
+{
+    NSString *transform = [self valueForKey:key];
+    if (!transform) return nil;
+
+    float a, b, c, d, tx, ty;
+    NSScanner *floatScanner = [NSScanner scannerWithString:transform];
+    [floatScanner scanString:@"matrix(" intoString:NULL];
+    [floatScanner scanFloat:&a];
+    [floatScanner scanFloat:&b];
+    [floatScanner scanFloat:&c];
+    [floatScanner scanFloat:&d];
+    [floatScanner scanFloat:&tx];
+    [floatScanner scanFloat:&ty];
+    return [NSValue valueWithCGAffineTransform:CGAffineTransformMake(a, b, c, d, tx, ty)];
 }
 
 @end
@@ -272,9 +290,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     gradient.identifier = attributes[@"id"];
     gradient.startPosition = CGPointMake([attributes[@"x1"] floatValue], [attributes[@"y1"] floatValue]);
     gradient.endPosition = CGPointMake([attributes[@"x2"] floatValue], [attributes[@"y2"] floatValue]);
-    if (attributes[@"gradientTransform"]) {
-        gradient.gradientTransform = [NSValue valueWithCGAffineTransform:[self transformFromString:attributes[@"gradientTransform"]]];
-    }
+    gradient.gradientTransform = [attributes transformForKey:@"gradientTransform"];
     [self.gradients addObject:gradient];
 }
 
@@ -284,24 +300,8 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     gradient.identifier = attributes[@"id"];
     gradient.position = CGPointMake([attributes[@"cx"] floatValue], [attributes[@"cy"] floatValue]);
     gradient.radius = [attributes[@"r"] floatValue];
-    if (attributes[@"gradientTransform"]) {
-        gradient.gradientTransform = [NSValue valueWithCGAffineTransform:[self transformFromString:attributes[@"gradientTransform"]]];
-    }
+    gradient.gradientTransform = [attributes transformForKey:@"gradientTransform"];
     [self.gradients addObject:gradient];
-}
-
-- (CGAffineTransform)transformFromString:(NSString *)string;
-{
-    float a, b, c, d, tx, ty;
-    NSScanner *floatScanner = [NSScanner scannerWithString:string];
-    [floatScanner scanString:@"matrix(" intoString:NULL];
-    [floatScanner scanFloat:&a];
-    [floatScanner scanFloat:&b];
-    [floatScanner scanFloat:&c];
-    [floatScanner scanFloat:&d];
-    [floatScanner scanFloat:&tx];
-    [floatScanner scanFloat:&ty];
-    return CGAffineTransformMake(a, b, c, d, tx, ty);
 }
 
 #pragma mark - Basic Element Factory Methods
@@ -369,7 +369,8 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
                                miterLimit:[attributes miterLimitForKey:@"stroke-miterlimit"]
                              lineCapStyle:[attributes lineCapForKey:@"stroke-linecap"]
                             lineJoinStyle:[attributes lineJoinForKey:@"stroke-linejoin"]
-                                 gradient:attributes[@"fill"]];
+                                 gradient:attributes[@"fill"]
+                                transform:[attributes transformForKey:@"transform"]];
 }
 
 - (JAMStyledBezierPath *)styledPathWithBezierPath:(UIBezierPath *)bezierPath
@@ -380,12 +381,14 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
                                        miterLimit:(CGFloat)miterLimit
                                      lineCapStyle:(CGLineCap)lineCapStyle
                                     lineJoinStyle:(CGLineJoin)lineJoinStyle
-                                         gradient:(NSString *)url;
+                                         gradient:(NSString *)url
+                                        transform:(NSValue *)transform;
 {
     JAMStyledBezierPath *styledBezierPath = JAMStyledBezierPath.new;
     styledBezierPath.fillColor = fillColor;
     styledBezierPath.strokeColor = strokeColor;
     styledBezierPath.gradient = [self gradientForFillURL:url];
+    styledBezierPath.transform = transform;
     
     styledBezierPath.path = bezierPath;
     styledBezierPath.path.lineWidth = strokeWeight;
@@ -394,9 +397,10 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     styledBezierPath.path.lineCapStyle = lineCapStyle;
     if (dashArray) {
         CGFloat values[dashArray.count];
-        for (int i = 0; i < dashArray.count; i++) {
+        
+        for (int i = 0; i < dashArray.count; i++)
             values[i] = [dashArray[i] floatValue];
-        }
+        
         [styledBezierPath.path setLineDash:values count:dashArray.count phase:0.f];
     }
     return styledBezierPath;
@@ -404,11 +408,13 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (JAMSVGGradient *)gradientForFillURL:(NSString *)fillURL;
 {
+    
     if ([fillURL rangeOfString:@"url(#"].location != NSNotFound) {
-        NSCharacterSet *urlStripper = [NSCharacterSet characterSetWithCharactersInString:@"url(#)"];
-        NSString *gradientIdentifier = [[fillURL componentsSeparatedByCharactersInSet:urlStripper] componentsJoinedByString:@""];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"identifier == %@", gradientIdentifier];
-        NSArray *filteredArray = [self.gradients filteredArrayUsingPredicate:predicate];
+        NSScanner *urlScanner = [NSScanner scannerWithString:fillURL];
+        [urlScanner scanString:@"url(#" intoString:NULL];
+        NSString *gradientIdentifier;
+        [urlScanner scanUpToString:@")" intoString:&gradientIdentifier];
+        NSArray *filteredArray = [self.gradients filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"identifier == %@", gradientIdentifier]];
         return filteredArray.lastObject;
     }
     return nil;
