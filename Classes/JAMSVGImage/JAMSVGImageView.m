@@ -47,57 +47,52 @@
 {
     CGRect destinationRect = CGRectZero;
     CGFloat scalingFactor = 1.f;
+    CGFloat halfRectWidth = rect.size.width / 2.0;
+    CGFloat halfRectHeight = rect.size.height / 2.0;
+    CGFloat halfSVGWidth = self.svgImage.size.width / 2.0;
+    CGFloat halfSVGHeight = self.svgImage.size.height / 2.0;
+    
     switch (self.contentMode) {
         case UIViewContentModeBottom:
-            destinationRect = CGRectMake((rect.size.width / 2.f) - (self.svgImage.size.width / 2.f),
-                                         rect.size.height - self.svgImage.size.height,
-                                         self.svgImage.size.width,
-                                         self.svgImage.size.height);
+            destinationRect = CGRectMake(halfRectWidth - halfSVGWidth, rect.size.height - self.svgImage.size.height,
+                                         self.svgImage.size.width, self.svgImage.size.height);
             break;
         case UIViewContentModeBottomLeft:
-            destinationRect = CGRectMake(0,
-                                         rect.size.height - self.svgImage.size.height,
-                                         self.svgImage.size.width,
-                                         self.svgImage.size.height);
+            destinationRect = CGRectMake(0, rect.size.height - self.svgImage.size.height,
+                                         self.svgImage.size.width, self.svgImage.size.height);
             break;
         case UIViewContentModeBottomRight:
-            destinationRect = CGRectMake(rect.size.width - self.svgImage.size.width,
-                                         rect.size.height - self.svgImage.size.height,
-                                         self.svgImage.size.width,
-                                         self.svgImage.size.height);
+            destinationRect = CGRectMake(rect.size.width - self.svgImage.size.width, rect.size.height - self.svgImage.size.height,
+                                         self.svgImage.size.width, self.svgImage.size.height);
             break;
         case UIViewContentModeCenter:
-            destinationRect = CGRectMake((rect.size.width / 2.f) - (self.svgImage.size.width / 2.f),
-                                         (rect.size.height / 2.f) - (self.svgImage.size.height / 2.f),
-                                         self.svgImage.size.width,
-                                         self.svgImage.size.height);
+            destinationRect = CGRectMake(halfRectWidth - halfSVGWidth, halfRectHeight - halfSVGHeight,
+                                         self.svgImage.size.width, self.svgImage.size.height);
             break;
         case UIViewContentModeLeft:
-            destinationRect = CGRectMake(0,
-                                         (rect.size.height / 2.f) - (self.svgImage.size.height / 2.f),
-                                         self.svgImage.size.width,
-                                         self.svgImage.size.height);
+            destinationRect = CGRectMake(0, halfRectHeight - halfSVGHeight,
+                                         self.svgImage.size.width, self.svgImage.size.height);
             break;
-        case UIViewContentModeRedraw: // This option doesn't make sense with SVG. We redraw regardless.
+        case UIViewContentModeRedraw: // This option doesn't make sense with SVG. We'll redraw regardless.
             destinationRect = rect;
             break;
         case UIViewContentModeRight:
             destinationRect = CGRectMake(rect.size.width - self.svgImage.size.width,
-                                         (rect.size.height / 2.f) - (self.svgImage.size.height / 2.f),
+                                         halfRectHeight - halfSVGHeight,
                                          self.svgImage.size.width,
                                          self.svgImage.size.height);
             break;
         case UIViewContentModeScaleAspectFill:
             scalingFactor = MAX(rect.size.width / self.svgImage.size.width, rect.size.height / self.svgImage.size.height);
-            destinationRect = CGRectMake((rect.size.width / 2.f) - ((self.svgImage.size.width / 2.f) * scalingFactor),
-                                         (rect.size.height / 2.f) - ((self.svgImage.size.height / 2.f) * scalingFactor),
+            destinationRect = CGRectMake(halfRectWidth - (halfSVGWidth * scalingFactor),
+                                         halfRectHeight - (halfSVGHeight * scalingFactor),
                                          self.svgImage.size.width * scalingFactor,
                                          self.svgImage.size.height * scalingFactor);
             break;
         case UIViewContentModeScaleAspectFit:
             scalingFactor = MIN(rect.size.width / self.svgImage.size.width, rect.size.height / self.svgImage.size.height);
-            destinationRect = CGRectMake((rect.size.width / 2.f) - ((self.svgImage.size.width / 2.f) * scalingFactor),
-                                         (rect.size.height / 2.f) - ((self.svgImage.size.height / 2.f) * scalingFactor),
+            destinationRect = CGRectMake(halfRectWidth - (halfSVGWidth * scalingFactor),
+                                         halfRectHeight - (halfSVGHeight * scalingFactor),
                                          self.svgImage.size.width * scalingFactor,
                                          self.svgImage.size.height * scalingFactor);
             break;
@@ -105,22 +100,16 @@
             destinationRect = rect;
             break;
         case UIViewContentModeTop:
-            destinationRect = CGRectMake((rect.size.width / 2.f) - (self.svgImage.size.width / 2.f),
-                                         0,
-                                         self.svgImage.size.width,
-                                         self.svgImage.size.height);
+            destinationRect = CGRectMake(halfRectWidth - halfSVGWidth, 0,
+                                         self.svgImage.size.width, self.svgImage.size.height);
             break;
         case UIViewContentModeTopLeft:
-            destinationRect = CGRectMake(0,
-                                         0,
-                                         self.svgImage.size.width,
-                                         self.svgImage.size.height);
+            destinationRect = CGRectMake(0, 0,
+                                         self.svgImage.size.width, self.svgImage.size.height);
             break;
         case UIViewContentModeTopRight:
-            destinationRect = CGRectMake(rect.size.width - self.svgImage.size.width,
-                                         0,
-                                         self.svgImage.size.width,
-                                         self.svgImage.size.height);
+            destinationRect = CGRectMake(rect.size.width - self.svgImage.size.width, 0,
+                                         self.svgImage.size.width, self.svgImage.size.height);
             break;
         default:
             destinationRect = rect;
