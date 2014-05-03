@@ -1,7 +1,7 @@
 JAMSVGImage
 ===========
 
-A class for parsing and displaying resolution independent SVG image graphics in iOS. The goal with this class is simplicity: it only supports a subset of the SVG spec (primitive shapes, bezier curves, stroke and fill), but it's easy to use and quite performant.
+A class for parsing and displaying resolution independent SVG image graphics in iOS. The goal with this class is simplicity: it only supports a subset of the SVG spec (primitive shapes, bezier curves, stroke & fill, and gradient fills), but it's easy to use and quite performant.
 
 Use JAMSVGImage and JAMSVGImageView in lots of places where you would normally use UIImage and UIImageView. The benefits of using SVG are:
 
@@ -40,6 +40,7 @@ Shape Primitives:
 Shape Appearance:
 - Fill Color (in hex "#xxxxxx" format)
 - Stroke Color (in hex "#xxxxxx" format)
+- Gradient Fill
 - Stroke Weight
 - Line Dashes
 - Line Join/Cap (Butt/Round/Miter)
