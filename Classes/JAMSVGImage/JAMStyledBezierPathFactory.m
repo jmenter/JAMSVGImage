@@ -248,7 +248,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 {
     JAMSVGGradient *lastGradient = self.gradients.lastObject;
     JAMSVGGradientColorStop *colorStop = JAMSVGGradientColorStop.new;
-    colorStop.position = [attributes[@"offset"] floatValue];
+    colorStop.position = [attributes floatForKey:@"offset"];
     colorStop.color = [self parseStyleColor:attributes[@"style"]];
     [lastGradient.colorStops addObject:colorStop];
 }
