@@ -24,11 +24,20 @@
 
 @end
 
-@implementation JAMSVGGradientColorStop
-@end
-
 @implementation JAMSVGLinearGradient
 @end
 
 @implementation JAMSVGRadialGradient
+@end
+
+@implementation JAMSVGGradientColorStop
+- (id)initWithColor:(UIColor *)color position:(CGFloat)position;
+{
+    if (!(self = [super init])) return nil;
+    
+    self.color = color;
+    self.position = position;
+    return self;
+}
+
 @end

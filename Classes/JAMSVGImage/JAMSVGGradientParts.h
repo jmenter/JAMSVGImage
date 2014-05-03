@@ -31,6 +31,7 @@
 
 /** ColorStop wraps up a color and position. */
 @interface JAMSVGGradientColorStop : NSObject
+- (id)initWithColor:(UIColor *)color position:(CGFloat)position;
 @property (nonatomic) UIColor *color;
 @property CGFloat position;
 @end
