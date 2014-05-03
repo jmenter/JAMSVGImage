@@ -10,16 +10,34 @@
  
  */
 
-#import <UIKit/UIKit.h>
-@class JAMSVGImage;
+#import "JAMSVGGradientParts.h"
 
-/** The JAMSVGImageView encapsulates a JAMSVGImage in a UIView. The SVG redraw respects the contentMode property and redraws at every frame/bounds change. */
-@interface JAMSVGImageView : UIView
+@implementation JAMSVGGradient
 
-/** The SVGImage. Setting this does not change the frame of the view; call sizeToFit if needed. */
-@property (nonatomic) JAMSVGImage *svgImage;
+- (id)init;
+{
+    if (!(self = [super init])) return nil;
+    
+    self.colorStops = NSMutableArray.new;
+    return self;
+}
 
-/** Creates a new JAMSVGImageView from a JAMSVGImage. */
-- (instancetype)initWithSVGImage:(JAMSVGImage *)svgImage;
+@end
+
+@implementation JAMSVGLinearGradient
+@end
+
+@implementation JAMSVGRadialGradient
+@end
+
+@implementation JAMSVGGradientColorStop
+- (id)initWithColor:(UIColor *)color position:(CGFloat)position;
+{
+    if (!(self = [super init])) return nil;
+    
+    self.color = color;
+    self.position = position;
+    return self;
+}
 
 @end

@@ -17,7 +17,14 @@
 /** The JAMStyledBezierPathFactory takes SVG element names and attributes from the SVG parser and generates JAMStyledBezierPaths. */
 @interface JAMStyledBezierPathFactory : NSObject
 
+
 /** Generates a JMStyledPath based on the elementName and attributes from the JMSVGParser. */
 - (JAMStyledBezierPath *)styledPathFromElementName:(NSString *)elementName attributes:(NSDictionary *)attributes;
+
+/** Adds a gradient color stop to the local array. */
+- (void)addGradientStopWithAttributes:(NSDictionary *)attributes;
+
+/** Gets the viewBox for the svg document. */
+- (CGRect)getViewboxFromAttributes:(NSDictionary *)attributes;
 
 @end

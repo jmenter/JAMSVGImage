@@ -13,10 +13,6 @@
 #import "JAMSVGImageView.h"
 #import "JAMSVGImage.h"
 
-@interface JAMSVGImageView ()
-@property (nonatomic) JAMSVGImage *svgImage;
-@end
-
 @implementation JAMSVGImageView
 
 - (instancetype)initWithSVGImage:(JAMSVGImage *)svgImage;
@@ -26,6 +22,12 @@
     self.svgImage = svgImage;
     self.backgroundColor = UIColor.clearColor;
     return self;
+}
+
+- (void)sizeToFit;
+{
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y,
+                            self.svgImage.size.width, self.svgImage.size.height);
 }
 
 // SVG redraws whenever bounds change.
