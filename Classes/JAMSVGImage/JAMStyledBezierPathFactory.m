@@ -20,6 +20,7 @@
 @property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) JAMSVGGradient *gradient;
 @property (nonatomic) NSValue *transform;
+@property (nonatomic) NSNumber *opacity;
 @end
 
 
@@ -46,6 +47,7 @@
 
 @interface NSDictionary (Utilities)
 - (CGFloat)floatForKey:(NSString *)key;
+- (NSNumber *)opacityForKey:(NSString *)key;
 - (UIColor *)strokeColorForKey:(NSString *)key;
 - (UIColor *)fillColorForKey:(NSString *)key;
 - (CGFloat)strokeWeightForKey:(NSString *)key;
@@ -61,6 +63,11 @@
 {
     NSString *value = [self valueForKey:key];
     return value ? [value floatValue] : 0.f;
+}
+
+- (NSNumber *)opacityForKey:(NSString *)key
+{
+    return [self valueForKey:key] ? @([[self valueForKey:key] floatValue]) : nil;
 }
 
 - (UIColor *)strokeColorForKey:(NSString *)key;
@@ -362,6 +369,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 - (JAMStyledBezierPath *)createStyledPath:(UIBezierPath *)path withAttributes:(NSDictionary *)attributes;
 {
     return [self styledPathWithBezierPath:path
+                                  opacity:[attributes opacityForKey:@"opacity"]
                                 fillColor:[attributes fillColorForKey:@"fill"]
                               strokeColor:[attributes strokeColorForKey:@"stroke"]
                              strokeWeight:[attributes strokeWeightForKey:@"stroke-width"]
@@ -374,6 +382,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 }
 
 - (JAMStyledBezierPath *)styledPathWithBezierPath:(UIBezierPath *)bezierPath
+                                          opacity:(NSNumber *)opacity
                                         fillColor:(UIColor *)fillColor
                                       strokeColor:(UIColor *)strokeColor
                                      strokeWeight:(CGFloat)strokeWeight
@@ -385,6 +394,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
                                         transform:(NSValue *)transform;
 {
     JAMStyledBezierPath *styledBezierPath = JAMStyledBezierPath.new;
+    styledBezierPath.opacity = opacity;
     styledBezierPath.fillColor = fillColor;
     styledBezierPath.strokeColor = strokeColor;
     styledBezierPath.gradient = [self gradientForFillURL:url];

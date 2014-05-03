@@ -19,6 +19,7 @@
 @property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) JAMSVGGradient *gradient;
 @property (nonatomic) NSValue *transform;
+@property (nonatomic) NSNumber *opacity;
 @end
 
 @implementation JAMStyledBezierPath
@@ -30,15 +31,22 @@
         CGContextSaveGState(UIGraphicsGetCurrentContext());
         CGContextConcatCTM(UIGraphicsGetCurrentContext(), self.transform.CGAffineTransformValue);
     }
-    if (self.gradient) {
-        [self fillWithGradient];
-    } else if (self.fillColor) {
+    if (self.opacity) {
+        CGContextSetAlpha(UIGraphicsGetCurrentContext(), self.opacity.floatValue);
+    }
+    if (self.fillColor) {
         [self.fillColor setFill];
         [self.path fill];
+    }
+    if (self.gradient) {
+        [self fillWithGradient];
     }
     if (self.strokeColor && self.path.lineWidth > 0.f) {
         [self.strokeColor setStroke];
         [self.path stroke];
+    }
+    if (self.opacity) {
+        CGContextSetAlpha(UIGraphicsGetCurrentContext(), 1.0);
     }
     if (self.transform) {
         CGContextRestoreGState(UIGraphicsGetCurrentContext());
@@ -84,7 +92,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, grad: %@", self.path, self.fillColor, self.strokeColor, self.gradient];
+    return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, gradient: %@", self.path, self.fillColor, self.strokeColor, self.gradient];
 }
 
 @end
