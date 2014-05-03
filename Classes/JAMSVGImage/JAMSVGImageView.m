@@ -30,7 +30,14 @@
                             self.svgImage.size.width, self.svgImage.size.height);
 }
 
-// SVG redraws whenever bounds change.
+- (void)setContentMode:(UIViewContentMode)contentMode
+{
+    if (_contentMode != contentMode) {
+        _contentMode = contentMode;
+        [self setNeedsDisplay];
+    }
+}
+
 - (void)layoutSubviews;
 {
     [self setNeedsDisplay];
