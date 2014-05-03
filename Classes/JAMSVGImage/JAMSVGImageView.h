@@ -16,6 +16,9 @@
 /** The JAMSVGImageView encapsulates a JAMSVGImage in a UIView. The SVG redraw respects the contentMode property and redraws at every frame/bounds change. */
 @interface JAMSVGImageView : UIView
 
+/** The SVGImage. Setting this does not change the frame of the view; call sizeToFit if needed. */
+@property (nonatomic) JAMSVGImage *svgImage;
+
 /** Creates a new JAMSVGImageView from a JAMSVGImage. */
 - (instancetype)initWithSVGImage:(JAMSVGImage *)svgImage;
 
