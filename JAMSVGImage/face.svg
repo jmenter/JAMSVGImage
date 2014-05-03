@@ -15,7 +15,7 @@
 <line fill="none" stroke="#231F20" stroke-miterlimit="10" x1="256" y1="0.001" x2="222.27" y2="33.731"/>
 <line fill="none" stroke="#231F20" stroke-miterlimit="10" x1="222.27" y1="33.731" x2="210.692" y2="33.731"/>
 <line fill="none" stroke="#231F20" stroke-miterlimit="10" x1="222.27" y1="33.731" x2="222.27" y2="45.308"/>
-<circle fill="#FFF200" stroke="#231F20" stroke-width="5" stroke-miterlimit="10" cx="128" cy="128" r="101.536"/>
+<circle fill="#FFF200" stroke="#231F20" stroke-width="5" stroke-miterlimit="10" cx="128" cy="128" r="101.536" transform="matrix(1 0 0 1 10 10)"/>
 <circle fill="#FFFFFF" stroke="#231F20" stroke-width="3" stroke-miterlimit="10" cx="94.077" cy="86.08" r="15.385"/>
 <circle fill="#FFFFFF" stroke="#231F20" stroke-width="3" stroke-miterlimit="10" cx="162.154" cy="92.618" r="31.153"/>
 <path fill="none" stroke="#231F20" stroke-width="3" stroke-linecap="round" stroke-miterlimit="10" d="M53.692,133.387

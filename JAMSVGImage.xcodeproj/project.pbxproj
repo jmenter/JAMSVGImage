@@ -19,6 +19,7 @@
 		63A36B3A18EF67A300AE444E /* JAMSVGImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B3918EF67A300AE444E /* JAMSVGImageView.m */; };
 		63A36B3C18EF8D9B00AE444E /* face.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63A36B3B18EF8D9B00AE444E /* face.svg */; };
 		63A36B4118EF8F8800AE444E /* tiger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63A36B4018EF8F8800AE444E /* tiger.svg */; };
+		63BC61471900CBC100B08133 /* check.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63BC61461900CBC100B08133 /* check.svg */; };
 		63D2067718EF501F00FAC851 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D2067618EF501F00FAC851 /* Foundation.framework */; };
 		63D2067918EF501F00FAC851 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D2067818EF501F00FAC851 /* CoreGraphics.framework */; };
 		63D2067B18EF501F00FAC851 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D2067A18EF501F00FAC851 /* UIKit.framework */; };
@@ -48,6 +49,7 @@
 		63A36B3918EF67A300AE444E /* JAMSVGImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMSVGImageView.m; sourceTree = "<group>"; };
 		63A36B3B18EF8D9B00AE444E /* face.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = face.svg; sourceTree = "<group>"; };
 		63A36B4018EF8F8800AE444E /* tiger.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tiger.svg; sourceTree = "<group>"; };
+		63BC61461900CBC100B08133 /* check.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = check.svg; sourceTree = "<group>"; };
 		63D2067318EF501F00FAC851 /* JAMSVGImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JAMSVGImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63D2067618EF501F00FAC851 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		63D2067818EF501F00FAC851 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -135,6 +137,7 @@
 		63D2067C18EF501F00FAC851 /* JAMSVGImage */ = {
 			isa = PBXGroup;
 			children = (
+				63BC61461900CBC100B08133 /* check.svg */,
 				6347286118F87BF9003E02E0 /* gradient.svg */,
 				633FDA7E18F4368900C8BEC4 /* curvy.svg */,
 				638E660818F3AD8F007A2EAA /* moreGradients.svg */,
@@ -215,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63BC61471900CBC100B08133 /* check.svg in Resources */,
 				6347286218F87BF9003E02E0 /* gradient.svg in Resources */,
 				63D2069218EF501F00FAC851 /* Images.xcassets in Resources */,
 				638E660918F3AD8F007A2EAA /* moreGradients.svg in Resources */,

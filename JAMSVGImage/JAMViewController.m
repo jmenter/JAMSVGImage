@@ -11,9 +11,9 @@
 {
     // Draw the tiger three different ways.
     JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
-    [tiger drawInCurrentContext];
+//    [tiger drawInCurrentContext];
     [tiger drawAtPoint:CGPointMake(50, 50)];
-    [tiger drawInRect:CGRectMake(100, 100, 500, 20)];
+//    [tiger drawInRect:CGRectMake(100, 100, 500, 20)];
     
     // Get a low res image from the svg and blow that up, shows what happens when you upsize raster images.
 //    JAMSVGImage *face = [JAMSVGImage imageNamed:@"gradients"];
@@ -44,9 +44,9 @@
     [super viewWillAppear:animated];
     NSData *cloudData = [self.cloudString dataUsingEncoding:NSUTF8StringEncoding];
     JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
-    svgImage = [JAMSVGImage imageNamed:@"gradient"];
+    svgImage = [JAMSVGImage imageNamed:@"check"];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
-    self.svgImageView.contentMode = UIViewContentModeScaleToFill;
+    self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:self.svgImageView];
 }
 
