@@ -206,6 +206,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 @interface JAMStyledBezierPathFactory ()
 @property (nonatomic) NSMutableArray *gradients;
 @property CGPoint previousControlPoint;
+@property (nonatomic) NSNumber *groupOpacityValue;
 @end
 
 @implementation JAMStyledBezierPathFactory
@@ -258,6 +259,16 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     colorStop.position = [attributes floatForKey:@"offset"];
     colorStop.color = [self parseStyleColor:attributes[@"style"]];
     [lastGradient.colorStops addObject:colorStop];
+}
+
+- (void)addGroupOpacityValueWithAttributes:(NSDictionary *)attributes;
+{
+    self.groupOpacityValue = [attributes opacityForKey:@"opacity"];
+}
+
+- (void)removeGroupOpacityValue;
+{
+    self.groupOpacityValue = nil;
 }
 
 - (CGRect)getViewboxFromAttributes:(NSDictionary *)attributes;
@@ -394,6 +405,13 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
                                         transform:(NSValue *)transform;
 {
     JAMStyledBezierPath *styledBezierPath = JAMStyledBezierPath.new;
+    if (self.groupOpacityValue) {
+        if (opacity) {
+            opacity = @(opacity.floatValue * self.groupOpacityValue.floatValue);
+        } else {
+            opacity = self.groupOpacityValue;
+        }
+    }
     styledBezierPath.opacity = opacity;
     styledBezierPath.fillColor = fillColor;
     styledBezierPath.strokeColor = strokeColor;

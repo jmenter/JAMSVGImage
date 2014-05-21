@@ -14,6 +14,12 @@
 #import "JAMStyledBezierPath.h"
 #import "JAMStyledBezierPathFactory.h"
 
+@interface JAMStyledBezierPathFactory (Private)
+@property (nonatomic) NSNumber *groupOpacityValue;
+- (void)addGroupOpacityValueWithAttributes:(NSDictionary *)attributes;
+- (void)removeGroupOpacityValue;
+@end
+
 @interface JAMSVGParser () <NSXMLParserDelegate>
 @property (nonatomic) NSXMLParser *xmlParser;
 @property (nonatomic) JAMStyledBezierPathFactory *pathFactory;
@@ -58,9 +64,18 @@
         [self.pathFactory addGradientStopWithAttributes:attributeDict];
         return;
     }
+    if ([elementName isEqualToString:@"g"]) {
+        [self.pathFactory addGroupOpacityValueWithAttributes:attributeDict];
+    }
     JAMStyledBezierPath *path = [self.pathFactory styledPathFromElementName:elementName attributes:attributeDict];
     if (path)
         [self.paths addObject:path];
+}
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName;
+{
+    if ([elementName isEqualToString:@"g"]) {
+        [self.pathFactory removeGroupOpacityValue];
+    }
 }
 
 @end

@@ -33,10 +33,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    JAMView *view = [JAMView.alloc initWithFrame:CGRectMake(0, 320, 320, 320)];
+    JAMView *view = [JAMView.alloc initWithFrame:CGRectMake(0, 10, 320, 320)];
     view.backgroundColor = UIColor.darkGrayColor;
-    [self.view addSubview:view];
-    self.view.backgroundColor = UIColor.lightGrayColor;
+//    [self.view addSubview:view];
+    self.view.backgroundColor = UIColor.whiteColor;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -44,7 +44,7 @@
     [super viewWillAppear:animated];
     NSData *cloudData = [self.cloudString dataUsingEncoding:NSUTF8StringEncoding];
     JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
-    svgImage = [JAMSVGImage imageNamed:@"check"];
+//    svgImage = [JAMSVGImage imageNamed:@"transparentBoxes"];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
     self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:self.svgImageView];

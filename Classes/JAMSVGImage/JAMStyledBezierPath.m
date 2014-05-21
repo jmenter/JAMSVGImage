@@ -27,12 +27,17 @@
 
 - (void)drawStyledPath;
 {
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    if (!context) return;
+
+    if (self.transform || self.opacity) {
+        CGContextSaveGState(context);
+    }
     if (self.transform) {
-        CGContextSaveGState(UIGraphicsGetCurrentContext());
-        CGContextConcatCTM(UIGraphicsGetCurrentContext(), self.transform.CGAffineTransformValue);
+        CGContextConcatCTM(context, self.transform.CGAffineTransformValue);
     }
     if (self.opacity) {
-        CGContextSetAlpha(UIGraphicsGetCurrentContext(), self.opacity.floatValue);
+        CGContextSetAlpha(context, self.opacity.floatValue);
     }
     if (self.fillColor) {
         [self.fillColor setFill];
@@ -45,11 +50,8 @@
         [self.strokeColor setStroke];
         [self.path stroke];
     }
-    if (self.opacity) {
-        CGContextSetAlpha(UIGraphicsGetCurrentContext(), 1.0);
-    }
-    if (self.transform) {
-        CGContextRestoreGState(UIGraphicsGetCurrentContext());
+    if (self.transform || self.opacity) {
+        CGContextRestoreGState(context);
     }
 }
 
