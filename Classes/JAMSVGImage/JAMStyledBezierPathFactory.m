@@ -238,6 +238,9 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     if ([elementName isEqualToString:@"polyline"])
         return [self polylineWithAttributes:attributes];
     
+    if ([elementName isEqualToString:@"polygon"])
+        return [self polygonWithAttributes:attributes];
+    
     if ([elementName isEqualToString:@"line"])
         return [self lineWithAttributes:attributes];
     
@@ -479,6 +482,15 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
         [commandList addObject:[NSString stringWithFormat: (commandList.count == 0) ? @"M%@" : @"L%@", obj]];
     }];
     return commandList;
+}
+
+- (JAMStyledBezierPath *)polygonWithAttributes:(NSDictionary *)attributes;
+{
+    NSString *commandString = attributes[@"points"];
+    NSArray *commandList = [self commandListForPolylineString:commandString];
+    UIBezierPath *commandListPath = [self bezierPathFromCommandList:commandList];
+    [commandListPath closePath];
+    return [self createStyledPath:commandListPath withAttributes:attributes];
 }
 
 - (UIBezierPath *)bezierPathFromCommandList:(NSArray *)commandList;
