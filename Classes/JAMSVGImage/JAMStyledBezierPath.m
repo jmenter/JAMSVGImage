@@ -39,7 +39,7 @@
     if (self.opacity) {
         CGContextSetAlpha(context, self.opacity.floatValue);
     }
-    if (self.fillColor) {
+    if (self.fillColor && !self.gradient) {
         [self.fillColor setFill];
         [self.path fill];
     }
