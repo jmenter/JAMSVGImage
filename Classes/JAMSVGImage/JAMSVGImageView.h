@@ -23,4 +23,6 @@
 /** Creates a new JAMSVGImageView from a JAMSVGImage. */
 - (instancetype)initWithSVGImage:(JAMSVGImage *)svgImage;
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event;
+
 @end

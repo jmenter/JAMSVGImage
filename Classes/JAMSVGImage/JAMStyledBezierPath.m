@@ -82,6 +82,11 @@
     CGGradientRelease(gradient);
 }
 
+- (BOOL)containsPoint:(CGPoint)point;
+{
+    return [self.path containsPoint:point];
+}
+
 - (NSString *)description
 {
     return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, grad: %@", self.path, self.fillColor, self.strokeColor, self.gradient];
