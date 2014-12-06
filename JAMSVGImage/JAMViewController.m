@@ -44,10 +44,12 @@
     [super viewWillAppear:animated];
     NSData *cloudData = [self.cloudString dataUsingEncoding:NSUTF8StringEncoding];
     JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
-    svgImage = [JAMSVGImage imageNamed:@"curvy"];
+    svgImage = [JAMSVGImage imageNamed:@"tiger"];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
     self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:self.svgImageView];
+    UIImage *tigerImage = svgImage.image;
+    NSLog(@"we're at: %f scale", tigerImage.scale);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
