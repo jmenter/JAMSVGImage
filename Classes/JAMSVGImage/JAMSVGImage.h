@@ -35,4 +35,7 @@
 - (void)drawAtPoint:(CGPoint)point;
 - (void)drawInRect:(CGRect)rect;
 
+/** Returns a Boolean value indicating whether the area enclosed by the path contains the specified point. */
+- (BOOL)containsPoint:(CGPoint)point;
+
 @end

@@ -122,4 +122,13 @@
     [self.svgImage drawInRect:destinationRect];
 }
 
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event;
+{
+    if (![super pointInside:point withEvent:event]) {
+        return NO;
+    }
+
+    return [self.svgImage containsPoint:point];
+}
+
 @end
