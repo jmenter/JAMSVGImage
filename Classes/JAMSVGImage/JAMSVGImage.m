@@ -16,7 +16,7 @@
 
 @interface JAMSVGImage ()
 @property (nonatomic) NSArray *styledPaths;
-@property (nonatomic, readwrite) CGSize size;
+@property (nonatomic) CGRect viewBox;
 @end
 
 @implementation JAMSVGImage
@@ -34,7 +34,7 @@
     
     [parser parseSVGDocument];
     image.styledPaths = parser.paths;
-    image.size = parser.viewBox.size;
+    image.viewBox = parser.viewBox;
     image.scale = 1;
     return image;
 }
@@ -47,7 +47,7 @@
     
     [parser parseSVGDocument];
     image.styledPaths = parser.paths;
-    image.size = parser.viewBox.size;
+    image.viewBox = parser.viewBox;
     image.scale = 1;
     return image;
 }
@@ -62,6 +62,11 @@
     return image;
 }
 
+- (CGSize)size;
+{
+    return self.viewBox.size;
+}
+
 - (CGImageRef)CGImage;
 {
     return self.image.CGImage;
@@ -71,6 +76,7 @@
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
+    CGContextTranslateCTM(context, -self.viewBox.origin.x, -self.viewBox.origin.y);
     CGContextScaleCTM(context, self.scale, self.scale);
     for (JAMStyledBezierPath *styledPath in self.styledPaths) {
         [styledPath drawStyledPath];
