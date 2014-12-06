@@ -44,7 +44,7 @@
     [super viewWillAppear:animated];
     NSData *cloudData = [self.cloudString dataUsingEncoding:NSUTF8StringEncoding];
     JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
-    svgImage = [JAMSVGImage imageNamed:@"tiger"];
+    svgImage = [JAMSVGImage imageNamed:@"curvy"];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
     self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:self.svgImageView];

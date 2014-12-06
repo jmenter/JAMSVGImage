@@ -139,13 +139,23 @@
 
     float a, b, c, d, tx, ty;
     NSScanner *floatScanner = [NSScanner scannerWithString:transform];
-    [floatScanner scanString:@"matrix(" intoString:NULL];
-    [floatScanner scanFloat:&a];
-    [floatScanner scanFloat:&b];
-    [floatScanner scanFloat:&c];
-    [floatScanner scanFloat:&d];
-    [floatScanner scanFloat:&tx];
-    [floatScanner scanFloat:&ty];
+    if ([transform containsString:@"matrix"]) {
+        [floatScanner scanString:@"matrix(" intoString:NULL];
+        [floatScanner scanFloat:&a];
+        [floatScanner scanFloat:&b];
+        [floatScanner scanFloat:&c];
+        [floatScanner scanFloat:&d];
+        [floatScanner scanFloat:&tx];
+        [floatScanner scanFloat:&ty];
+    } else if ([transform containsString:@"translate"]) {
+        [floatScanner scanString:@"translate(" intoString:NULL];
+        a = 1;
+        b = 0;
+        c = 0;
+        d = 1;
+        [floatScanner scanFloat:&tx];
+        [floatScanner scanFloat:&ty];
+    }
     return [NSValue valueWithCGAffineTransform:CGAffineTransformMake(a, b, c, d, tx, ty)];
 }
 
