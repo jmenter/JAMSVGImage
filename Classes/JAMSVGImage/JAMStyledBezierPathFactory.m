@@ -449,7 +449,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 - (JAMSVGGradient *)gradientForFillURL:(NSString *)fillURL;
 {
     
-    if ([fillURL rangeOfString:@"url(#"].location != NSNotFound) {
+    if (fillURL && [fillURL rangeOfString:@"url(#"].location != NSNotFound) {
         NSScanner *urlScanner = [NSScanner scannerWithString:fillURL];
         [urlScanner scanString:@"url(#" intoString:NULL];
         NSString *gradientIdentifier;
