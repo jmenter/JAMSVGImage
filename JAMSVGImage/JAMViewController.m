@@ -49,7 +49,6 @@
     self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:self.svgImageView];
     UIImage *tigerImage = svgImage.image;
-    NSLog(@"we're at: %f scale", tigerImage.scale);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
