@@ -12,8 +12,18 @@
 
 #import <Foundation/Foundation.h>
 
-/** The JAMStyledBezierPath class encapsulates a UIBezierPath object and styling information (fill, stroke, etc.) */
+@class JAMSVGGradient;
+
+/** The JAMStyledBezierPath class encapsulates a UIBezierPath object and styling information (fill, stroke, gradient, transform, and opacity.) */
 @interface JAMStyledBezierPath : NSObject
+
+/** Styled path creation */
++ (instancetype)styledPathWithPath:(UIBezierPath *)path
+                         fillColor:(UIColor *)fillColor
+                       strokeColor:(UIColor *)strokeColor
+                          gradient:(JAMSVGGradient *)gradient
+                         transform:(NSValue *)transform
+                           opacity:(NSNumber *)opacity;
 
 /** Draws the styled path in the current graphics context. */
 - (void)drawStyledPath;

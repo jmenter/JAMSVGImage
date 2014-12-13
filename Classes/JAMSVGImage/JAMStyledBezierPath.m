@@ -24,6 +24,24 @@
 
 @implementation JAMStyledBezierPath
 
++ (instancetype)styledPathWithPath:(UIBezierPath *)path
+                         fillColor:(UIColor *)fillColor
+                       strokeColor:(UIColor *)strokeColor
+                          gradient:(JAMSVGGradient *)gradient
+                         transform:(NSValue *)transform
+                           opacity:(NSNumber *)opacity;
+{
+    JAMStyledBezierPath *styledPath = JAMStyledBezierPath.new;
+    
+    styledPath.path = path;
+    styledPath.fillColor = fillColor;
+    styledPath.strokeColor = strokeColor;
+    styledPath.gradient = gradient;
+    styledPath.transform = transform;
+    styledPath.opacity = opacity;
+    
+    return styledPath;
+}
 
 - (void)drawStyledPath;
 {
@@ -59,12 +77,11 @@
 {
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     NSMutableArray *colors = NSMutableArray.new;
+    CGFloat locations[self.gradient.colorStops.count];
     for (JAMSVGGradientColorStop *stop in self.gradient.colorStops) {
         [colors addObject:(id)stop.color.CGColor];
-    }
-    CGFloat locations[self.gradient.colorStops.count];
-    for (int i = 0; i < self.gradient.colorStops.count; i++) {
-        locations[i] = ((JAMSVGGradientColorStop *)self.gradient.colorStops[i]).position;
+        CGFloat location = ((JAMSVGGradientColorStop *)self.gradient.colorStops[[self.gradient.colorStops indexOfObject:stop]]).position;
+        locations[[self.gradient.colorStops indexOfObject:stop]] = location;
     }
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFMutableArrayRef)colors, locations);
     
@@ -92,9 +109,9 @@
     CGGradientRelease(gradient);
 }
 
-- (NSString *)description
+- (NSString *)description;
 {
-    return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, gradient: %@", self.path, self.fillColor, self.strokeColor, self.gradient];
+    return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, gradient: %@, transform: %@, opacity: %@", self.path, self.fillColor, self.strokeColor, self.gradient, self.transform, self.opacity];
 }
 
 @end
