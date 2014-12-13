@@ -3,24 +3,20 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="256px" height="256px" viewBox="0 0 256 256" enable-background="new 0 0 256 256" xml:space="preserve">
-<g>
+<rect fill="#999999" width="256" height="256"/>
+<rect x="-126.795" y="73.205" transform="matrix(-0.866 -0.5 0.5 -0.866 -1.525879e-05 546.4102)" fill="#174099" stroke="#00B95E" stroke-miterlimit="10" width="400" height="400"/>
+<g transform="translate(100, 0)">
+	<radialGradient id="SVGID_1_" cx="-32.5" cy="180.5" r="31.0644" gradientUnits="userSpaceOnUse">
+		<stop  offset="0" style="stop-color:#D41D00"/>
+		<stop  offset="1" style="stop-color:#5080FA"/>
+	</radialGradient>
 	
-		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="495.7773" y1="552.7285" x2="685.7422" y2="552.7285" gradientTransform="matrix(1 0 0 1 -462 -451)">
-		<stop  offset="0" style="stop-color:#18B900;stop-opacity:0.2"/>
-		<stop  offset="1" style="stop-color:#492EFF;stop-opacity:0.8"/>
-	</linearGradient>
-	<path fill="url(#SVGID_1_)" d="M49.846,42.231C80.247,20.829,175.23,5.692,170.615,64.923s101.539,30.384,25.77,79.615
-		c-75.769,49.231-124.616,53.077-121.923-24.23S1.77,76.077,49.846,42.231z"/>
-	
-		<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="317.7773" y1="-196.7285" x2="507.7422" y2="-196.7285" gradientTransform="matrix(1 0 0 -1 -284 -95)">
-		<stop  offset="0" style="stop-color:#18B900;stop-opacity:0.2"/>
-		<stop  offset="1" style="stop-color:#492EFF;stop-opacity:0.8"/>
-	</linearGradient>
-	<path fill="url(#SVGID_2_)" stroke="#231F20" stroke-width="10" stroke-miterlimit="10" stroke-dasharray="11.9026,11.9026" d="
-		M49.846,42.231C80.247,20.829,175.23,5.692,170.615,64.923s101.539,30.384,25.77,79.615
-		c-75.769,49.231-124.616,53.077-121.923-24.23S1.77,76.077,49.846,42.231z"/>
+		<polygon opacity="0.5" fill="url(#SVGID_1_)" stroke="#00B95E" stroke-width="10" stroke-miterlimit="10" enable-background="new    " points="
+		-13.397,50 73.205,100 -1.795,229.904 -88.397,179.904 	"/>
 </g>
-<rect x="40.5" y="184.5" fill="#1740FF" stroke="#00B95E" stroke-miterlimit="10" width="40" height="35"/>
-<rect x="40.5" y="184.5" fill="#1740FF" stroke="#00B95E" stroke-miterlimit="10" width="40" height="35" transform="translate(30 10)"/>
-<rect x="40.5" y="184.5" fill="#1740FF" stroke="#00B95E" stroke-miterlimit="10" width="10" height="40" transform="rotate(3)"/>
+<linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="96.3398" y1="133.6602" x2="143.6604" y2="106.3396">
+	<stop  offset="0" style="stop-color:#DD4099"/>
+	<stop  offset="1" style="stop-color:#5080FA"/>
+</linearGradient>
+<rect x="100" y="100" fill="url(#SVGID_2_)" stroke="#00B95E" stroke-miterlimit="10" width="40" height="40"/>
 </svg>

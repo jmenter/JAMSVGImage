@@ -44,11 +44,12 @@
     [super viewWillAppear:animated];
 //    NSData *cloudData = [self.cloudString dataUsingEncoding:NSUTF8StringEncoding];
 //    JAMSVGImage *svgImage = [JAMSVGImage imageWithSVGData:cloudData];
-    JAMSVGImage *svgImage = [JAMSVGImage imageNamed:@"tiger"];
+    JAMSVGImage *svgImage = [JAMSVGImage imageNamed:@"curvy"];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:svgImage];
     self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
+    
     [self.view addSubview:self.svgImageView];
-    UIImage *tigerImage = svgImage.image;
+//    UIImage *tigerImage = svgImage.image;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
