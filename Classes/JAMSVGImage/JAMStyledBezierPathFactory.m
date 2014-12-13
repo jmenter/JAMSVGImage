@@ -23,7 +23,6 @@
 @property (nonatomic) NSNumber *opacity;
 @end
 
-
 @interface UIColor (HexUtilities)
 + (UIColor *)colorFromHexString:(NSString *)hexString;
 @end
@@ -61,85 +60,60 @@
 
 - (CGFloat)floatForKey:(NSString *)key;
 {
-    NSString *value = [self valueForKey:key];
-    return value ? [value floatValue] : 0.f;
+    return self[key] ? [self[key] floatValue] : 0.f;
 }
 
 - (NSNumber *)opacityForKey:(NSString *)key
 {
-    return [self valueForKey:key] ? @([[self valueForKey:key] floatValue]) : nil;
+    return self[key] ? @([self[key] floatValue]) : nil;
 }
 
 - (UIColor *)strokeColorForKey:(NSString *)key;
 {
-    NSString *hexColor = [self valueForKey:key];
-    return [UIColor colorFromHexString:hexColor];
+    return [UIColor colorFromHexString:self[key]];
 }
 
 - (UIColor *)fillColorForKey:(NSString *)key;
 {
-    NSString *hexColor = [self valueForKey:key] ?: @"#000000";
-    return [UIColor colorFromHexString:hexColor];
+    return [UIColor colorFromHexString:self[key] ?: @"#000000"];
 }
 
 - (NSArray *)dashArrayForKey:(NSString *)key;
 {
-    NSString *dashValues = [self valueForKey:key];
-    if (!dashValues) return nil;
-
     NSMutableArray *floatValues = NSMutableArray.new;
-    NSArray *stringValues = [dashValues componentsSeparatedByString:@","];
-    
-    for (NSString *value in stringValues) {
+    for (NSString *value in [self[key] componentsSeparatedByString:@","]) {
         [floatValues addObject:@(value.floatValue)];
     }
-    return floatValues;
+    return floatValues.count == 0 ? nil : floatValues.copy;
 }
 
 - (CGFloat)strokeWeightForKey:(NSString *)key;
 {
-    NSString *value = [self valueForKey:key];
-    return value ? value.floatValue : 1.f;
+    return self[key] ? [self[key] floatValue] : 1.f;
 }
 
 - (CGLineJoin)lineJoinForKey:(NSString *)key;
 {
-    NSString *value = [self valueForKey:key];
-    if ([value isEqualToString:@"round"]) {
-        return kCGLineJoinRound;
-    }
-    if ([value isEqualToString:@"square"]) {
-        return kCGLineJoinBevel;
-    }
-    return kCGLineJoinMiter;
+    return [self[key] isEqualToString:@"round"] ? kCGLineJoinRound : [self[key] isEqualToString:@"square"] ? kCGLineJoinBevel :kCGLineJoinMiter;
 }
 
 - (CGLineCap)lineCapForKey:(NSString *)key;
 {
-    NSString *value = [self valueForKey:key];
-    if ([value isEqualToString:@"round"]) {
-        return kCGLineCapRound;
-    }
-    if ([value isEqualToString:@"square"]) {
-        return kCGLineCapSquare;
-    }
-    return kCGLineCapButt;
+    return [self[key] isEqualToString:@"round"] ? kCGLineCapRound : [self[key] isEqualToString:@"square"] ? kCGLineCapSquare : kCGLineCapButt;
 }
 
 - (CGFloat)miterLimitForKey:(NSString *)key;
 {
-    NSString *miterLimit = [self valueForKey:key];
-    return miterLimit ? miterLimit.floatValue : 10.f;
+    return self[key] ? [self[key] floatValue] : 10.f;
 }
 
 - (NSValue *)transformForKey:(NSString *)key;
 {
-    NSString *transform = [self valueForKey:key];
-    if (!transform) return nil;
+    if (!self[key]) return nil;
 
-    float a, b, c, d, tx, ty;
-    NSScanner *floatScanner = [NSScanner scannerWithString:transform];
-    if ([transform containsString:@"matrix"]) {
+    float a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0;
+    NSScanner *floatScanner = [NSScanner scannerWithString:self[key]];
+    if ([self[key] containsString:@"matrix"]) {
         [floatScanner scanString:@"matrix(" intoString:NULL];
         [floatScanner scanFloat:&a];
         [floatScanner scanFloat:&b];
@@ -147,14 +121,22 @@
         [floatScanner scanFloat:&d];
         [floatScanner scanFloat:&tx];
         [floatScanner scanFloat:&ty];
-    } else if ([transform containsString:@"translate"]) {
+    } else if ([self[key] containsString:@"translate"]) {
         [floatScanner scanString:@"translate(" intoString:NULL];
-        a = 1;
-        b = 0;
-        c = 0;
-        d = 1;
         [floatScanner scanFloat:&tx];
         [floatScanner scanFloat:&ty];
+    } else if ([self[key] containsString:@"scale"]) {
+        [floatScanner scanString:@"scale(" intoString:NULL];
+        [floatScanner scanFloat:&a];
+        [floatScanner scanFloat:&d];
+    } else if ([self[key] containsString:@"rotate"]) {
+        [floatScanner scanString:@"rotate(" intoString:NULL];
+        float angle;
+        [floatScanner scanFloat:&angle];
+        a = cosf(angle);
+        b = sinf(angle);
+        c = -sinf(angle);
+        d = cosf(angle);
     }
     return [NSValue valueWithCGAffineTransform:CGAffineTransformMake(a, b, c, d, tx, ty)];
 }
@@ -188,8 +170,7 @@
 
 - (BOOL)scanPoint:(CGPoint *)point;
 {
-    float xCoord;
-    float yCoord;
+    float xCoord, yCoord;
     [self conditionallyIncrement];
     BOOL didScanX = [self scanFloat:&xCoord];
     [self conditionallyIncrement];
@@ -401,32 +382,36 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (JAMStyledBezierPath *)createStyledPath:(UIBezierPath *)path withAttributes:(NSDictionary *)attributes;
 {
-    return [self styledPathWithBezierPath:path
-                                  opacity:[attributes opacityForKey:@"opacity"]
-                                fillColor:[attributes fillColorForKey:@"fill"]
-                              strokeColor:[attributes strokeColorForKey:@"stroke"]
-                             strokeWeight:[attributes strokeWeightForKey:@"stroke-width"]
-                                dashArray:[attributes dashArrayForKey:@"stroke-dasharray"]
-                               miterLimit:[attributes miterLimitForKey:@"stroke-miterlimit"]
-                             lineCapStyle:[attributes lineCapForKey:@"stroke-linecap"]
-                            lineJoinStyle:[attributes lineJoinForKey:@"stroke-linejoin"]
-                                 gradient:attributes[@"fill"]
-                                transform:[attributes transformForKey:@"transform"]];
+    
+    return [JAMStyledBezierPath styledPathWithPath:[self applyStrokeAttributes:attributes toPath:path]
+                                         fillColor:[attributes fillColorForKey:@"fill"]
+                                       strokeColor:[attributes strokeColorForKey:@"stroke"]
+                                          gradient:[self gradientForFillURL:attributes[@"fill"]]
+                                         transform:[attributes transformForKey:@"transform"]
+                                           opacity:[self opacityFromAttributes:attributes]];
 }
 
-- (JAMStyledBezierPath *)styledPathWithBezierPath:(UIBezierPath *)bezierPath
-                                          opacity:(NSNumber *)opacity
-                                        fillColor:(UIColor *)fillColor
-                                      strokeColor:(UIColor *)strokeColor
-                                     strokeWeight:(CGFloat)strokeWeight
-                                        dashArray:(NSArray *)dashArray
-                                       miterLimit:(CGFloat)miterLimit
-                                     lineCapStyle:(CGLineCap)lineCapStyle
-                                    lineJoinStyle:(CGLineJoin)lineJoinStyle
-                                         gradient:(NSString *)url
-                                        transform:(NSValue *)transform;
+- (UIBezierPath *)applyStrokeAttributes:(NSDictionary *)attributes toPath:(UIBezierPath *)path;
 {
-    JAMStyledBezierPath *styledBezierPath = JAMStyledBezierPath.new;
+    NSArray *dashArray = [attributes dashArrayForKey:@"stroke-dasharray"];
+    if (dashArray) {
+        CGFloat values[dashArray.count];
+        for (int i = 0; i < dashArray.count; i++) {
+            values[i] = [dashArray[i] floatValue];
+        }
+        [path setLineDash:values count:dashArray.count phase:0.f];
+    }
+    path.lineWidth = [attributes strokeWeightForKey:@"stroke-width"];
+    path.miterLimit = [attributes miterLimitForKey:@"stroke-miterlimit"];
+    path.lineJoinStyle = [attributes lineJoinForKey:@"stroke-linejoin"];
+    path.lineCapStyle = [attributes lineCapForKey:@"stroke-linecap"];
+    
+    return path;
+}
+
+- (NSNumber *)opacityFromAttributes:(NSDictionary *)attributes;
+{
+    NSNumber *opacity = [attributes opacityForKey:@"opacity"];
     if (self.groupOpacityValue) {
         if (opacity) {
             opacity = @(opacity.floatValue * self.groupOpacityValue.floatValue);
@@ -434,26 +419,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
             opacity = self.groupOpacityValue;
         }
     }
-    styledBezierPath.opacity = opacity;
-    styledBezierPath.fillColor = fillColor;
-    styledBezierPath.strokeColor = strokeColor;
-    styledBezierPath.gradient = [self gradientForFillURL:url];
-    styledBezierPath.transform = transform;
-    
-    styledBezierPath.path = bezierPath;
-    styledBezierPath.path.lineWidth = strokeWeight;
-    styledBezierPath.path.miterLimit = miterLimit;
-    styledBezierPath.path.lineJoinStyle = lineJoinStyle;
-    styledBezierPath.path.lineCapStyle = lineCapStyle;
-    if (dashArray) {
-        CGFloat values[dashArray.count];
-        
-        for (int i = 0; i < dashArray.count; i++)
-            values[i] = [dashArray[i] floatValue];
-        
-        [styledBezierPath.path setLineDash:values count:dashArray.count phase:0.f];
-    }
-    return styledBezierPath;
+    return opacity;
 }
 
 - (JAMSVGGradient *)gradientForFillURL:(NSString *)fillURL;
