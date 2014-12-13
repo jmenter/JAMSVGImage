@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.4, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="256px" height="256px" viewBox="0 0 256 256" enable-background="new 0 0 256 256" xml:space="preserve">
+<g>
+	
+		<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="202.2012" y1="-95.9375" x2="370.4502" y2="-95.9375" gradientTransform="matrix(1 0 0 -1 -178 -11)">
+		<stop  offset="0" style="stop-color:#FFFFFF"/>
+		<stop  offset="1" style="stop-color:#000000"/>
+	</linearGradient>
+	<path fill="url(#SVGID_1_)" d="M32.655,30.55c17.876-25.753,121-29,131.667,18c10.666,47,56,105.667,2.666,109
+		c-53.333,3.333-107.667-17.667-121.333-65.333C31.989,44.551,12.989,58.883,32.655,30.55z"/>
+	
+		<path fill="none" stroke="#231F20" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="12.4746,12.4746,6.2373,12.4746,12.4746,6.2373" d="
+		M32.655,30.55c17.876-25.753,121-29,131.667,18c10.666,47,56,105.667,2.666,109c-53.333,3.333-107.667-17.667-121.333-65.333
+		C31.989,44.551,12.989,58.883,32.655,30.55z"/>
+</g>
+<g opacity="0.5">
+	
+		<radialGradient id="SVGID_2_" cx="314" cy="-54" r="34.0932" gradientTransform="matrix(1 0 0 -1 -178 -11)" gradientUnits="userSpaceOnUse">
+		<stop  offset="0" style="stop-color:#FFFFFF"/>
+		<stop  offset="1" style="stop-color:#000000"/>
+	</radialGradient>
+	<rect x="96.166" y="15.833" fill="url(#SVGID_2_)" width="79.667" height="54.333"/>
+	<g>
+		<polyline fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" points="175.833,64.167 175.833,70.167 
+			169.833,70.167 		"/>
+		
+			<line fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" stroke-dasharray="3.7593,7.5186,7.5186,3.7593" x1="162.314" y1="70.167" x2="141.639" y2="70.167"/>
+		
+			<line fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" stroke-dasharray="7.5186,7.5186,3.7593,7.5186,7.5186,3.7593" x1="139.759" y1="70.167" x2="104.046" y2="70.167"/>
+		<polyline fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" points="102.166,70.167 96.166,70.167 
+			96.166,64.167 		"/>
+		
+			<line fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" stroke-dasharray="5.2916,10.5833,10.5833,5.2916" x1="96.166" y1="53.583" x2="96.166" y2="24.479"/>
+		<polyline fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" points="96.166,21.833 96.166,15.833 
+			102.166,15.833 		"/>
+		
+			<line fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" stroke-dasharray="3.7593,7.5186,7.5186,3.7593" x1="109.686" y1="15.833" x2="130.359" y2="15.833"/>
+		
+			<line fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" stroke-dasharray="7.5186,7.5186,3.7593,7.5186,7.5186,3.7593" x1="132.24" y1="15.833" x2="167.953" y2="15.833"/>
+		<polyline fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" points="169.833,15.833 175.833,15.833 
+			175.833,21.833 		"/>
+		
+			<line fill="none" stroke="#231F20" stroke-width="4" stroke-miterlimit="10" stroke-dasharray="5.2916,10.5833,10.5833,5.2916" x1="175.833" y1="32.417" x2="175.833" y2="61.521"/>
+	</g>
+</g>
+</svg>

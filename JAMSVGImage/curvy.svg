@@ -22,4 +22,5 @@
 </g>
 <rect x="40.5" y="184.5" fill="#1740FF" stroke="#00B95E" stroke-miterlimit="10" width="40" height="35"/>
 <rect x="40.5" y="184.5" fill="#1740FF" stroke="#00B95E" stroke-miterlimit="10" width="40" height="35" transform="translate(30 10)"/>
+<rect x="40.5" y="184.5" fill="#1740FF" stroke="#00B95E" stroke-miterlimit="10" width="10" height="40" transform="rotate(3)"/>
 </svg>
