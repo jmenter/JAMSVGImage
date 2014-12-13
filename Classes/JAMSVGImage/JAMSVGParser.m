@@ -18,30 +18,36 @@
 @property (nonatomic) NSNumber *groupOpacityValue;
 - (void)addGroupOpacityValueWithAttributes:(NSDictionary *)attributes;
 - (void)removeGroupOpacityValue;
+- (void)pushGroupTransformWithAttributes:(NSDictionary *)attributes;
+- (void)popGroupTransform;
 @end
 
 @interface JAMSVGParser () <NSXMLParserDelegate>
 @property (nonatomic) NSXMLParser *xmlParser;
 @property (nonatomic) JAMStyledBezierPathFactory *pathFactory;
+@property NSUInteger groupLevel;
+@property (nonatomic) NSMutableDictionary *groupTransforms;
 @end
 
 @implementation JAMSVGParser
 
 - (id)initWithSVGDocument:(NSString *)path;
 {
-    if (!(self = [super init])) return nil;
+    if (!(self = [super init]) || !path) return nil;
     
     return [self initWithSVGData:[NSData dataWithContentsOfFile:path]];
 }
 
 - (id)initWithSVGData:(NSData *)data;
 {
-    if (!(self = [super init])) return nil;
+    if (!(self = [super init]) || !data) return nil;
     
     self.xmlParser = [NSXMLParser.alloc initWithData:data];
     self.xmlParser.delegate = self;
     self.paths = NSMutableArray.new;
     self.pathFactory = JAMStyledBezierPathFactory.new;
+    self.groupLevel = 0;
+    self.groupTransforms = NSMutableDictionary.new;
     return self;
 }
 
@@ -65,16 +71,28 @@
         return;
     }
     if ([elementName isEqualToString:@"g"]) {
+        self.groupLevel++;
         [self.pathFactory addGroupOpacityValueWithAttributes:attributeDict];
+        if (attributeDict[@"transform"]) {
+            self.groupTransforms[@(self.groupLevel)] = attributeDict;
+            [self.pathFactory pushGroupTransformWithAttributes:attributeDict];
+        }
     }
     JAMStyledBezierPath *path = [self.pathFactory styledPathFromElementName:elementName attributes:attributeDict];
     if (path)
         [self.paths addObject:path];
 }
+
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName;
 {
     if ([elementName isEqualToString:@"g"]) {
+        if (self.groupTransforms[@(self.groupLevel)]) {
+            [self.pathFactory popGroupTransform];
+            [self.groupTransforms removeObjectForKey:@(self.groupLevel)];
+        }
+        
         [self.pathFactory removeGroupOpacityValue];
+        self.groupLevel--;
     }
 }
 
