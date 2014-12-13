@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, JAMSVGGradientType) {
 @property (nonatomic) NSString *identifier;
 @property (nonatomic) NSMutableArray *colorStops;
 @property (nonatomic) NSValue *gradientTransform;
-@property (readonly) JAMSVGGradientType gradientType;
+@property (nonatomic, readonly) JAMSVGGradientType gradientType;
 @end
 
 @interface JAMSVGLinearGradient : JAMSVGGradient
