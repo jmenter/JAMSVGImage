@@ -48,4 +48,7 @@ Shape Appearance:
 SVG Document Properties:
 - viewBox
 
+Others:
+- Path and group level affine transformations
+
 If there are any svg parts you're missing out on then: fork, fix, and issue a pull request!
