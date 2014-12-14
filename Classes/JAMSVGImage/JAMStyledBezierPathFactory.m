@@ -682,6 +682,8 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     [commandScanner scanInt:&sweepFlag];
     [commandScanner scanThroughToHyphen];
     [commandScanner scanPoint:&arcEndPoint];
+    
+//    [path addArcWithCenter:arcStartPoint radius:0 startAngle:0 endAngle:0 clockwise:YES];
     [path closePath];
 }
 @end
