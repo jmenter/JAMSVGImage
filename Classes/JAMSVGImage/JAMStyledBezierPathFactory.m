@@ -30,6 +30,16 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     return CGPointMake(point1.x - point2.x, point1.y - point2.y);
 }
 
+static CGPoint CGPointMidPoint(CGPoint point1, CGPoint point2)
+{
+    return CGPointMake((point1.x - point2.x) / 2, (point1.y - point2.y) / 2);
+}
+
+static CGPoint CGPointSquare(CGPoint point)
+{
+    return CGPointMake(point.x * point.x, point.y * point.y);
+}
+
 @interface JAMStyledBezierPath (Private)
 @property (nonatomic) UIBezierPath *path;
 @property (nonatomic) UIColor *fillColor;
@@ -669,11 +679,13 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 - (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
     // TODO: Implement
-    CGPoint arcStartPoint, arcEndPoint;
+    CGPoint radii, arcEndPoint, arcStartPoint = self.previousControlPoint;
     float xAxisRotation;
     int largeArcFlag, sweepFlag;
     
-    [commandScanner scanPoint:&arcStartPoint];
+    // (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
+    
+    [commandScanner scanPoint:&radii];
     [commandScanner scanThroughToHyphen];
     [commandScanner scanFloat:&xAxisRotation];
     [commandScanner scanThroughToHyphen];
@@ -683,7 +695,40 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     [commandScanner scanThroughToHyphen];
     [commandScanner scanPoint:&arcEndPoint];
     
-//    [path addArcWithCenter:arcStartPoint radius:0 startAngle:0 endAngle:0 clockwise:YES];
-    [path closePath];
+    CGPoint midPoint = CGPointMidPoint(arcStartPoint, arcEndPoint);
+    CGFloat rotation = xAxisRotation * (M_PI / 180.f);
+    CGPoint point1 = CGPointMake(cos(rotation) * midPoint.x + sin(rotation) * midPoint.y,
+                                 -sin(rotation) * midPoint.x + cos(rotation) * midPoint.y);
+    CGPoint r = CGPointMake(fabs(radii.x), fabs(radii.y));
+    
+    CGPoint point1Squared = CGPointSquare(point1);
+    CGPoint rSquared = CGPointSquare(r);
+    
+    CGFloat radiiFix = (point1Squared.x / rSquared.x) + (point1Squared.y / rSquared.y);
+    if (radiiFix > 1) {
+        r.x = sqrt(radiiFix) * r.x;
+        r.y = sqrt(radiiFix) * r.y;
+        rSquared = CGPointSquare(r);
+    }
+    
+    CGFloat cf = ((rSquared.x * rSquared.y) - (rSquared.x  * point1Squared.y) - (rSquared.y  * point1Squared.x)) /
+    ((rSquared.x * point1Squared.y) + (rSquared.y * point1Squared.x));
+    cf = (cf > 0) ? cf : 0;
+    CGFloat cfSqrt = sqrt(cf);
+    cfSqrt *= (largeArcFlag != sweepFlag) ? 1 : -1;
+    
+    CGPoint centerPoint1 = CGPointMake(cfSqrt * ((r.x * point1.y) / r.y), cfSqrt * ((r.y * point1.x) / r.x));
+    
+    CGPoint centerPoint = CGPointMake((cos(rotation) * centerPoint1.x - sin(rotation) * centerPoint1.y) + ((arcStartPoint.x + arcEndPoint.x) / 2),
+                                      (sin(rotation) * centerPoint1.x + cos(rotation) * centerPoint1.y) + ((arcStartPoint.y + arcEndPoint.y) / 2));
+
+    
+    
+    
+    
+    [path addArcWithCenter:centerPoint radius:20 startAngle:0 endAngle:3 clockwise:YES];
+    [path moveToPoint:arcEndPoint];
+//    [path closePath];
 }
+
 @end
