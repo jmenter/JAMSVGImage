@@ -18,17 +18,42 @@
 @property (nonatomic) UIColor *fillColor;
 @property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) JAMSVGGradient *gradient;
-@property (nonatomic) NSValue *transform;
+@property (nonatomic) NSArray *transforms;
+@property (nonatomic) NSNumber *opacity;
 @end
 
 @implementation JAMStyledBezierPath
 
++ (instancetype)styledPathWithPath:(UIBezierPath *)path
+                         fillColor:(UIColor *)fillColor
+                       strokeColor:(UIColor *)strokeColor
+                          gradient:(JAMSVGGradient *)gradient
+                        transforms:(NSArray *)transforms
+                           opacity:(NSNumber *)opacity;
+{
+    JAMStyledBezierPath *styledPath = JAMStyledBezierPath.new;
+    
+    styledPath.path = path;
+    styledPath.fillColor = fillColor;
+    styledPath.strokeColor = strokeColor;
+    styledPath.gradient = gradient;
+    styledPath.transforms = transforms;
+    styledPath.opacity = opacity;
+    
+    return styledPath;
+}
 
 - (void)drawStyledPath;
 {
-    if (self.transform) {
-        CGContextSaveGState(UIGraphicsGetCurrentContext());
-        CGContextConcatCTM(UIGraphicsGetCurrentContext(), self.transform.CGAffineTransformValue);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    if (!context) return;
+
+    CGContextSaveGState(context);
+    for (NSValue *transform in self.transforms) {
+        CGContextConcatCTM(context, transform.CGAffineTransformValue);
+    }
+    if (self.opacity) {
+        CGContextSetAlpha(context, self.opacity.floatValue);
     }
     if (self.gradient) {
         [self fillWithGradient];
@@ -40,51 +65,44 @@
         [self.strokeColor setStroke];
         [self.path stroke];
     }
-    if (self.transform) {
-        CGContextRestoreGState(UIGraphicsGetCurrentContext());
-    }
+    CGContextRestoreGState(context);
 }
 
 - (void)fillWithGradient;
 {
+    CGContextRef context = UIGraphicsGetCurrentContext();
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     NSMutableArray *colors = NSMutableArray.new;
+    CGFloat locations[self.gradient.colorStops.count];
     for (JAMSVGGradientColorStop *stop in self.gradient.colorStops) {
         [colors addObject:(id)stop.color.CGColor];
-    }
-    CGFloat locations[self.gradient.colorStops.count];
-    for (int i = 0; i < self.gradient.colorStops.count; i++) {
-        locations[i] = ((JAMSVGGradientColorStop *)self.gradient.colorStops[i]).position;
+        CGFloat location = ((JAMSVGGradientColorStop *)self.gradient.colorStops[[self.gradient.colorStops indexOfObject:stop]]).position;
+        locations[[self.gradient.colorStops indexOfObject:stop]] = location;
     }
     CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFMutableArrayRef)colors, locations);
     
-    CGContextSaveGState(UIGraphicsGetCurrentContext());
+    CGContextSaveGState(context);
     [self.path addClip];
     
     if (self.gradient.gradientTransform) {
-        CGContextSaveGState(UIGraphicsGetCurrentContext());
-        CGContextConcatCTM(UIGraphicsGetCurrentContext(), self.gradient.gradientTransform.CGAffineTransformValue);
+        CGContextConcatCTM(context, self.gradient.gradientTransform.CGAffineTransformValue);
     }
 
-    if ([self.gradient isKindOfClass:JAMSVGRadialGradient.class]) {
+    if (self.gradient.gradientType == JAMSVGGradientTypeRadial) {
         JAMSVGRadialGradient *radialGradient = (JAMSVGRadialGradient *)self.gradient;
-        CGContextDrawRadialGradient(UIGraphicsGetCurrentContext(), gradient, radialGradient.position, 0.f, radialGradient.position, radialGradient.radius, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
-    } else if ([self.gradient isKindOfClass:JAMSVGLinearGradient.class]) {
+        CGContextDrawRadialGradient(context, gradient, radialGradient.position, 0.f, radialGradient.position, radialGradient.radius, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
+    } else if (self.gradient.gradientType == JAMSVGGradientTypeLinear) {
         JAMSVGLinearGradient *linearGradient = (JAMSVGLinearGradient *)self.gradient;
-        CGContextDrawLinearGradient(UIGraphicsGetCurrentContext(), gradient, linearGradient.startPosition, linearGradient.endPosition, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
+        CGContextDrawLinearGradient(context, gradient, linearGradient.startPosition, linearGradient.endPosition, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
     }
-    if (self.gradient.gradientTransform) {
-        CGContextRestoreGState(UIGraphicsGetCurrentContext());
-    }
-
     CGContextRestoreGState(UIGraphicsGetCurrentContext());
     CGColorSpaceRelease(colorSpace);
     CGGradientRelease(gradient);
 }
 
-- (NSString *)description
+- (NSString *)description;
 {
-    return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, grad: %@", self.path, self.fillColor, self.strokeColor, self.gradient];
+    return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, gradient: %@, transform: %@, opacity: %@", self.path, self.fillColor, self.strokeColor, self.gradient, self.transforms, self.opacity];
 }
 
 @end

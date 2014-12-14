@@ -14,14 +14,30 @@
 #import "JAMStyledBezierPath.h"
 #import "JAMSVGGradientParts.h"
 
+#pragma mark - CG Utility Functions
+
+static CGAffineTransform CGAffineTransformSkew(CGAffineTransform transform, CGFloat skewX, CGFloat skewY) {
+    return CGAffineTransformConcat(transform, CGAffineTransformMake(1, tanf(skewY), tanf(skewX), 1, 0, 0));
+}
+
+static CGPoint CGPointAddPoints(CGPoint point1, CGPoint point2)
+{
+    return CGPointMake(point1.x + point2.x, point1.y + point2.y);
+}
+
+static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
+{
+    return CGPointMake(point1.x - point2.x, point1.y - point2.y);
+}
+
 @interface JAMStyledBezierPath (Private)
 @property (nonatomic) UIBezierPath *path;
 @property (nonatomic) UIColor *fillColor;
 @property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) JAMSVGGradient *gradient;
 @property (nonatomic) NSValue *transform;
+@property (nonatomic) NSNumber *opacity;
 @end
-
 
 @interface UIColor (HexUtilities)
 + (UIColor *)colorFromHexString:(NSString *)hexString;
@@ -44,8 +60,64 @@
 }
 @end
 
+@interface NSScanner (Utilities)
+- (BOOL)scanFloatAndAdvance:(float *)result;
+- (void)scanThroughWhitespaceCommasAndClosingParenthesis;
+- (NSString *)initialCharacter;
+- (NSString *)currentCharacter;
+- (void)scanThroughToHyphen;
+- (BOOL)scanPoint:(CGPoint *)point;
+@end
+
+@implementation NSScanner (Utilities)
+
+- (BOOL)scanFloatAndAdvance:(float *)result;
+{
+    BOOL foundFloat = [self scanFloat:result];
+    [self scanThroughWhitespaceCommasAndClosingParenthesis];
+    return foundFloat;
+}
+
+- (void)scanThroughWhitespaceCommasAndClosingParenthesis;
+{
+    [self scanCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@" ,)"] intoString:NULL];
+}
+
+- (NSString *)initialCharacter;
+{
+    return [NSString stringWithFormat:@"%C", [self.string characterAtIndex:0]];
+}
+
+- (NSString *)currentCharacter;
+{
+    return [NSString stringWithFormat:@"%C", [self.string characterAtIndex:self.scanLocation]];
+}
+
+- (void)scanThroughToHyphen;
+{
+    if (![self.currentCharacter isEqualToString:@"-"])
+        self.scanLocation++;
+}
+
+- (BOOL)scanPoint:(CGPoint *)point;
+{
+    float xCoord, yCoord;
+    [self scanThroughToHyphen];
+    BOOL didScanX = [self scanFloat:&xCoord];
+    [self scanThroughToHyphen];
+    BOOL didScanY = [self scanFloat:&yCoord];
+    if (didScanX && didScanY) {
+        *point = CGPointMake(xCoord, yCoord);
+        return YES;
+    }
+    return NO;
+}
+
+@end
+
 @interface NSDictionary (Utilities)
 - (CGFloat)floatForKey:(NSString *)key;
+- (NSNumber *)opacityForKey:(NSString *)key;
 - (UIColor *)strokeColorForKey:(NSString *)key;
 - (UIColor *)fillColorForKey:(NSString *)key;
 - (CGFloat)strokeWeightForKey:(NSString *)key;
@@ -59,146 +131,113 @@
 
 - (CGFloat)floatForKey:(NSString *)key;
 {
-    NSString *value = [self valueForKey:key];
-    return value ? [value floatValue] : 0.f;
+    return self[key] ? [self[key] floatValue] : 0.f;
+}
+
+- (NSNumber *)opacityForKey:(NSString *)key
+{
+    return self[key] ? @([self[key] floatValue]) : nil;
 }
 
 - (UIColor *)strokeColorForKey:(NSString *)key;
 {
-    NSString *hexColor = [self valueForKey:key];
-    return [UIColor colorFromHexString:hexColor];
+    return [UIColor colorFromHexString:self[key]];
 }
 
 - (UIColor *)fillColorForKey:(NSString *)key;
 {
-    NSString *hexColor = [self valueForKey:key] ?: @"#000000";
-    return [UIColor colorFromHexString:hexColor];
+    return [UIColor colorFromHexString:self[key] ?: @"#000000"];
 }
 
 - (NSArray *)dashArrayForKey:(NSString *)key;
 {
-    NSString *dashValues = [self valueForKey:key];
-    if (!dashValues) return nil;
-
     NSMutableArray *floatValues = NSMutableArray.new;
-    NSArray *stringValues = [dashValues componentsSeparatedByString:@","];
-    
-    for (NSString *value in stringValues) {
+    for (NSString *value in [self[key] componentsSeparatedByString:@","]) {
         [floatValues addObject:@(value.floatValue)];
     }
-    return floatValues;
+    return floatValues.count == 0 ? nil : floatValues.copy;
 }
 
 - (CGFloat)strokeWeightForKey:(NSString *)key;
 {
-    NSString *value = [self valueForKey:key];
-    return value ? value.floatValue : 1.f;
+    return self[key] ? [self[key] floatValue] : 1.f;
 }
 
 - (CGLineJoin)lineJoinForKey:(NSString *)key;
 {
-    NSString *value = [self valueForKey:key];
-    if ([value isEqualToString:@"round"]) {
-        return kCGLineJoinRound;
-    }
-    if ([value isEqualToString:@"square"]) {
-        return kCGLineJoinBevel;
-    }
-    return kCGLineJoinMiter;
+    return [self[key] isEqualToString:@"round"] ? kCGLineJoinRound : [self[key] isEqualToString:@"square"] ? kCGLineJoinBevel :kCGLineJoinMiter;
 }
 
 - (CGLineCap)lineCapForKey:(NSString *)key;
 {
-    NSString *value = [self valueForKey:key];
-    if ([value isEqualToString:@"round"]) {
-        return kCGLineCapRound;
-    }
-    if ([value isEqualToString:@"square"]) {
-        return kCGLineCapSquare;
-    }
-    return kCGLineCapButt;
+    return [self[key] isEqualToString:@"round"] ? kCGLineCapRound : [self[key] isEqualToString:@"square"] ? kCGLineCapSquare : kCGLineCapButt;
 }
 
 - (CGFloat)miterLimitForKey:(NSString *)key;
 {
-    NSString *miterLimit = [self valueForKey:key];
-    return miterLimit ? miterLimit.floatValue : 10.f;
+    return self[key] ? [self[key] floatValue] : 10.f;
 }
 
 - (NSValue *)transformForKey:(NSString *)key;
 {
-    NSString *transform = [self valueForKey:key];
-    if (!transform) return nil;
+    if (!self[key]) return nil;
+    
+    float a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0, angle = 0;
+    CGAffineTransform transform = CGAffineTransformMake(a, b, c, d, tx, ty);
+    NSScanner *floatScanner = [NSScanner scannerWithString:self[key]];
+    
+    while (!floatScanner.isAtEnd) {
+        a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0, angle = 0;
+        if ([floatScanner scanString:@"matrix(" intoString:NULL]) {
+            [floatScanner scanFloatAndAdvance:&a];
+            [floatScanner scanFloatAndAdvance:&b];
+            [floatScanner scanFloatAndAdvance:&c];
+            [floatScanner scanFloatAndAdvance:&d];
+            [floatScanner scanFloatAndAdvance:&tx];
+            [floatScanner scanFloatAndAdvance:&ty];
+            
+            transform = CGAffineTransformConcat(transform, CGAffineTransformMake(a, b, c, d, tx, ty));
+        } else if ([floatScanner scanString:@"translate(" intoString:NULL]) {
+            [floatScanner scanFloatAndAdvance:&tx];
+            [floatScanner scanFloatAndAdvance:&ty];
+            
+            transform = CGAffineTransformTranslate(transform, tx, ty);
+        } else if ([floatScanner scanString:@"scale(" intoString:NULL]) {
+            [floatScanner scanFloatAndAdvance:&a];
+            d = [floatScanner scanFloatAndAdvance:&d] ? d : a;
+            
+            transform = CGAffineTransformScale(transform, a, d);
+        } else if ([floatScanner scanString:@"rotate(" intoString:NULL]) {
+            float translateX = 0;
+            float translateY = 0;
+            [floatScanner scanFloatAndAdvance:&angle];
+            [floatScanner scanFloatAndAdvance:&translateX];
+            [floatScanner scanFloatAndAdvance:&translateY];
+            
+            transform = CGAffineTransformTranslate(transform, translateX, translateY);
+            transform = CGAffineTransformRotate(transform, angle * (M_PI / 180.f));
+            transform = CGAffineTransformTranslate(transform, -translateX, -translateY);
+        } else if ([floatScanner scanString:@"skewX(" intoString:NULL]) {
+            [floatScanner scanFloatAndAdvance:&angle];
+            
+            transform = CGAffineTransformSkew(transform, angle * (M_PI / 180.f), 0);
+        } else if ([floatScanner scanString:@"skewY(" intoString:NULL]) {
+            [floatScanner scanFloatAndAdvance:&angle];
 
-    float a, b, c, d, tx, ty;
-    NSScanner *floatScanner = [NSScanner scannerWithString:transform];
-    [floatScanner scanString:@"matrix(" intoString:NULL];
-    [floatScanner scanFloat:&a];
-    [floatScanner scanFloat:&b];
-    [floatScanner scanFloat:&c];
-    [floatScanner scanFloat:&d];
-    [floatScanner scanFloat:&tx];
-    [floatScanner scanFloat:&ty];
-    return [NSValue valueWithCGAffineTransform:CGAffineTransformMake(a, b, c, d, tx, ty)];
-}
-
-@end
-
-@interface NSScanner (Utilities)
-- (NSString *)initialCharacter;
-- (NSString *)currentCharacter;
-- (void)conditionallyIncrement;
-- (BOOL)scanPoint:(CGPoint *)point;
-@end
-
-@implementation NSScanner (Utilities)
-
-- (NSString *)initialCharacter;
-{
-    return [NSString stringWithFormat:@"%C", [self.string characterAtIndex:0]];
-}
-
-- (NSString *)currentCharacter;
-{
-    return [NSString stringWithFormat:@"%C", [self.string characterAtIndex:self.scanLocation]];
-}
-
-- (void)conditionallyIncrement;
-{
-    if (![self.currentCharacter isEqualToString:@"-"])
-        self.scanLocation++;
-}
-
-- (BOOL)scanPoint:(CGPoint *)point;
-{
-    float xCoord;
-    float yCoord;
-    [self conditionallyIncrement];
-    BOOL didScanX = [self scanFloat:&xCoord];
-    [self conditionallyIncrement];
-    BOOL didScanY = [self scanFloat:&yCoord];
-    if (didScanX && didScanY) {
-        *point = CGPointMake(xCoord, yCoord);
-        return YES;
+            transform = CGAffineTransformSkew(transform, 0, angle * (M_PI / 180.f));
+        }
     }
-    return NO;
+    
+    return [NSValue valueWithCGAffineTransform:transform];
 }
 
 @end
-
-CGPoint CGPointAddPoints(CGPoint point1, CGPoint point2)
-{
-    return CGPointMake(point1.x + point2.x, point1.y + point2.y);
-}
-
-CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
-{
-    return CGPointMake(point1.x - point2.x, point1.y - point2.y);
-}
 
 @interface JAMStyledBezierPathFactory ()
 @property (nonatomic) NSMutableArray *gradients;
 @property CGPoint previousControlPoint;
+@property (nonatomic) NSNumber *groupOpacityValue;
+@property (nonatomic) NSMutableArray *transformStack;
 @end
 
 @implementation JAMStyledBezierPathFactory
@@ -210,6 +249,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     if (!(self = [super init])) return nil;
     
     self.gradients = NSMutableArray.new;
+    self.transformStack = NSMutableArray.new;
     return self;
 }
 
@@ -229,6 +269,9 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     
     if ([elementName isEqualToString:@"polyline"])
         return [self polylineWithAttributes:attributes];
+    
+    if ([elementName isEqualToString:@"polygon"])
+        return [self polygonWithAttributes:attributes];
     
     if ([elementName isEqualToString:@"line"])
         return [self lineWithAttributes:attributes];
@@ -251,6 +294,35 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     colorStop.position = [attributes floatForKey:@"offset"];
     colorStop.color = [self parseStyleColor:attributes[@"style"]];
     [lastGradient.colorStops addObject:colorStop];
+}
+
+- (void)addGroupOpacityValueWithAttributes:(NSDictionary *)attributes;
+{
+    self.groupOpacityValue = [attributes opacityForKey:@"opacity"];
+}
+
+- (void)removeGroupOpacityValue;
+{
+    self.groupOpacityValue = nil;
+}
+
+- (void)pushGroupTransformWithAttributes:(NSDictionary *)attributes;
+{
+    [self.transformStack addObject:[attributes transformForKey:@"transform"]];
+}
+
+- (void)popGroupTransform;
+{
+    [self.transformStack removeLastObject];
+}
+
+- (CGAffineTransform)concatenatedGroupTransforms;
+{
+    CGAffineTransform concatenated = CGAffineTransformIdentity;
+    for (NSValue *value in self.transformStack) {
+        concatenated = CGAffineTransformConcat(concatenated, value.CGAffineTransformValue);
+    }
+    return concatenated;
 }
 
 - (CGRect)getViewboxFromAttributes:(NSDictionary *)attributes;
@@ -340,6 +412,15 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     return [self createStyledPath:commandListPath withAttributes:attributes];
 }
 
+- (JAMStyledBezierPath *)polygonWithAttributes:(NSDictionary *)attributes;
+{
+    NSString *commandString = attributes[@"points"];
+    NSArray *commandList = [self commandListForPolylineString:commandString];
+    UIBezierPath *commandListPath = [self bezierPathFromCommandList:commandList];
+    [commandListPath closePath];
+    return [self createStyledPath:commandListPath withAttributes:attributes];
+}
+
 - (JAMStyledBezierPath *)polylineWithAttributes:(NSDictionary *)attributes;
 {
     NSString *commandString = attributes[@"points"];
@@ -361,55 +442,57 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (JAMStyledBezierPath *)createStyledPath:(UIBezierPath *)path withAttributes:(NSDictionary *)attributes;
 {
-    return [self styledPathWithBezierPath:path
-                                fillColor:[attributes fillColorForKey:@"fill"]
-                              strokeColor:[attributes strokeColorForKey:@"stroke"]
-                             strokeWeight:[attributes strokeWeightForKey:@"stroke-width"]
-                                dashArray:[attributes dashArrayForKey:@"stroke-dasharray"]
-                               miterLimit:[attributes miterLimitForKey:@"stroke-miterlimit"]
-                             lineCapStyle:[attributes lineCapForKey:@"stroke-linecap"]
-                            lineJoinStyle:[attributes lineJoinForKey:@"stroke-linejoin"]
-                                 gradient:attributes[@"fill"]
-                                transform:[attributes transformForKey:@"transform"]];
+    NSArray *transforms = nil;
+    if (attributes[@"transform"] || self.transformStack.count > 0) {
+        if (attributes[@"transform"]) {
+            transforms = [self.transformStack arrayByAddingObject:[attributes transformForKey:@"transform"]];
+        } else {
+            transforms = self.transformStack.copy;
+        }
+    }
+    return [JAMStyledBezierPath styledPathWithPath:[self applyStrokeAttributes:attributes toPath:path]
+                                         fillColor:[attributes fillColorForKey:@"fill"]
+                                       strokeColor:[attributes strokeColorForKey:@"stroke"]
+                                          gradient:[self gradientForFillURL:attributes[@"fill"]]
+                                        transforms:transforms
+                                           opacity:[self opacityFromAttributes:attributes]];
 }
 
-- (JAMStyledBezierPath *)styledPathWithBezierPath:(UIBezierPath *)bezierPath
-                                        fillColor:(UIColor *)fillColor
-                                      strokeColor:(UIColor *)strokeColor
-                                     strokeWeight:(CGFloat)strokeWeight
-                                        dashArray:(NSArray *)dashArray
-                                       miterLimit:(CGFloat)miterLimit
-                                     lineCapStyle:(CGLineCap)lineCapStyle
-                                    lineJoinStyle:(CGLineJoin)lineJoinStyle
-                                         gradient:(NSString *)url
-                                        transform:(NSValue *)transform;
+- (UIBezierPath *)applyStrokeAttributes:(NSDictionary *)attributes toPath:(UIBezierPath *)path;
 {
-    JAMStyledBezierPath *styledBezierPath = JAMStyledBezierPath.new;
-    styledBezierPath.fillColor = fillColor;
-    styledBezierPath.strokeColor = strokeColor;
-    styledBezierPath.gradient = [self gradientForFillURL:url];
-    styledBezierPath.transform = transform;
-    
-    styledBezierPath.path = bezierPath;
-    styledBezierPath.path.lineWidth = strokeWeight;
-    styledBezierPath.path.miterLimit = miterLimit;
-    styledBezierPath.path.lineJoinStyle = lineJoinStyle;
-    styledBezierPath.path.lineCapStyle = lineCapStyle;
+    NSArray *dashArray = [attributes dashArrayForKey:@"stroke-dasharray"];
     if (dashArray) {
         CGFloat values[dashArray.count];
-        
-        for (int i = 0; i < dashArray.count; i++)
+        for (int i = 0; i < dashArray.count; i++) {
             values[i] = [dashArray[i] floatValue];
-        
-        [styledBezierPath.path setLineDash:values count:dashArray.count phase:0.f];
+        }
+        [path setLineDash:values count:dashArray.count phase:0.f];
     }
-    return styledBezierPath;
+    path.lineWidth = [attributes strokeWeightForKey:@"stroke-width"];
+    path.miterLimit = [attributes miterLimitForKey:@"stroke-miterlimit"];
+    path.lineJoinStyle = [attributes lineJoinForKey:@"stroke-linejoin"];
+    path.lineCapStyle = [attributes lineCapForKey:@"stroke-linecap"];
+    
+    return path;
+}
+
+- (NSNumber *)opacityFromAttributes:(NSDictionary *)attributes;
+{
+    NSNumber *opacity = [attributes opacityForKey:@"opacity"];
+    if (self.groupOpacityValue) {
+        if (opacity) {
+            opacity = @(opacity.floatValue * self.groupOpacityValue.floatValue);
+        } else {
+            opacity = self.groupOpacityValue;
+        }
+    }
+    return opacity;
 }
 
 - (JAMSVGGradient *)gradientForFillURL:(NSString *)fillURL;
 {
     
-    if ([fillURL rangeOfString:@"url(#"].location != NSNotFound) {
+    if (fillURL && [fillURL rangeOfString:@"url(#"].location != NSNotFound) {
         NSScanner *urlScanner = [NSScanner scannerWithString:fillURL];
         [urlScanner scanString:@"url(#" intoString:NULL];
         NSString *gradientIdentifier;
@@ -510,7 +593,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 - (void)addHorizontalLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
     float xPosition;
-    [commandScanner conditionallyIncrement];
+    [commandScanner scanThroughToHyphen];
     [commandScanner scanFloat:&xPosition];
     CGPoint horizontalLineToPoint = CGPointMake(xPosition, path.currentPoint.y);
     
@@ -522,7 +605,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 - (void)addVerticalLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
     float yPosition;
-    [commandScanner conditionallyIncrement];
+    [commandScanner scanThroughToHyphen];
     [commandScanner scanFloat:&yPosition];
     CGPoint verticalLineToPoint = CGPointMake(path.currentPoint.x, yPosition);
     
