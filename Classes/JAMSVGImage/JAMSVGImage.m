@@ -104,7 +104,7 @@
 {
     point.x += self.viewBox.origin.x;
     point.y += self.viewBox.origin.y;
-
+    
     for (JAMStyledBezierPath *styledPath in self.styledPaths) {
         if ([styledPath containsPoint:point]) {
             return YES;

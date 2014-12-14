@@ -111,7 +111,7 @@
 
 - (NSString *)description;
 {
-    return [NSString stringWithFormat:@"    path: %@\n    fill: %@\n    stroke: %@\n    gradient: %@\n    transform: %@\n    opacity: %@", self.path, self.fillColor, self.strokeColor, self.gradient, self.transforms, self.opacity];
+    return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, gradient: %@, transform: %@, opacity: %@", self.path, self.fillColor, self.strokeColor, self.gradient, self.transforms, self.opacity];
 }
 
 @end

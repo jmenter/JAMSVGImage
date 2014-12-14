@@ -22,6 +22,17 @@
     return self;
 }
 
+- (JAMSVGGradientType)gradientType;
+{
+    if ([self isKindOfClass:JAMSVGLinearGradient.class]) {
+        return JAMSVGGradientTypeLinear;
+    }
+    if ([self isKindOfClass:JAMSVGRadialGradient.class]) {
+        return JAMSVGGradientTypeRadial;
+    }
+    return JAMSVGGradientTypeUnknown;
+}
+
 @end
 
 @implementation JAMSVGLinearGradient
@@ -31,6 +42,7 @@
 @end
 
 @implementation JAMSVGGradientColorStop
+
 - (id)initWithColor:(UIColor *)color position:(CGFloat)position;
 {
     if (!(self = [super init])) return nil;
