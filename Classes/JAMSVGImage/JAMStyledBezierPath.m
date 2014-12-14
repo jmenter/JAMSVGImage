@@ -104,6 +104,11 @@
     CGGradientRelease(gradient);
 }
 
+- (BOOL)containsPoint:(CGPoint)point;
+{
+    return [self.path containsPoint:point];
+}
+
 - (NSString *)description;
 {
     return [NSString stringWithFormat:@"    path: %@\n    fill: %@\n    stroke: %@\n    gradient: %@\n    transform: %@\n    opacity: %@", self.path, self.fillColor, self.strokeColor, self.gradient, self.transforms, self.opacity];

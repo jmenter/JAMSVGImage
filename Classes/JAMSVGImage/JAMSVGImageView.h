@@ -11,6 +11,7 @@
  */
 
 #import <UIKit/UIKit.h>
+
 @class JAMSVGImage;
 
 /** The JAMSVGImageView encapsulates a JAMSVGImage in a UIView. The SVG redraws at every frame/bounds change. */
@@ -23,5 +24,7 @@
 
 /** Creates a new JAMSVGImageView from a JAMSVGImage. */
 - (instancetype)initWithSVGImage:(JAMSVGImage *)svgImage;
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event;
 
 @end
