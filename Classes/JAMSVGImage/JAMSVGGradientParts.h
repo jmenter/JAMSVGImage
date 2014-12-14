@@ -12,18 +12,11 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, JAMSVGGradientType) {
-    JAMSVGGradientTypeUnknown = -1,
-    JAMSVGGradientTypeLinear,
-    JAMSVGGradientTypeRadial
-};
-
 /** The SVG Gradient object and its two subtypes */
 @interface JAMSVGGradient : NSObject
 @property (nonatomic) NSString *identifier;
 @property (nonatomic) NSMutableArray *colorStops;
 @property (nonatomic) NSValue *gradientTransform;
-@property (nonatomic, readonly) JAMSVGGradientType gradientType;
 @end
 
 @interface JAMSVGLinearGradient : JAMSVGGradient

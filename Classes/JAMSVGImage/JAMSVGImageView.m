@@ -11,6 +11,7 @@
  */
 
 #import "JAMSVGImageView.h"
+#import "JAMSVGImage.h"
 
 @implementation JAMSVGImageView
 

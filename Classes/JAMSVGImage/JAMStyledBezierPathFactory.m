@@ -562,6 +562,9 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
         else if ([@[@"Q", @"q"] containsObject:commandScanner.currentCharacter])
             [self addQuadCurveToPointFromCommandScanner:commandScanner toPath:path];
         
+        else if ([@[@"A", @"a"] containsObject:commandScanner.currentCharacter])
+            [self addEllipticalArcToPointFromCommandScanner:commandScanner toPath:path];
+        
         else if ([@[@"Z", @"z"] containsObject:commandScanner.currentCharacter])
             [path closePath];
     }
@@ -663,4 +666,22 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
 }
 
+- (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
+{
+    // TODO: Implement
+    CGPoint arcStartPoint, arcEndPoint;
+    float xAxisRotation;
+    int largeArcFlag, sweepFlag;
+    
+    [commandScanner scanPoint:&arcStartPoint];
+    [commandScanner scanThroughToHyphen];
+    [commandScanner scanFloat:&xAxisRotation];
+    [commandScanner scanThroughToHyphen];
+    [commandScanner scanInt:&largeArcFlag];
+    [commandScanner scanThroughToHyphen];
+    [commandScanner scanInt:&sweepFlag];
+    [commandScanner scanThroughToHyphen];
+    [commandScanner scanPoint:&arcEndPoint];
+    [path closePath];
+}
 @end

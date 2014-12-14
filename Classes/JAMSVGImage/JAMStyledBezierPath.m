@@ -12,6 +12,7 @@
 
 #import "JAMStyledBezierPath.h"
 #import "JAMSVGGradientParts.h"
+#import <objc/runtime.h>
 
 @interface JAMStyledBezierPath ()
 @property (nonatomic) UIBezierPath *path;
@@ -48,6 +49,9 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     if (!context) return;
 
+    Ivar nameIVar = class_getInstanceVariable([UIBezierPath class], "_immutablePathIsValid");
+    id valid = object_getIvar(self.path, nameIVar);
+    
     CGContextSaveGState(context);
     for (NSValue *transform in self.transforms) {
         CGContextConcatCTM(context, transform.CGAffineTransformValue);
@@ -102,7 +106,7 @@
 
 - (NSString *)description;
 {
-    return [NSString stringWithFormat:@"path: %@, fill: %@, stroke: %@, gradient: %@, transform: %@, opacity: %@", self.path, self.fillColor, self.strokeColor, self.gradient, self.transforms, self.opacity];
+    return [NSString stringWithFormat:@"    path: %@\n    fill: %@\n    stroke: %@\n    gradient: %@\n    transform: %@\n    opacity: %@", self.path, self.fillColor, self.strokeColor, self.gradient, self.transforms, self.opacity];
 }
 
 @end

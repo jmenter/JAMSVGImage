@@ -11,8 +11,8 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = UIColor.whiteColor;
-    
-    self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:[JAMSVGImage imageNamed:@"curvy"]];
+    JAMSVGImage *image = [JAMSVGImage imageNamed:@"spring_tree_final"];
+    self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:image];
     self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
     
     [self.view addSubview:self.svgImageView];
