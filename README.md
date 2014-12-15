@@ -1,7 +1,7 @@
 JAMSVGImage
 ===========
 
-A class for parsing and displaying resolution independent SVG image graphics in iOS. The goal with this class is simplicity: it only supports a subset of the SVG spec (primitive shapes, bezier curves, stroke & fill, and gradient fills), but it's easy to use and quite performant.
+A class for parsing and displaying resolution independent SVG image graphics in iOS. The goal with this class is simplicity: it only supports paths and their appearance—primitive shapes, bezier paths (including elliptical arcs), stroke & fill, opacity, gradient fills, and affine transformations. It's easy to use and since the SVG commands are converted to Core Graphics objects it is quite performant.
 
 Use JAMSVGImage and JAMSVGImageView in lots of places where you would normally use UIImage and UIImageView. The benefits of using SVG are:
 
@@ -9,7 +9,7 @@ Use JAMSVGImage and JAMSVGImageView in lots of places where you would normally u
 2. Graphic file sizes tend to be much smaller
 3. Built-in "flat look" (haha)
 
-There are two main ways to use these classes. The first is to simply create a new JMSVGImage object and use the drawing methods, like so:
+There are two main ways to use these classes. The first is to simply create a new JMSVGImage object and use the instance's drawing methods to draw in a graphics context, like so:
 
     JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
     [tiger drawInCurrentContext];
@@ -27,7 +27,7 @@ This creates a JAMSVGImageView, populated with the tiger svg, sets the contentMo
 
 You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef.
 
-Note: the parser only supports the common subset of graphics primitives and assumes points for the length units. Supported shapes/features:
+Supported shapes/features:
 
 Shape Primitives:
 - Circle
@@ -36,14 +36,18 @@ Shape Primitives:
 - Line
 - Polyline
 - Bezier Path
+- Elliptical Arc
 
 Shape Appearance:
 - Fill Color (in hex "#xxxxxx" format)
+- Fill Rules (evenodd)
 - Stroke Color (in hex "#xxxxxx" format)
 - Gradient Fill
 - Stroke Weight
 - Line Dashes
 - Line Join/Cap (Butt/Round/Miter)
+- Opacity
+- Affine Transformations
 
 SVG Document Properties:
 - viewBox
