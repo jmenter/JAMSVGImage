@@ -40,6 +40,8 @@ static CGPoint CGPointSquare(CGPoint point)
     return CGPointMake(point.x * point.x, point.y * point.y);
 }
 
+#pragma mark - Private path properties.
+
 @interface JAMStyledBezierPath (Private)
 @property (nonatomic) UIBezierPath *path;
 @property (nonatomic) UIColor *fillColor;
@@ -48,6 +50,8 @@ static CGPoint CGPointSquare(CGPoint point)
 @property (nonatomic) NSValue *transform;
 @property (nonatomic) NSNumber *opacity;
 @end
+
+#pragma mark - Hella useful categories.
 
 @interface UIColor (HexUtilities)
 + (UIColor *)colorFromHexString:(NSString *)hexString;
@@ -175,7 +179,7 @@ static CGPoint CGPointSquare(CGPoint point)
 
 - (CGLineJoin)lineJoinForKey:(NSString *)key;
 {
-    return [self[key] isEqualToString:@"round"] ? kCGLineJoinRound : [self[key] isEqualToString:@"square"] ? kCGLineJoinBevel :kCGLineJoinMiter;
+    return [self[key] isEqualToString:@"round"] ? kCGLineJoinRound : [self[key] isEqualToString:@"square"] ? kCGLineJoinBevel : kCGLineJoinMiter;
 }
 
 - (CGLineCap)lineCapForKey:(NSString *)key;
@@ -193,7 +197,7 @@ static CGPoint CGPointSquare(CGPoint point)
     if (!self[key]) return nil;
     
     float a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0, angle = 0;
-    CGAffineTransform transform = CGAffineTransformMake(a, b, c, d, tx, ty);
+    CGAffineTransform transform = CGAffineTransformIdentity;
     NSScanner *floatScanner = [NSScanner scannerWithString:self[key]];
     
     while (!floatScanner.isAtEnd) {
@@ -205,35 +209,34 @@ static CGPoint CGPointSquare(CGPoint point)
             [floatScanner scanFloatAndAdvance:&d];
             [floatScanner scanFloatAndAdvance:&tx];
             [floatScanner scanFloatAndAdvance:&ty];
-            
             transform = CGAffineTransformConcat(transform, CGAffineTransformMake(a, b, c, d, tx, ty));
-        } else if ([floatScanner scanString:@"translate(" intoString:NULL]) {
+        }
+        else if ([floatScanner scanString:@"translate(" intoString:NULL]) {
             [floatScanner scanFloatAndAdvance:&tx];
             [floatScanner scanFloatAndAdvance:&ty];
-            
             transform = CGAffineTransformTranslate(transform, tx, ty);
-        } else if ([floatScanner scanString:@"scale(" intoString:NULL]) {
+        }
+        else if ([floatScanner scanString:@"scale(" intoString:NULL]) {
             [floatScanner scanFloatAndAdvance:&a];
             d = [floatScanner scanFloatAndAdvance:&d] ? d : a;
-            
             transform = CGAffineTransformScale(transform, a, d);
-        } else if ([floatScanner scanString:@"rotate(" intoString:NULL]) {
+        }
+        else if ([floatScanner scanString:@"rotate(" intoString:NULL]) {
             float translateX = 0;
             float translateY = 0;
             [floatScanner scanFloatAndAdvance:&angle];
             [floatScanner scanFloatAndAdvance:&translateX];
             [floatScanner scanFloatAndAdvance:&translateY];
-            
             transform = CGAffineTransformTranslate(transform, translateX, translateY);
             transform = CGAffineTransformRotate(transform, angle * (M_PI / 180.f));
             transform = CGAffineTransformTranslate(transform, -translateX, -translateY);
-        } else if ([floatScanner scanString:@"skewX(" intoString:NULL]) {
+        }
+        else if ([floatScanner scanString:@"skewX(" intoString:NULL]) {
             [floatScanner scanFloatAndAdvance:&angle];
-            
             transform = CGAffineTransformSkew(transform, angle * (M_PI / 180.f), 0);
-        } else if ([floatScanner scanString:@"skewY(" intoString:NULL]) {
+        }
+        else if ([floatScanner scanString:@"skewY(" intoString:NULL]) {
             [floatScanner scanFloatAndAdvance:&angle];
-
             transform = CGAffineTransformSkew(transform, 0, angle * (M_PI / 180.f));
         }
     }
@@ -245,7 +248,7 @@ static CGPoint CGPointSquare(CGPoint point)
 
 @interface JAMStyledBezierPathFactory ()
 @property (nonatomic) NSMutableArray *gradients;
-@property CGPoint previousControlPoint;
+@property CGPoint previousCurveOperationControlPoint;
 @property (nonatomic) NSNumber *groupOpacityValue;
 @property (nonatomic) NSMutableArray *transformStack;
 @end
@@ -299,11 +302,10 @@ static CGPoint CGPointSquare(CGPoint point)
 
 - (void)addGradientStopWithAttributes:(NSDictionary *)attributes;
 {
-    JAMSVGGradient *lastGradient = self.gradients.lastObject;
     JAMSVGGradientColorStop *colorStop = JAMSVGGradientColorStop.new;
     colorStop.position = [attributes floatForKey:@"offset"];
     colorStop.color = [self parseStyleColor:attributes[@"style"]];
-    [lastGradient.colorStops addObject:colorStop];
+    [((JAMSVGGradient *)self.gradients.lastObject).colorStops addObject:colorStop];
 }
 
 - (void)addGroupOpacityValueWithAttributes:(NSDictionary *)attributes;
@@ -523,7 +525,8 @@ static CGPoint CGPointSquare(CGPoint point)
     
     NSString *command;
     NSUInteger lastLocation = 0;
-    while (!commandScanner.isAtEnd) {
+    while (!commandScanner.isAtEnd)
+    {
         [commandScanner scanUpToCharactersFromSet:knownCommands intoString:&command];
         NSString *fullCommand = [commandString substringWithRange:NSMakeRange(lastLocation, commandScanner.scanLocation - lastLocation)];
         if (![fullCommand isEqualToString:@""])
@@ -533,7 +536,7 @@ static CGPoint CGPointSquare(CGPoint point)
         if (!commandScanner.isAtEnd)
             commandScanner.scanLocation++;
     }
-    return commandList;
+    return commandList.copy;
 }
 
 - (NSArray *)commandListForPolylineString:(NSString *)polylineString;
@@ -641,13 +644,13 @@ static CGPoint CGPointSquare(CGPoint point)
         controlPoint1 = CGPointAddPoints(controlPoint1, path.currentPoint);
         controlPoint2 = CGPointAddPoints(controlPoint2, path.currentPoint);
     }
-    self.previousControlPoint = controlPoint2;
+    self.previousCurveOperationControlPoint = controlPoint2;
     [path addCurveToPoint:curveToPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
 }
 
 - (void)addSmoothCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint smoothedPrevious = CGPointSubtractPoints(path.currentPoint, self.previousControlPoint);
+    CGPoint smoothedPrevious = CGPointSubtractPoints(path.currentPoint, self.previousCurveOperationControlPoint);
     CGPoint controlPoint1 = CGPointAddPoints(path.currentPoint, smoothedPrevious);
     CGPoint controlPoint2 = CGPointZero;
     CGPoint curveToPoint = CGPointZero;
@@ -658,7 +661,7 @@ static CGPoint CGPointSquare(CGPoint point)
         curveToPoint = CGPointAddPoints(curveToPoint, path.currentPoint);
         controlPoint2 = CGPointAddPoints(controlPoint2, path.currentPoint);
     }
-    self.previousControlPoint = controlPoint2;
+    self.previousCurveOperationControlPoint = controlPoint2;
     [path addCurveToPoint:curveToPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
 }
 
@@ -692,6 +695,7 @@ static CGPoint CGPointSquare(CGPoint point)
     if ([commandScanner.initialCharacter isEqualToString:@"a"]) {
         arcEndPoint = CGPointAddPoints(arcEndPoint, path.currentPoint);
     }
+    // Move to end point in case this elliptical arc is in a series of relative drawing commands.
     [path moveToPoint:arcEndPoint];
     return;
     
