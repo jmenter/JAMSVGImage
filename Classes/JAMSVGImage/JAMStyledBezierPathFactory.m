@@ -182,7 +182,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     return self[key] ? [self[key] floatValue] : 10.f;
 }
 
-- (NSValue *)transformForKey:(NSString *)key;
+- (NSValue *)affineTransformForKey:(NSString *)key;
 {
     if (!self[key]) return nil;
     
@@ -240,7 +240,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 @property (nonatomic) NSMutableArray *gradients;
 @property CGPoint previousCurveOperationControlPoint;
 @property (nonatomic) NSNumber *groupOpacityValue;
-@property (nonatomic) NSMutableArray *transformStack;
+@property (nonatomic) NSMutableArray *affineTransformStack;
 @end
 
 @implementation JAMStyledBezierPathFactory
@@ -252,7 +252,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     if (!(self = [super init])) return nil;
     
     self.gradients = NSMutableArray.new;
-    self.transformStack = NSMutableArray.new;
+    self.affineTransformStack = NSMutableArray.new;
     return self;
 }
 
@@ -310,18 +310,18 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)pushGroupTransformWithAttributes:(NSDictionary *)attributes;
 {
-    [self.transformStack addObject:[attributes transformForKey:@"transform"]];
+    [self.affineTransformStack addObject:[attributes affineTransformForKey:@"transform"]];
 }
 
 - (void)popGroupTransform;
 {
-    [self.transformStack removeLastObject];
+    [self.affineTransformStack removeLastObject];
 }
 
 - (CGAffineTransform)concatenatedGroupTransforms;
 {
     CGAffineTransform concatenated = CGAffineTransformIdentity;
-    for (NSValue *value in self.transformStack) {
+    for (NSValue *value in self.affineTransformStack) {
         concatenated = CGAffineTransformConcat(concatenated, value.CGAffineTransformValue);
     }
     return concatenated;
@@ -370,7 +370,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     gradient.identifier = attributes[@"id"];
     gradient.startPosition = CGPointMake([attributes[@"x1"] floatValue], [attributes[@"y1"] floatValue]);
     gradient.endPosition = CGPointMake([attributes[@"x2"] floatValue], [attributes[@"y2"] floatValue]);
-    gradient.gradientTransform = [attributes transformForKey:@"gradientTransform"];
+    gradient.gradientTransform = [attributes affineTransformForKey:@"gradientTransform"];
     [self.gradients addObject:gradient];
 }
 
@@ -380,7 +380,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     gradient.identifier = attributes[@"id"];
     gradient.position = CGPointMake([attributes[@"cx"] floatValue], [attributes[@"cy"] floatValue]);
     gradient.radius = [attributes[@"r"] floatValue];
-    gradient.gradientTransform = [attributes transformForKey:@"gradientTransform"];
+    gradient.gradientTransform = [attributes affineTransformForKey:@"gradientTransform"];
     [self.gradients addObject:gradient];
 }
 
@@ -452,19 +452,20 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (JAMStyledBezierPath *)createStyledPath:(UIBezierPath *)path withAttributes:(NSDictionary *)attributes;
 {
+    
     NSArray *transforms = nil;
-    if (attributes[@"transform"] || self.transformStack.count > 0) {
+    if (attributes[@"transform"] || self.affineTransformStack.count > 0) {
         if (attributes[@"transform"]) {
-            transforms = [self.transformStack arrayByAddingObject:[attributes transformForKey:@"transform"]];
+            transforms = [self.affineTransformStack arrayByAddingObject:[attributes affineTransformForKey:@"transform"]];
         } else {
-            transforms = self.transformStack.copy;
+            transforms = self.affineTransformStack.copy;
         }
     }
     return [JAMStyledBezierPath styledPathWithPath:[self applyStrokeAttributes:attributes toPath:path]
                                          fillColor:[attributes fillColorForKey:@"fill"]
                                        strokeColor:[attributes strokeColorForKey:@"stroke"]
                                           gradient:[self gradientForFillURL:attributes[@"fill"]]
-                                        transforms:transforms
+                                  affineTransforms:transforms
                                            opacity:[self opacityFromAttributes:attributes]];
 }
 

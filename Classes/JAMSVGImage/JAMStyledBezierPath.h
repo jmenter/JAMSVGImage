@@ -22,7 +22,7 @@
                          fillColor:(UIColor *)fillColor
                        strokeColor:(UIColor *)strokeColor
                           gradient:(JAMSVGGradient *)gradient
-                        transforms:(NSArray *)transforms
+                  affineTransforms:(NSArray *)transforms
                            opacity:(NSNumber *)opacity;
 
 /** Draws the styled path in the current graphics context. */

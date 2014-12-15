@@ -18,7 +18,7 @@
 @property (nonatomic) UIColor *fillColor;
 @property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) JAMSVGGradient *gradient;
-@property (nonatomic) NSArray *transforms;
+@property (nonatomic) NSArray *affineTransforms;
 @property (nonatomic) NSNumber *opacity;
 @end
 
@@ -28,7 +28,7 @@
                          fillColor:(UIColor *)fillColor
                        strokeColor:(UIColor *)strokeColor
                           gradient:(JAMSVGGradient *)gradient
-                        transforms:(NSArray *)transforms
+                  affineTransforms:(NSArray *)transforms
                            opacity:(NSNumber *)opacity;
 {
     JAMStyledBezierPath *styledPath = JAMStyledBezierPath.new;
@@ -37,7 +37,7 @@
     styledPath.fillColor = fillColor;
     styledPath.strokeColor = strokeColor;
     styledPath.gradient = gradient;
-    styledPath.transforms = transforms;
+    styledPath.affineTransforms = transforms;
     styledPath.opacity = opacity;
     
     return styledPath;
@@ -49,7 +49,7 @@
     if (!context) return;
 
     CGContextSaveGState(context);
-    for (NSValue *transform in self.transforms) {
+    for (NSValue *transform in self.affineTransforms) {
         CGContextConcatCTM(context, transform.CGAffineTransformValue);
     }
     if (self.opacity) {
@@ -107,7 +107,7 @@
 
 - (NSString *)description;
 {
-    return [NSString stringWithFormat:@"    styledPath:%p\n    path: %@\n    fill: %@\n    stroke: %@\n    gradient: %@\n    transform: %@\n    opacity: %@", self, self.path, self.fillColor, self.strokeColor, self.gradient, self.transforms, self.opacity];
+    return [NSString stringWithFormat:@"    styledPath:%p\n    path: %@\n    fill: %@\n    stroke: %@\n    gradient: %@\n    transform: %@\n    opacity: %@", self, self.path, self.fillColor, self.strokeColor, self.gradient, self.affineTransforms, self.opacity];
 }
 
 @end
