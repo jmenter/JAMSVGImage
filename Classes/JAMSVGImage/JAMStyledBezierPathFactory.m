@@ -43,6 +43,23 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 #pragma mark - Hella useful categories.
 
+@interface NSString (Utilities)
+- (NSString *)stringByTrimmingWhitespace;
+- (NSString *)lastCharacter;
+@end
+
+@implementation NSString (Utilities)
+- (NSString *)stringByTrimmingWhitespace;
+{
+    return [self stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
+}
+
+- (NSString *)lastCharacter;
+{
+    return self.length > 0 ? [NSString stringWithFormat:@"%C", [self characterAtIndex:self.length - 1]] : nil;
+}
+@end
+
 @interface UIColor (HexUtilities)
 + (UIColor *)colorFromHexString:(NSString *)hexString;
 @end
@@ -415,8 +432,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 - (JAMStyledBezierPath *)pathWithAttributes:(NSDictionary *)attributes;
 {
     NSString *commandString = attributes[@"d"];
-    NSString *trimmedCommandString = [commandString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSArray *commandList = [self commandListForCommandString:trimmedCommandString];
+    NSArray *commandList = [self commandListForCommandString:commandString.stringByTrimmingWhitespace];
     UIBezierPath *commandListPath = [self bezierPathFromCommandList:commandList];
     commandListPath.usesEvenOddFillRule = [attributes[@"fill-rule"] isEqualToString:@"evenodd"];
     return [self createStyledPath:commandListPath withAttributes:attributes];
@@ -518,6 +534,11 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (NSArray *)commandListForCommandString:(NSString *)commandString;
 {
+    commandString = commandString.stringByTrimmingWhitespace;
+    // Add an extra z if the last command is a close command. A little hacky but prevents missing out on final Zs.
+    if ([@[@"Z", @"z"] containsObject:commandString.lastCharacter]) {
+        commandString = [commandString stringByAppendingString:@"z"];
+    }
     NSScanner *commandScanner = [NSScanner scannerWithString:commandString];
     NSCharacterSet *knownCommands = [NSCharacterSet characterSetWithCharactersInString:@"MmLlCcVvHhAaSsQqTtZz"];
     NSMutableArray *commandList = NSMutableArray.new;
@@ -578,8 +599,9 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
         else if ([@[@"A", @"a"] containsObject:commandScanner.currentCharacter])
             [self addEllipticalArcToPointFromCommandScanner:commandScanner toPath:path];
         
-        else if ([@[@"Z", @"z"] containsObject:commandScanner.currentCharacter])
+        else if ([@[@"Z", @"z"] containsObject:commandScanner.currentCharacter]) {
             [path closePath];
+        }
     }
     return path;
 }
@@ -592,7 +614,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     [commandScanner scanPoint:&moveToPoint];
     
     if ([commandScanner.initialCharacter isEqualToString:@"m"])
-        moveToPoint = CGPointAddPoints(moveToPoint, path.currentPoint);
+        moveToPoint = CGPointAddPoints(moveToPoint, path.isEmpty ? CGPointZero : path.currentPoint);
     [path moveToPoint:moveToPoint];
 }
 
