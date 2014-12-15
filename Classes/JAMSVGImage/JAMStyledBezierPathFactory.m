@@ -697,36 +697,37 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     }
     
     xAxisRotation *= M_PI / 180.f;
-    CGFloat rx = radii.x, ry = radii.y;
     CGPoint currentPoint = CGPointMake(cos(xAxisRotation) * (arcStartPoint.x - arcEndPoint.x) / 2.0 + sin(xAxisRotation) * (arcStartPoint.y - arcEndPoint.y) / 2.0, -sin(xAxisRotation) * (arcStartPoint.x - arcEndPoint.x) / 2.0 + cos(xAxisRotation) * (arcStartPoint.y - arcEndPoint.y) / 2.0);
-    // adjust radii
-    CGFloat radiiAdjustment = pow(currentPoint.x, 2) / pow(rx, 2) + pow(currentPoint.y, 2) / pow(ry, 2);
-    rx *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
-    ry *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
-    // cx', cy'
-    CGFloat s = (largeArcFlag == sweepFlag ? -1 : 1) * sqrt(((pow(rx,2)*pow(ry,2))-(pow(rx,2)*pow(currentPoint.y,2))-(pow(ry,2)*pow(currentPoint.x,2))) / (pow(rx,2)*pow(currentPoint.y,2)+pow(ry,2)*pow(currentPoint.x,2)));
-    if (s != s) s = 0;
-    CGPoint cpp = CGPointMake(s * rx * currentPoint.y / ry, s * -ry * currentPoint.x / rx);
-    // cx, cy
-    CGPoint centerPoint = CGPointMake((arcStartPoint.x + arcEndPoint.x) / 2.0 + cos(xAxisRotation) * cpp.x - sin(xAxisRotation) * cpp.y, (arcStartPoint.y + arcEndPoint.y) / 2.0 + sin(xAxisRotation) * cpp.x + cos(xAxisRotation) * cpp.y);
+
+    CGFloat radiiAdjustment = pow(currentPoint.x, 2) / pow(radii.x, 2) + pow(currentPoint.y, 2) / pow(radii.y, 2);
+    radii.x *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
+    radii.y *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
+
+    CGFloat sweep = (largeArcFlag == sweepFlag ? -1 : 1) * sqrt(((pow(radii.x, 2) * pow(radii.y, 2)) - (pow(radii.x, 2) * pow(currentPoint.y, 2)) - (pow(radii.y, 2) * pow(currentPoint.x, 2))) / (pow(radii.x, 2) * pow(currentPoint.y, 2) + pow(radii.y, 2) * pow(currentPoint.x, 2)));
+    sweep = (sweep != sweep) ? 0 : sweep;
+    CGPoint preCenterPoint = CGPointMake(sweep * radii.x * currentPoint.y / radii.y, sweep * -radii.y * currentPoint.x / radii.x);
+
+    CGPoint centerPoint = CGPointMake((arcStartPoint.x + arcEndPoint.x) / 2.0 + cos(xAxisRotation) * preCenterPoint.x - sin(xAxisRotation) * preCenterPoint.y, (arcStartPoint.y + arcEndPoint.y) / 2.0 + sin(xAxisRotation) * preCenterPoint.x + cos(xAxisRotation) * preCenterPoint.y);
     
-    CGFloat startAngle = angle(CGPointMake(1, 0), CGPointMake((currentPoint.x-cpp.x)/rx, (currentPoint.y-cpp.y)/ry));
-    // angle delta
-    CGPoint u = CGPointMake((currentPoint.x-cpp.x)/rx, (currentPoint.y-cpp.y)/ry);
-    CGPoint v = CGPointMake((-currentPoint.x-cpp.x)/rx, (-currentPoint.y-cpp.y)/ry);
-    CGFloat angleDelta = (u.x * v.y < u.y * v.x ? -1 : 1) * acos(ratio(u, v));
-    if (ratio(u,v) <= -1) angleDelta = M_PI;
-    if (ratio(u,v) >= 1) angleDelta = 0;
+    CGFloat startAngle = angle(CGPointMake(1, 0), CGPointMake((currentPoint.x-preCenterPoint.x)/radii.x,
+                                                              (currentPoint.y-preCenterPoint.y)/radii.y));
+
+    CGPoint deltaU = CGPointMake((currentPoint.x - preCenterPoint.x) / radii.x,
+                                 (currentPoint.y - preCenterPoint.y) / radii.y);
+    CGPoint deltaV = CGPointMake((-currentPoint.x - preCenterPoint.x) / radii.x,
+                                 (-currentPoint.y - preCenterPoint.y) / radii.y);
+    CGFloat angleDelta = (deltaU.x * deltaV.y < deltaU.y * deltaV.x ? -1 : 1) * acos(ratio(deltaU, deltaV));
     
-    CGFloat radius = rx > ry ? rx : ry;
-    CGFloat scaleX = rx > ry ? 1 : rx / ry;
-    CGFloat scaleY = rx > ry ? ry / rx : 1;
+    angleDelta = (ratio(deltaU, deltaV) <= -1) ? M_PI : (ratio(deltaU, deltaV) >= 1) ? 0 : angleDelta;
+    
+    CGFloat radius = MAX(radii.x, radii.y);
+    CGPoint scale = (radii.x > radii.y) ? CGPointMake(1, radii.y / radii.x) : CGPointMake(radii.x / radii.y, 1);
     
     [path applyTransform:CGAffineTransformMakeTranslation(-centerPoint.x, -centerPoint.y)];
     [path applyTransform:CGAffineTransformMakeRotation(-xAxisRotation)];
-    [path applyTransform:CGAffineTransformMakeScale(1 / scaleX, 1 / scaleY)];
-    [path addArcWithCenter:CGPointMake(0, 0) radius:radius startAngle:startAngle endAngle:startAngle + angleDelta clockwise:sweepFlag];
-    [path applyTransform:CGAffineTransformMakeScale(scaleX, scaleY)];
+    [path applyTransform:CGAffineTransformMakeScale(1 / scale.x, 1 / scale.y)];
+    [path addArcWithCenter:CGPointZero radius:radius startAngle:startAngle endAngle:startAngle + angleDelta clockwise:sweepFlag];
+    [path applyTransform:CGAffineTransformMakeScale(scale.x, scale.y)];
     [path applyTransform:CGAffineTransformMakeRotation(xAxisRotation)];
     [path applyTransform:CGAffineTransformMakeTranslation(centerPoint.x, centerPoint.y)];
 }
