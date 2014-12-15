@@ -329,8 +329,13 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (CGRect)getViewboxFromAttributes:(NSDictionary *)attributes;
 {
-    // Need to fix this, having the size be CGRectZero causes crashes if the svg didn't supply a viewBox
-    if (!attributes[@"viewBox"]) return CGRectMake(0, 0, 512, 512);
+    if (!attributes[@"viewBox"]) {
+        if (attributes[@"width"] && attributes[@"height"]) {
+            return CGRectMake(0, 0, [attributes[@"width"] floatValue], [attributes[@"height"] floatValue]);
+        } else {
+            return CGRectMake(0, 0, 256, 256);
+        }
+    }
     
     float xPosition, yPosition, width, height;
     NSScanner *viewBoxScanner = [NSScanner scannerWithString:attributes[@"viewBox"]];
