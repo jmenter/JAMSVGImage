@@ -679,7 +679,7 @@ static CGPoint CGPointSquare(CGPoint point)
     [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
 }
 
-- (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
+- (void)dontAddEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
     CGPoint radii, arcEndPoint, arcStartPoint = path.currentPoint;
     float xAxisRotation;
@@ -793,6 +793,135 @@ static CGPoint CGPointSquare(CGPoint point)
     [path closePath];
 //    [path moveToPoint:arcEndPoint];
 //    return (cx, cy, rx, ry, theta, delta, phi);
+}
+
+- (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
+{
+    CGPoint radii, arcEndPoint, arcStartPoint = path.currentPoint;
+    float xAxisRotation;
+    int largeArcFlag, sweepFlag;
+    
+    [commandScanner scanPoint:&radii];
+    [commandScanner scanFloat:&xAxisRotation];
+    [commandScanner scanInt:&largeArcFlag];
+    [commandScanner scanThroughToHyphen];
+    [commandScanner scanInt:&sweepFlag];
+    [commandScanner scanPoint:&arcEndPoint];
+    
+    if ([commandScanner.initialCharacter isEqualToString:@"a"]) {
+        arcEndPoint = CGPointAddPoints(arcEndPoint, path.currentPoint);
+    }
+    // Move to end point in case this elliptical arc is in a series of relative drawing commands.
+//    [path moveToPoint:arcEndPoint];
+//    return;
+    
+    xAxisRotation *= M_PI / 180.f;
+    // Not implemented yet. These codes don't work right.
+    CGFloat
+//    x0 = arcStartPoint.x,
+//    y0 = arcStartPoint.y,
+    rx = radii.x,
+    ry = radii.y;
+//    phi = xAxisRotation,
+//    x = arcEndPoint.x,
+//    y = arcEndPoint.y;
+    
+//    BOOL large_arc = largeArcFlag;
+//    BOOL sweep = sweepFlag;
+    
+    CGPoint cp = arcEndPoint;
+    CGPoint curr = arcStartPoint;
+//    CGFloat xAxisRotation;
+//    CGFloat rx;
+//    CGFloat ry;
+//    BOOL largeArcFlag;
+//    BOOL sweepFlag;
+    CGPoint currp = CGPointMake(
+                                cos(xAxisRotation) * (curr.x - cp.x) / 2.0 + sin(xAxisRotation) * (curr.y - cp.y) / 2.0,
+                                -sin(xAxisRotation) * (curr.x - cp.x) / 2.0 + cos(xAxisRotation) * (curr.y - cp.y) / 2.0
+                                );
+    // adjust radii
+    CGFloat l = pow(currp.x,2)/pow(rx,2)+pow(currp.y,2)/pow(ry,2);
+    if (l > 1) {
+        rx *= sqrt(l);
+        ry *= sqrt(l);
+    }
+    // cx', cy'
+    CGFloat s = (largeArcFlag == sweepFlag ? -1 : 1) * sqrt(
+                                                            ((pow(rx,2)*pow(ry,2))-(pow(rx,2)*pow(currp.y,2))-(pow(ry,2)*pow(currp.x,2))) /
+                                                            (pow(rx,2)*pow(currp.y,2)+pow(ry,2)*pow(currp.x,2))
+                                                            );
+    if (s != s) s = 0;
+    CGPoint cpp = CGPointMake(s * rx * currp.y / ry, s * -ry * currp.x / rx);
+    // cx, cy
+    CGPoint centp = CGPointMake(
+                                (curr.x + cp.x) / 2.0 + cos(xAxisRotation) * cpp.x - sin(xAxisRotation) * cpp.y,
+                                (curr.y + cp.y) / 2.0 + sin(xAxisRotation) * cpp.x + cos(xAxisRotation) * cpp.y
+                                );
+    // vector magnitude
+    //    var m = function(v) { return Math.sqrt(Math.pow(v[0],2) + Math.pow(v[1],2)); }
+    // ratio between two vectors
+    //    var r = function(u, v) { return (u[0]*v[0]+u[1]*v[1]) / (m(u)*m(v)) }
+    // angle between two vectors
+    //    var a = function(u, v) { return (u[0]*v[1] < u[1]*v[0] ? -1 : 1) * Math.acos(r(u,v)); }
+    // initial angle
+    CGFloat a1 = angle(CGPointMake(1, 0), CGPointMake((currp.x-cpp.x)/rx, (currp.y-cpp.y)/ry));// [(currp.x-cpp.x)/rx,(currp.y-cpp.y)/ry]);
+    // angle delta
+    CGPoint u = CGPointMake((currp.x-cpp.x)/rx, (currp.y-cpp.y)/ry);// [(currp.x-cpp.x)/rx,(currp.y-cpp.y)/ry];
+    CGPoint v = CGPointMake((-currp.x-cpp.x)/rx, (-currp.y-cpp.y)/ry);// [(-currp.x-cpp.x)/rx,(-currp.y-cpp.y)/ry];
+    CGFloat ad = angle(u, v);//(u, v);
+    if (ratio(u,v) <= -1) ad = M_PI;
+    if (ratio(u,v) >= 1) ad = 0;
+    
+    // for markers
+    CGFloat dir = (1 - sweepFlag) ? 1.0 : -1.0;
+    CGFloat ah = a1 + dir * (ad / 2.0);
+    CGPoint halfWay = CGPointMake(
+                                  centp.x + rx * cos(ah),
+                                  centp.y + ry * sin(ah)
+                                  );
+    //    pp.addMarkerAngle(halfWay, ah - dir * Math.PI / 2);
+    //    pp.addMarkerAngle(cp, ah - dir * Math.PI);
+    
+    //    bb.addPoint(cp.x, cp.y); // TODO: this is too naive, make it better
+    CGFloat r = rx > ry ? rx : ry;
+    CGFloat sx = rx > ry ? 1 : rx / ry;
+    CGFloat sy = rx > ry ? ry / rx : 1;
+    
+    [path applyTransform:CGAffineTransformMakeTranslation(-centp.x, -centp.y)];
+    [path applyTransform:CGAffineTransformMakeRotation(-xAxisRotation)];
+    [path applyTransform:CGAffineTransformMakeScale(1/sx, 1/sy)];
+    //    ctx.translate(centp.x, centp.y);
+    //    ctx.rotate(xAxisRotation);
+    //    ctx.scale(sx, sy);
+    //    ctx.arc(0, 0, r, a1, a1 + ad, 1 - sweepFlag);
+//    [path addLineToPoint:arcStartPoint];
+//    [path applyTransform:CGAffineTransformMakeRotation(xAxisRotation * (M_PI / 180.f))];
+    [path addArcWithCenter:CGPointZero radius:r startAngle:a1 endAngle:a1 + ad clockwise:sweepFlag];
+//    [path applyTransform:CGAffineTransformMakeRotation(-2)];
+    [path applyTransform:CGAffineTransformMakeScale(sx, sy)];
+    [path applyTransform:CGAffineTransformMakeRotation(xAxisRotation)];
+    [path applyTransform:CGAffineTransformMakeTranslation(centp.x, centp.y)];
+    [path addLineToPoint:arcEndPoint];
+    //    ctx.scale(1/sx, 1/sy);
+    //    ctx.rotate(-xAxisRotation);
+    //    ctx.translate(-centp.x, -centp.y);
+
+}
+
+static CGFloat magnitude(CGPoint v)
+{
+    return sqrt(pow(v.x,2) + pow(v.y,2));
+}
+
+static CGFloat ratio(CGPoint u, CGPoint v)
+{
+    return (u.x*v.x+u.y*v.y) / (magnitude(u)*magnitude(v)) ;
+}
+
+static CGFloat angle(CGPoint u, CGPoint v)
+{
+    return (u.x*v.y < u.y*v.x ? -1 : 1) * acos(ratio(u,v)) ;
 }
 
 @end
