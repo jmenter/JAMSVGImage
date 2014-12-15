@@ -413,6 +413,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     NSString *trimmedCommandString = [commandString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSArray *commandList = [self commandListForCommandString:trimmedCommandString];
     UIBezierPath *commandListPath = [self bezierPathFromCommandList:commandList];
+    commandListPath.usesEvenOddFillRule = [attributes[@"fill-rule"] isEqualToString:@"evenodd"];
     return [self createStyledPath:commandListPath withAttributes:attributes];
 }
 
