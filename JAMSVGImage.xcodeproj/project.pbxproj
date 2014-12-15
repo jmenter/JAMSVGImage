@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6300DC2D1A3CC9D9004AA12F /* arcs01.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6300DC2C1A3CC9D9004AA12F /* arcs01.svg */; };
+		63195E291A3E5A0F0072FB74 /* paths-data-03-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63195E281A3E5A0F0072FB74 /* paths-data-03-f.svg */; };
 		633FDA7F18F4368900C8BEC4 /* curvy.svg in Resources */ = {isa = PBXBuildFile; fileRef = 633FDA7E18F4368900C8BEC4 /* curvy.svg */; };
 		635B1C7D1A3DDDEE00942295 /* tree.svg in Resources */ = {isa = PBXBuildFile; fileRef = 635B1C7C1A3DDDEE00942295 /* tree.svg */; };
 		638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */ = {isa = PBXBuildFile; fileRef = 638E660618F39529007A2EAA /* JAMSVGGradientParts.m */; };
@@ -31,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		6300DC2C1A3CC9D9004AA12F /* arcs01.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = arcs01.svg; sourceTree = "<group>"; };
+		63195E281A3E5A0F0072FB74 /* paths-data-03-f.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "paths-data-03-f.svg"; sourceTree = "<group>"; };
 		633FDA7E18F4368900C8BEC4 /* curvy.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = curvy.svg; sourceTree = "<group>"; };
 		635B1C7C1A3DDDEE00942295 /* tree.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tree.svg; sourceTree = "<group>"; };
 		638E660518F39529007A2EAA /* JAMSVGGradientParts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMSVGGradientParts.h; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		63D2067C18EF501F00FAC851 /* JAMSVGImage */ = {
 			isa = PBXGroup;
 			children = (
+				63195E281A3E5A0F0072FB74 /* paths-data-03-f.svg */,
 				635B1C7C1A3DDDEE00942295 /* tree.svg */,
 				6300DC2C1A3CC9D9004AA12F /* arcs01.svg */,
 				633FDA7E18F4368900C8BEC4 /* curvy.svg */,
@@ -220,6 +223,7 @@
 				6300DC2D1A3CC9D9004AA12F /* arcs01.svg in Resources */,
 				633FDA7F18F4368900C8BEC4 /* curvy.svg in Resources */,
 				EB5881E019D5CE2900797A2E /* Launch.xib in Resources */,
+				63195E291A3E5A0F0072FB74 /* paths-data-03-f.svg in Resources */,
 				63FAEAD41A37F2F60036E195 /* artTest.svg in Resources */,
 				635B1C7D1A3DDDEE00942295 /* tree.svg in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,

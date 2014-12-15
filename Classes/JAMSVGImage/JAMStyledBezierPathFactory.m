@@ -678,57 +678,117 @@ static CGPoint CGPointSquare(CGPoint point)
 
 - (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    // TODO: Implement
-    CGPoint radii, arcEndPoint, arcStartPoint = self.previousControlPoint;
+    CGPoint radii, arcEndPoint, arcStartPoint = path.currentPoint;
     float xAxisRotation;
     int largeArcFlag, sweepFlag;
     
-    // (rx ry x-axis-rotation large-arc-flag sweep-flag x y)
-    
     [commandScanner scanPoint:&radii];
-    [commandScanner scanThroughToHyphen];
     [commandScanner scanFloat:&xAxisRotation];
-    [commandScanner scanThroughToHyphen];
     [commandScanner scanInt:&largeArcFlag];
     [commandScanner scanThroughToHyphen];
     [commandScanner scanInt:&sweepFlag];
-    [commandScanner scanThroughToHyphen];
     [commandScanner scanPoint:&arcEndPoint];
+
+    if ([commandScanner.initialCharacter isEqualToString:@"a"]) {
+        arcEndPoint = CGPointAddPoints(arcEndPoint, path.currentPoint);
+    }
+    [path moveToPoint:arcEndPoint];
+    return;
     
-    CGPoint midPoint = CGPointMidPoint(arcStartPoint, arcEndPoint);
-    CGFloat rotation = xAxisRotation * (M_PI / 180.f);
-    CGPoint point1 = CGPointMake(cos(rotation) * midPoint.x + sin(rotation) * midPoint.y,
-                                 -sin(rotation) * midPoint.x + cos(rotation) * midPoint.y);
-    CGPoint r = CGPointMake(fabs(radii.x), fabs(radii.y));
+    // Not implemented yet. These codes don't work right.
+    CGFloat
+    x0 = arcStartPoint.x,
+    y0 = arcStartPoint.y,
+    rx = radii.x,
+    ry = radii.y,
+    phi = xAxisRotation,
+    x = arcEndPoint.x,
+    y = arcEndPoint.y;
     
-    CGPoint point1Squared = CGPointSquare(point1);
-    CGPoint rSquared = CGPointSquare(r);
+    BOOL large_arc = largeArcFlag;
+    BOOL sweep = sweepFlag;
+
+    // Compute 1/2 distance between current and final point
+    CGFloat dx2 = (x0 - x) / 2.0;
+    CGFloat dy2 = (y0 - y) / 2.0;
     
-    CGFloat radiiFix = (point1Squared.x / rSquared.x) + (point1Squared.y / rSquared.y);
-    if (radiiFix > 1) {
-        r.x = sqrt(radiiFix) * r.x;
-        r.y = sqrt(radiiFix) * r.y;
-        rSquared = CGPointSquare(r);
+    // Convert from degrees to radians
+    CGFloat phi_r = fmod(phi, 360) * (M_PI / 180.f);
+    
+    // Compute (x1, y1)
+    CGFloat x1 = cos(phi_r) * dx2 + sin(phi_r) * dy2;
+    CGFloat y1 = -sin(phi_r) * dx2 + cos(phi_r) * dy2;
+    
+    // Make sure radii are large enough
+    rx = abs(rx);
+    ry = abs(ry);
+    CGFloat rx_sq = rx * rx;
+    CGFloat ry_sq = ry * ry;
+    CGFloat x1_sq = x1 * x1;
+    CGFloat y1_sq = y1 * y1;
+    
+    CGFloat radius_check = (x1_sq / rx_sq) + (y1_sq / ry_sq);
+    if (radius_check > 1)
+    {
+        rx *= sqrt(radius_check);
+        ry *= sqrt(radius_check);
+        rx_sq = rx * rx;
+        ry_sq = ry * ry;
     }
     
-    CGFloat cf = ((rSquared.x * rSquared.y) - (rSquared.x  * point1Squared.y) - (rSquared.y  * point1Squared.x)) /
-    ((rSquared.x * point1Squared.y) + (rSquared.y * point1Squared.x));
-    cf = (cf > 0) ? cf : 0;
-    CGFloat cfSqrt = sqrt(cf);
-    cfSqrt *= (largeArcFlag != sweepFlag) ? 1 : -1;
+    // Step 2: Compute (cx1, cy1)
     
-    CGPoint centerPoint1 = CGPointMake(cfSqrt * ((r.x * point1.y) / r.y), cfSqrt * ((r.y * point1.x) / r.x));
+    CGFloat sign = (large_arc == sweep) ? -1 : 1;
+    CGFloat sq = ((rx_sq * ry_sq) - (rx_sq * y1_sq) - (ry_sq * x1_sq)) / ((rx_sq * y1_sq) + (ry_sq * x1_sq));
+    sq = (sq < 0) ? 0 : sq;
+    CGFloat coef = sign * sqrt(sq);
+    CGFloat cx1 = coef * ((rx * y1) / ry);
+    CGFloat cy1 = coef * -((ry * x1) / rx);
     
-    CGPoint centerPoint = CGPointMake((cos(rotation) * centerPoint1.x - sin(rotation) * centerPoint1.y) + ((arcStartPoint.x + arcEndPoint.x) / 2),
-                                      (sin(rotation) * centerPoint1.x + cos(rotation) * centerPoint1.y) + ((arcStartPoint.y + arcEndPoint.y) / 2));
-
+    //   Step 3: Compute (cx, cy) from (cx1, cy1)
     
+    CGFloat sx2 = (x0 + x) / 2.0;
+    CGFloat sy2 = (y0 + y) / 2.0;
     
+    CGFloat cx = sx2 + (cos(phi_r) * cx1 - sin(phi_r) * cy1);
+    CGFloat cy = sy2 + (sin(phi_r) * cx1 + cos(phi_r) * cy1);
     
+    //   Step 4: Compute angle start and angle extent
     
-    [path addArcWithCenter:centerPoint radius:20 startAngle:0 endAngle:3 clockwise:YES];
-    [path moveToPoint:arcEndPoint];
-//    [path closePath];
+    CGFloat ux = (x1 - cx1) / rx;
+    CGFloat uy = (y1 - cy1) / ry;
+    CGFloat vx = (-x1 - cx1) / rx;
+    CGFloat vy = (-y1 - cy1) / ry;
+    CGFloat n = sqrt( (ux * ux) + (uy * uy) );
+    CGFloat p = ux; // 1 * ux + 0 * uy
+    sign = (uy < 0) ? -1 : 1;
+    
+    CGFloat theta = sign * acos( p / n );
+//    CGFloat theta = rad2deg(theta);
+    
+    n = sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
+    p = ux * vx + uy * vy;
+    sign = ((ux * vy - uy * vx) < 0) ? -1 : 1;
+    CGFloat delta = sign * acos( p / n );
+//    delta = rad2deg(delta);
+    
+    if (!sweep && delta > 0)
+    {
+        delta -= 2 * M_PI;
+    } else if (sweep && delta < 0)
+    {
+        delta += 2 * M_PI;
+    }
+    
+    delta = fmod(delta, 2 * M_PI);
+    theta = fmod(theta, 2 * M_PI);
+//    delta %= 360;
+//    theta %= 360;
+    
+    [path addArcWithCenter:CGPointMake(cx, cy) radius:rx startAngle:theta + phi_r endAngle:delta + phi_r clockwise:YES];
+    [path closePath];
+//    [path moveToPoint:arcEndPoint];
+//    return (cx, cy, rx, ry, theta, delta, phi);
 }
 
 @end
