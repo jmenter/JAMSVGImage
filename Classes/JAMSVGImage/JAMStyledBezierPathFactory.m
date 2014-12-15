@@ -30,16 +30,6 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     return CGPointMake(point1.x - point2.x, point1.y - point2.y);
 }
 
-static CGPoint CGPointMidPoint(CGPoint point1, CGPoint point2)
-{
-    return CGPointMake((point1.x - point2.x) / 2, (point1.y - point2.y) / 2);
-}
-
-static CGPoint CGPointSquare(CGPoint point)
-{
-    return CGPointMake(point.x * point.x, point.y * point.y);
-}
-
 #pragma mark - Private path properties.
 
 @interface JAMStyledBezierPath (Private)
@@ -339,7 +329,8 @@ static CGPoint CGPointSquare(CGPoint point)
 
 - (CGRect)getViewboxFromAttributes:(NSDictionary *)attributes;
 {
-    if (!attributes[@"viewBox"]) return CGRectZero;
+    // Need to fix this, having the size be CGRectZero causes crashes if the svg didn't supply a viewBox
+    if (!attributes[@"viewBox"]) return CGRectMake(0, 0, 512, 512);
     
     float xPosition, yPosition, width, height;
     NSScanner *viewBoxScanner = [NSScanner scannerWithString:attributes[@"viewBox"]];
@@ -419,7 +410,8 @@ static CGPoint CGPointSquare(CGPoint point)
 - (JAMStyledBezierPath *)pathWithAttributes:(NSDictionary *)attributes;
 {
     NSString *commandString = attributes[@"d"];
-    NSArray *commandList = [self commandListForCommandString:commandString];
+    NSString *trimmedCommandString = [commandString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSArray *commandList = [self commandListForCommandString:trimmedCommandString];
     UIBezierPath *commandListPath = [self bezierPathFromCommandList:commandList];
     return [self createStyledPath:commandListPath withAttributes:attributes];
 }
@@ -529,8 +521,9 @@ static CGPoint CGPointSquare(CGPoint point)
     {
         [commandScanner scanUpToCharactersFromSet:knownCommands intoString:&command];
         NSString *fullCommand = [commandString substringWithRange:NSMakeRange(lastLocation, commandScanner.scanLocation - lastLocation)];
-        if (![fullCommand isEqualToString:@""])
-            [commandList addObject:fullCommand];
+        NSString *trimmedFullCommand = [fullCommand stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        if (![trimmedFullCommand isEqualToString:@""])
+            [commandList addObject:trimmedFullCommand];
         
         lastLocation = commandScanner.scanLocation;
         if (!commandScanner.isAtEnd)
@@ -679,122 +672,6 @@ static CGPoint CGPointSquare(CGPoint point)
     [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
 }
 
-- (void)dontAddEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
-{
-    CGPoint radii, arcEndPoint, arcStartPoint = path.currentPoint;
-    float xAxisRotation;
-    int largeArcFlag, sweepFlag;
-    
-    [commandScanner scanPoint:&radii];
-    [commandScanner scanFloat:&xAxisRotation];
-    [commandScanner scanInt:&largeArcFlag];
-    [commandScanner scanThroughToHyphen];
-    [commandScanner scanInt:&sweepFlag];
-    [commandScanner scanPoint:&arcEndPoint];
-
-    if ([commandScanner.initialCharacter isEqualToString:@"a"]) {
-        arcEndPoint = CGPointAddPoints(arcEndPoint, path.currentPoint);
-    }
-    // Move to end point in case this elliptical arc is in a series of relative drawing commands.
-    [path moveToPoint:arcEndPoint];
-    return;
-    
-    // Not implemented yet. These codes don't work right.
-    CGFloat
-    x0 = arcStartPoint.x,
-    y0 = arcStartPoint.y,
-    rx = radii.x,
-    ry = radii.y,
-    phi = xAxisRotation,
-    x = arcEndPoint.x,
-    y = arcEndPoint.y;
-    
-    BOOL large_arc = largeArcFlag;
-    BOOL sweep = sweepFlag;
-
-    // Compute 1/2 distance between current and final point
-    CGFloat dx2 = (x0 - x) / 2.0;
-    CGFloat dy2 = (y0 - y) / 2.0;
-    
-    // Convert from degrees to radians
-    CGFloat phi_r = fmod(phi, 360) * (M_PI / 180.f);
-    
-    // Compute (x1, y1)
-    CGFloat x1 = cos(phi_r) * dx2 + sin(phi_r) * dy2;
-    CGFloat y1 = -sin(phi_r) * dx2 + cos(phi_r) * dy2;
-    
-    // Make sure radii are large enough
-    rx = abs(rx);
-    ry = abs(ry);
-    CGFloat rx_sq = rx * rx;
-    CGFloat ry_sq = ry * ry;
-    CGFloat x1_sq = x1 * x1;
-    CGFloat y1_sq = y1 * y1;
-    
-    CGFloat radius_check = (x1_sq / rx_sq) + (y1_sq / ry_sq);
-    if (radius_check > 1)
-    {
-        rx *= sqrt(radius_check);
-        ry *= sqrt(radius_check);
-        rx_sq = rx * rx;
-        ry_sq = ry * ry;
-    }
-    
-    // Step 2: Compute (cx1, cy1)
-    
-    CGFloat sign = (large_arc == sweep) ? -1 : 1;
-    CGFloat sq = ((rx_sq * ry_sq) - (rx_sq * y1_sq) - (ry_sq * x1_sq)) / ((rx_sq * y1_sq) + (ry_sq * x1_sq));
-    sq = (sq < 0) ? 0 : sq;
-    CGFloat coef = sign * sqrt(sq);
-    CGFloat cx1 = coef * ((rx * y1) / ry);
-    CGFloat cy1 = coef * -((ry * x1) / rx);
-    
-    //   Step 3: Compute (cx, cy) from (cx1, cy1)
-    
-    CGFloat sx2 = (x0 + x) / 2.0;
-    CGFloat sy2 = (y0 + y) / 2.0;
-    
-    CGFloat cx = sx2 + (cos(phi_r) * cx1 - sin(phi_r) * cy1);
-    CGFloat cy = sy2 + (sin(phi_r) * cx1 + cos(phi_r) * cy1);
-    
-    //   Step 4: Compute angle start and angle extent
-    
-    CGFloat ux = (x1 - cx1) / rx;
-    CGFloat uy = (y1 - cy1) / ry;
-    CGFloat vx = (-x1 - cx1) / rx;
-    CGFloat vy = (-y1 - cy1) / ry;
-    CGFloat n = sqrt( (ux * ux) + (uy * uy) );
-    CGFloat p = ux; // 1 * ux + 0 * uy
-    sign = (uy < 0) ? -1 : 1;
-    
-    CGFloat theta = sign * acos( p / n );
-//    CGFloat theta = rad2deg(theta);
-    
-    n = sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
-    p = ux * vx + uy * vy;
-    sign = ((ux * vy - uy * vx) < 0) ? -1 : 1;
-    CGFloat delta = sign * acos( p / n );
-//    delta = rad2deg(delta);
-    
-    if (!sweep && delta > 0)
-    {
-        delta -= 2 * M_PI;
-    } else if (sweep && delta < 0)
-    {
-        delta += 2 * M_PI;
-    }
-    
-    delta = fmod(delta, 2 * M_PI);
-    theta = fmod(theta, 2 * M_PI);
-//    delta %= 360;
-//    theta %= 360;
-    
-    [path addArcWithCenter:CGPointMake(cx, cy) radius:rx startAngle:theta + phi_r endAngle:delta + phi_r clockwise:YES];
-    [path closePath];
-//    [path moveToPoint:arcEndPoint];
-//    return (cx, cy, rx, ry, theta, delta, phi);
-}
-
 - (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
     CGPoint radii, arcEndPoint, arcStartPoint = path.currentPoint;
@@ -811,117 +688,55 @@ static CGPoint CGPointSquare(CGPoint point)
     if ([commandScanner.initialCharacter isEqualToString:@"a"]) {
         arcEndPoint = CGPointAddPoints(arcEndPoint, path.currentPoint);
     }
-    // Move to end point in case this elliptical arc is in a series of relative drawing commands.
-//    [path moveToPoint:arcEndPoint];
-//    return;
     
     xAxisRotation *= M_PI / 180.f;
-    // Not implemented yet. These codes don't work right.
-    CGFloat
-//    x0 = arcStartPoint.x,
-//    y0 = arcStartPoint.y,
-    rx = radii.x,
-    ry = radii.y;
-//    phi = xAxisRotation,
-//    x = arcEndPoint.x,
-//    y = arcEndPoint.y;
-    
-//    BOOL large_arc = largeArcFlag;
-//    BOOL sweep = sweepFlag;
-    
-    CGPoint cp = arcEndPoint;
-    CGPoint curr = arcStartPoint;
-//    CGFloat xAxisRotation;
-//    CGFloat rx;
-//    CGFloat ry;
-//    BOOL largeArcFlag;
-//    BOOL sweepFlag;
-    CGPoint currp = CGPointMake(
-                                cos(xAxisRotation) * (curr.x - cp.x) / 2.0 + sin(xAxisRotation) * (curr.y - cp.y) / 2.0,
-                                -sin(xAxisRotation) * (curr.x - cp.x) / 2.0 + cos(xAxisRotation) * (curr.y - cp.y) / 2.0
-                                );
+    CGFloat rx = radii.x, ry = radii.y;
+    CGPoint currentPoint = CGPointMake(cos(xAxisRotation) * (arcStartPoint.x - arcEndPoint.x) / 2.0 + sin(xAxisRotation) * (arcStartPoint.y - arcEndPoint.y) / 2.0, -sin(xAxisRotation) * (arcStartPoint.x - arcEndPoint.x) / 2.0 + cos(xAxisRotation) * (arcStartPoint.y - arcEndPoint.y) / 2.0);
     // adjust radii
-    CGFloat l = pow(currp.x,2)/pow(rx,2)+pow(currp.y,2)/pow(ry,2);
-    if (l > 1) {
-        rx *= sqrt(l);
-        ry *= sqrt(l);
-    }
+    CGFloat radiiAdjustment = pow(currentPoint.x, 2) / pow(rx, 2) + pow(currentPoint.y, 2) / pow(ry, 2);
+    rx *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
+    ry *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
     // cx', cy'
-    CGFloat s = (largeArcFlag == sweepFlag ? -1 : 1) * sqrt(
-                                                            ((pow(rx,2)*pow(ry,2))-(pow(rx,2)*pow(currp.y,2))-(pow(ry,2)*pow(currp.x,2))) /
-                                                            (pow(rx,2)*pow(currp.y,2)+pow(ry,2)*pow(currp.x,2))
-                                                            );
+    CGFloat s = (largeArcFlag == sweepFlag ? -1 : 1) * sqrt(((pow(rx,2)*pow(ry,2))-(pow(rx,2)*pow(currentPoint.y,2))-(pow(ry,2)*pow(currentPoint.x,2))) / (pow(rx,2)*pow(currentPoint.y,2)+pow(ry,2)*pow(currentPoint.x,2)));
     if (s != s) s = 0;
-    CGPoint cpp = CGPointMake(s * rx * currp.y / ry, s * -ry * currp.x / rx);
+    CGPoint cpp = CGPointMake(s * rx * currentPoint.y / ry, s * -ry * currentPoint.x / rx);
     // cx, cy
-    CGPoint centp = CGPointMake(
-                                (curr.x + cp.x) / 2.0 + cos(xAxisRotation) * cpp.x - sin(xAxisRotation) * cpp.y,
-                                (curr.y + cp.y) / 2.0 + sin(xAxisRotation) * cpp.x + cos(xAxisRotation) * cpp.y
-                                );
-    // vector magnitude
-    //    var m = function(v) { return Math.sqrt(Math.pow(v[0],2) + Math.pow(v[1],2)); }
-    // ratio between two vectors
-    //    var r = function(u, v) { return (u[0]*v[0]+u[1]*v[1]) / (m(u)*m(v)) }
-    // angle between two vectors
-    //    var a = function(u, v) { return (u[0]*v[1] < u[1]*v[0] ? -1 : 1) * Math.acos(r(u,v)); }
-    // initial angle
-    CGFloat a1 = angle(CGPointMake(1, 0), CGPointMake((currp.x-cpp.x)/rx, (currp.y-cpp.y)/ry));// [(currp.x-cpp.x)/rx,(currp.y-cpp.y)/ry]);
+    CGPoint centerPoint = CGPointMake((arcStartPoint.x + arcEndPoint.x) / 2.0 + cos(xAxisRotation) * cpp.x - sin(xAxisRotation) * cpp.y, (arcStartPoint.y + arcEndPoint.y) / 2.0 + sin(xAxisRotation) * cpp.x + cos(xAxisRotation) * cpp.y);
+    
+    CGFloat startAngle = angle(CGPointMake(1, 0), CGPointMake((currentPoint.x-cpp.x)/rx, (currentPoint.y-cpp.y)/ry));
     // angle delta
-    CGPoint u = CGPointMake((currp.x-cpp.x)/rx, (currp.y-cpp.y)/ry);// [(currp.x-cpp.x)/rx,(currp.y-cpp.y)/ry];
-    CGPoint v = CGPointMake((-currp.x-cpp.x)/rx, (-currp.y-cpp.y)/ry);// [(-currp.x-cpp.x)/rx,(-currp.y-cpp.y)/ry];
-    CGFloat ad = angle(u, v);//(u, v);
-    if (ratio(u,v) <= -1) ad = M_PI;
-    if (ratio(u,v) >= 1) ad = 0;
+    CGPoint u = CGPointMake((currentPoint.x-cpp.x)/rx, (currentPoint.y-cpp.y)/ry);
+    CGPoint v = CGPointMake((-currentPoint.x-cpp.x)/rx, (-currentPoint.y-cpp.y)/ry);
+    CGFloat angleDelta = (u.x * v.y < u.y * v.x ? -1 : 1) * acos(ratio(u, v));
+    if (ratio(u,v) <= -1) angleDelta = M_PI;
+    if (ratio(u,v) >= 1) angleDelta = 0;
     
-    // for markers
-    CGFloat dir = (1 - sweepFlag) ? 1.0 : -1.0;
-    CGFloat ah = a1 + dir * (ad / 2.0);
-    CGPoint halfWay = CGPointMake(
-                                  centp.x + rx * cos(ah),
-                                  centp.y + ry * sin(ah)
-                                  );
-    //    pp.addMarkerAngle(halfWay, ah - dir * Math.PI / 2);
-    //    pp.addMarkerAngle(cp, ah - dir * Math.PI);
+    CGFloat radius = rx > ry ? rx : ry;
+    CGFloat scaleX = rx > ry ? 1 : rx / ry;
+    CGFloat scaleY = rx > ry ? ry / rx : 1;
     
-    //    bb.addPoint(cp.x, cp.y); // TODO: this is too naive, make it better
-    CGFloat r = rx > ry ? rx : ry;
-    CGFloat sx = rx > ry ? 1 : rx / ry;
-    CGFloat sy = rx > ry ? ry / rx : 1;
-    
-    [path applyTransform:CGAffineTransformMakeTranslation(-centp.x, -centp.y)];
+    [path applyTransform:CGAffineTransformMakeTranslation(-centerPoint.x, -centerPoint.y)];
     [path applyTransform:CGAffineTransformMakeRotation(-xAxisRotation)];
-    [path applyTransform:CGAffineTransformMakeScale(1/sx, 1/sy)];
-    //    ctx.translate(centp.x, centp.y);
-    //    ctx.rotate(xAxisRotation);
-    //    ctx.scale(sx, sy);
-    //    ctx.arc(0, 0, r, a1, a1 + ad, 1 - sweepFlag);
-//    [path addLineToPoint:arcStartPoint];
-//    [path applyTransform:CGAffineTransformMakeRotation(xAxisRotation * (M_PI / 180.f))];
-    [path addArcWithCenter:CGPointZero radius:r startAngle:a1 endAngle:a1 + ad clockwise:sweepFlag];
-//    [path applyTransform:CGAffineTransformMakeRotation(-2)];
-    [path applyTransform:CGAffineTransformMakeScale(sx, sy)];
+    [path applyTransform:CGAffineTransformMakeScale(1 / scaleX, 1 / scaleY)];
+    [path addArcWithCenter:CGPointMake(0, 0) radius:radius startAngle:startAngle endAngle:startAngle + angleDelta clockwise:sweepFlag];
+    [path applyTransform:CGAffineTransformMakeScale(scaleX, scaleY)];
     [path applyTransform:CGAffineTransformMakeRotation(xAxisRotation)];
-    [path applyTransform:CGAffineTransformMakeTranslation(centp.x, centp.y)];
-    [path addLineToPoint:arcEndPoint];
-    //    ctx.scale(1/sx, 1/sy);
-    //    ctx.rotate(-xAxisRotation);
-    //    ctx.translate(-centp.x, -centp.y);
-
+    [path applyTransform:CGAffineTransformMakeTranslation(centerPoint.x, centerPoint.y)];
 }
 
-static CGFloat magnitude(CGPoint v)
+static CGFloat angle(CGPoint point1, CGPoint point2)
 {
-    return sqrt(pow(v.x,2) + pow(v.y,2));
+    return (point1.x * point2.y < point1.y * point2.x ? -1 : 1) * acos(ratio(point1, point2));
 }
 
-static CGFloat ratio(CGPoint u, CGPoint v)
+static CGFloat ratio(CGPoint point1, CGPoint point2)
 {
-    return (u.x*v.x+u.y*v.y) / (magnitude(u)*magnitude(v)) ;
+    return (point1.x * point2.x + point1.y * point2.y) / (magnitude(point1) * magnitude(point2));
 }
 
-static CGFloat angle(CGPoint u, CGPoint v)
+static CGFloat magnitude(CGPoint point)
 {
-    return (u.x*v.y < u.y*v.x ? -1 : 1) * acos(ratio(u,v)) ;
+    return sqrt(pow(point.x, 2) + pow(point.y, 2));
 }
 
 @end
