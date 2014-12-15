@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		63195E291A3E5A0F0072FB74 /* paths-data-03-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63195E281A3E5A0F0072FB74 /* paths-data-03-f.svg */; };
 		633FDA7F18F4368900C8BEC4 /* curvy.svg in Resources */ = {isa = PBXBuildFile; fileRef = 633FDA7E18F4368900C8BEC4 /* curvy.svg */; };
+		6374BB0B1A3F9AB50062684C /* quad01.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6374BB0A1A3F9AB50062684C /* quad01.svg */; };
 		638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */ = {isa = PBXBuildFile; fileRef = 638E660618F39529007A2EAA /* JAMSVGGradientParts.m */; };
 		63A36B3418EF512F00AE444E /* JAMStyledBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B2D18EF512F00AE444E /* JAMStyledBezierPath.m */; };
 		63A36B3518EF512F00AE444E /* JAMStyledBezierPathFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A36B2F18EF512F00AE444E /* JAMStyledBezierPathFactory.m */; };
@@ -31,6 +32,7 @@
 /* Begin PBXFileReference section */
 		63195E281A3E5A0F0072FB74 /* paths-data-03-f.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "paths-data-03-f.svg"; sourceTree = "<group>"; };
 		633FDA7E18F4368900C8BEC4 /* curvy.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = curvy.svg; sourceTree = "<group>"; };
+		6374BB0A1A3F9AB50062684C /* quad01.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = quad01.svg; sourceTree = "<group>"; };
 		638E660518F39529007A2EAA /* JAMSVGGradientParts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMSVGGradientParts.h; sourceTree = "<group>"; };
 		638E660618F39529007A2EAA /* JAMSVGGradientParts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMSVGGradientParts.m; sourceTree = "<group>"; };
 		63A36B2C18EF512F00AE444E /* JAMStyledBezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMStyledBezierPath.h; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 		63D2067C18EF501F00FAC851 /* JAMSVGImage */ = {
 			isa = PBXGroup;
 			children = (
+				6374BB0A1A3F9AB50062684C /* quad01.svg */,
 				63195E281A3E5A0F0072FB74 /* paths-data-03-f.svg */,
 				633FDA7E18F4368900C8BEC4 /* curvy.svg */,
 				63A36B4018EF8F8800AE444E /* tiger.svg */,
@@ -216,6 +219,7 @@
 				63A36B4118EF8F8800AE444E /* tiger.svg in Resources */,
 				633FDA7F18F4368900C8BEC4 /* curvy.svg in Resources */,
 				EB5881E019D5CE2900797A2E /* Launch.xib in Resources */,
+				6374BB0B1A3F9AB50062684C /* quad01.svg in Resources */,
 				63195E291A3E5A0F0072FB74 /* paths-data-03-f.svg in Resources */,
 				63FAEAD41A37F2F60036E195 /* artTest.svg in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,

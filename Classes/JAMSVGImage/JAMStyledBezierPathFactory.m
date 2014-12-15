@@ -595,7 +595,10 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
         
         else if ([@[@"Q", @"q"] containsObject:commandScanner.currentCharacter])
             [self addQuadCurveToPointFromCommandScanner:commandScanner toPath:path];
-        
+
+        else if ([@[@"T", @"t"] containsObject:commandScanner.currentCharacter])
+            [self addSmoothQuadCurveToPointFromCommandScanner:commandScanner toPath:path];
+
         else if ([@[@"A", @"a"] containsObject:commandScanner.currentCharacter])
             [self addEllipticalArcToPointFromCommandScanner:commandScanner toPath:path];
         
@@ -698,7 +701,22 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
         controlPoint = CGPointAddPoints(controlPoint, path.currentPoint);
         quadCurveToPoint = CGPointAddPoints(quadCurveToPoint, path.currentPoint);
     }
+    self.previousCurveOperationControlPoint = controlPoint;
     [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
+}
+
+- (void)addSmoothQuadCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
+{
+    CGPoint controlPoint = CGPointZero;
+    CGPoint reflectedCurveToPoint = CGPointAddPoints(path.currentPoint, CGPointSubtractPoints(path.currentPoint, self.previousCurveOperationControlPoint));
+    [commandScanner scanPoint:&controlPoint];
+    
+    if ([commandScanner.initialCharacter isEqualToString:@"t"]) {
+        controlPoint = CGPointAddPoints(controlPoint, path.currentPoint);
+        reflectedCurveToPoint = CGPointAddPoints(reflectedCurveToPoint, path.currentPoint);
+    }
+    self.previousCurveOperationControlPoint = controlPoint;
+    [path addQuadCurveToPoint:controlPoint controlPoint:reflectedCurveToPoint];
 }
 
 - (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
