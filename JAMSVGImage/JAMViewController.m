@@ -11,7 +11,7 @@
 {
     [super viewDidLoad];
     self.view.backgroundColor = UIColor.whiteColor;
-    JAMSVGImage *image = [JAMSVGImage imageNamed:@"paths-data-12-t"];
+    JAMSVGImage *image = [JAMSVGImage imageNamed:@"paths-data-03-f"];
     self.svgImageView = [JAMSVGImageView.alloc initWithSVGImage:image];
     self.svgImageView.contentMode = UIViewContentModeScaleAspectFit;
     
