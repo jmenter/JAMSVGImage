@@ -45,6 +45,8 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 @interface NSString (Utilities)
 - (NSString *)stringByTrimmingWhitespace;
+- (NSString *)characterStringAtIndex:(NSUInteger)index;
+- (NSString *)firstCharacter;
 - (NSString *)lastCharacter;
 @end
 
@@ -54,9 +56,19 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     return [self stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
 }
 
+- (NSString *)characterStringAtIndex:(NSUInteger)index;
+{
+    return (self.length > index) ? [NSString stringWithFormat:@"%C", [self characterAtIndex:index]] : nil;
+}
+
+- (NSString *)firstCharacter;
+{
+    return (self.length > 0) ? [NSString stringWithFormat:@"%C", [self characterAtIndex:1]] : nil;
+}
+
 - (NSString *)lastCharacter;
 {
-    return self.length > 0 ? [NSString stringWithFormat:@"%C", [self characterAtIndex:self.length - 1]] : nil;
+    return (self.length > 0) ? [NSString stringWithFormat:@"%C", [self characterAtIndex:self.length - 1]] : nil;
 }
 @end
 
@@ -67,12 +79,16 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 @implementation UIColor (HexUtilities)
 + (UIColor *)colorFromHexString:(NSString *)hexString;
 {
-    if (!hexString || [hexString isEqualToString:@"none"])
+    if (!hexString || [hexString isEqualToString:@"none"] || !(hexString.length == 3 || hexString.length == 4 || hexString.length == 6 || hexString.length == 7))
         return nil;
-    
+    hexString = [hexString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"#"]];
+    if (hexString.length == 3) {
+        hexString = [NSString stringWithFormat:@"%@%@%@%@%@%@", [hexString characterStringAtIndex:0], [hexString characterStringAtIndex:0],
+                     [hexString characterStringAtIndex:1], [hexString characterStringAtIndex:1],
+                     [hexString characterStringAtIndex:2], [hexString characterStringAtIndex:2]];
+    }
     unsigned int rgbValue = 0;
     NSScanner *scanner = [NSScanner scannerWithString:hexString];
-    scanner.scanLocation = 1;
     [scanner scanHexInt:&rgbValue];
     return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0
                            green:((rgbValue & 0xFF00) >> 8)/255.0
@@ -707,16 +723,15 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)addSmoothQuadCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint controlPoint = CGPointZero;
-    CGPoint reflectedCurveToPoint = CGPointAddPoints(path.currentPoint, CGPointSubtractPoints(path.currentPoint, self.previousCurveOperationControlPoint));
-    [commandScanner scanPoint:&controlPoint];
+    CGPoint controlPoint = CGPointAddPoints(path.currentPoint, CGPointSubtractPoints(path.currentPoint, self.previousCurveOperationControlPoint));
+    CGPoint quadCurveToPoint = CGPointZero;
+    [commandScanner scanPoint:&quadCurveToPoint];
     
     if ([commandScanner.initialCharacter isEqualToString:@"t"]) {
-        controlPoint = CGPointAddPoints(controlPoint, path.currentPoint);
-        reflectedCurveToPoint = CGPointAddPoints(reflectedCurveToPoint, path.currentPoint);
+        quadCurveToPoint = CGPointAddPoints(quadCurveToPoint, path.currentPoint);
     }
     self.previousCurveOperationControlPoint = controlPoint;
-    [path addQuadCurveToPoint:controlPoint controlPoint:reflectedCurveToPoint];
+    [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
 }
 
 - (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
