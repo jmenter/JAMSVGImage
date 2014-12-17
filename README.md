@@ -1,7 +1,9 @@
 JAMSVGImage
 ===========
 
-A class for parsing and displaying resolution independent SVG image graphics in iOS. The goal with this class is simplicity: it only supports paths and their appearance—primitive shapes, bezier paths (including elliptical arcs), stroke & fill, opacity, gradient fills, and affine transformations. It's easy to use and since the SVG commands are converted to Core Graphics objects it is quite performant.
+A class for parsing and displaying resolution independent SVG image graphics in iOS. The goal with this class is simplicity: it only supports paths and their appearance: primitive shapes, bezier paths (including elliptical arcs), stroke & fill, opacity, gradient fills, and affine transformations.
+
+![JAMSVGImageView Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/master/example.png)
 
 Use JAMSVGImage and JAMSVGImageView in lots of places where you would normally use UIImage and UIImageView. The benefits of using SVG are:
 
@@ -9,23 +11,23 @@ Use JAMSVGImage and JAMSVGImageView in lots of places where you would normally u
 2. Graphic file sizes tend to be much smaller
 3. Built-in "flat look" (haha)
 
-There are two main ways to use these classes. The first is to simply create a new JMSVGImage object and use the instance's drawing methods to draw in a graphics context, like so:
+There are three main ways to use these classes.
 
-    JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
-    [tiger drawInCurrentContext];
+JAMSVGImageView is IBDesignable and IBInspectable so you can drag a UIView to your layout in Interface Builder, set the class type to "JAMSVGImageView", and then type the name of the SVG image in the inspector like in the example above.
 
-This parses the file named "tiger.svg" in your app's main bundle and draws it in the current graphics context at its natural size.
-
-The second way to use is to put the JMSVGImage in a JMSVGImageView and add that subview to your view, like so:
+Programmatically alloc and init a new JAMSVGImageView with a JAMSVGImage, and add it to your view heirarchy
 
     JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
     JAMSVGImageView *tigerImageView = [JAMSVGImageView.alloc initWithSVGImage:tiger];
     tigerImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:tigerImageView];
 
-This creates a JAMSVGImageView, populated with the tiger svg, sets the contentMode, and adds it to the view heirarchy. The JAMSVGImageView respects all UIViewContentMode types and draws itself in high-resolution no matter what size the view is scaled to.
+Create a JAMSVGImage instance and use the drawInCurrentContext method in your current graphics context
 
-You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef.
+    JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
+    [tiger drawInCurrentContext];
+
+You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef and use that anywhere you would use a UIImage or CGImageRef.
 
 Supported shapes/features:
 
