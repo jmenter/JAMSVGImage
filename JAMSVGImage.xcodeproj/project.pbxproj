@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		633FDA7F18F4368900C8BEC4 /* curvy.svg in Resources */ = {isa = PBXBuildFile; fileRef = 633FDA7E18F4368900C8BEC4 /* curvy.svg */; };
-		6374BB0B1A3F9AB50062684C /* quad01.svg in Resources */ = {isa = PBXBuildFile; fileRef = 6374BB0A1A3F9AB50062684C /* quad01.svg */; };
 		6380F68C1A41110300D7C9B4 /* JAMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6380F68A1A41110300D7C9B4 /* JAMViewController.m */; };
 		6380F68D1A41110300D7C9B4 /* JAMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6380F68B1A41110300D7C9B4 /* JAMViewController.xib */; };
 		638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */ = {isa = PBXBuildFile; fileRef = 638E660618F39529007A2EAA /* JAMSVGGradientParts.m */; };
@@ -46,13 +44,10 @@
 		63D2068318EF501F00FAC851 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D2068218EF501F00FAC851 /* main.m */; };
 		63D2068718EF501F00FAC851 /* JAMAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D2068618EF501F00FAC851 /* JAMAppDelegate.m */; };
 		63D2069218EF501F00FAC851 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63D2069118EF501F00FAC851 /* Images.xcassets */; };
-		63FAEAD41A37F2F60036E195 /* artTest.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63FAEAD31A37F2F60036E195 /* artTest.svg */; };
 		EB5881E019D5CE2900797A2E /* Launch.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB5881DF19D5CE2900797A2E /* Launch.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		633FDA7E18F4368900C8BEC4 /* curvy.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = curvy.svg; sourceTree = "<group>"; };
-		6374BB0A1A3F9AB50062684C /* quad01.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = quad01.svg; sourceTree = "<group>"; };
 		6380F6891A41110300D7C9B4 /* JAMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMViewController.h; sourceTree = "<group>"; };
 		6380F68A1A41110300D7C9B4 /* JAMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMViewController.m; sourceTree = "<group>"; };
 		6380F68B1A41110300D7C9B4 /* JAMViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JAMViewController.xib; sourceTree = "<group>"; };
@@ -101,7 +96,6 @@
 		63D2068518EF501F00FAC851 /* JAMAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JAMAppDelegate.h; sourceTree = "<group>"; };
 		63D2068618EF501F00FAC851 /* JAMAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JAMAppDelegate.m; sourceTree = "<group>"; };
 		63D2069118EF501F00FAC851 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		63FAEAD31A37F2F60036E195 /* artTest.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = artTest.svg; sourceTree = "<group>"; };
 		EB5881DF19D5CE2900797A2E /* Launch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Launch.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -207,10 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				63AD79191A3FBFF800987249 /* path conformance test documents */,
-				6374BB0A1A3F9AB50062684C /* quad01.svg */,
-				633FDA7E18F4368900C8BEC4 /* curvy.svg */,
 				63A36B4018EF8F8800AE444E /* tiger.svg */,
-				63FAEAD31A37F2F60036E195 /* artTest.svg */,
 				63D2068518EF501F00FAC851 /* JAMAppDelegate.h */,
 				63D2068618EF501F00FAC851 /* JAMAppDelegate.m */,
 				6380F6891A41110300D7C9B4 /* JAMViewController.h */,
@@ -298,7 +289,6 @@
 				6380F68D1A41110300D7C9B4 /* JAMViewController.xib in Resources */,
 				63AD79381A3FBFF800987249 /* paths-data-10-t.svg in Resources */,
 				63AD793F1A3FBFF800987249 /* paths-data-18-f.svg in Resources */,
-				633FDA7F18F4368900C8BEC4 /* curvy.svg in Resources */,
 				EB5881E019D5CE2900797A2E /* Launch.xib in Resources */,
 				63AD793A1A3FBFF800987249 /* paths-data-13-t.svg in Resources */,
 				63AD79341A3FBFF800987249 /* paths-data-06-t.svg in Resources */,
@@ -308,10 +298,8 @@
 				63AD79321A3FBFF800987249 /* paths-data-04-t.svg in Resources */,
 				63AD79431A3FBFF800987249 /* paths-dom-02-f.svg in Resources */,
 				63AD79421A3FBFF800987249 /* paths-dom-01-f.svg in Resources */,
-				6374BB0B1A3F9AB50062684C /* quad01.svg in Resources */,
 				63AD79411A3FBFF800987249 /* paths-data-20-f.svg in Resources */,
 				63AD79391A3FBFF800987249 /* paths-data-12-t.svg in Resources */,
-				63FAEAD41A37F2F60036E195 /* artTest.svg in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,
 				63AD792F1A3FBFF800987249 /* paths-data-01-t.svg in Resources */,
 				63AD79371A3FBFF800987249 /* paths-data-09-t.svg in Resources */,

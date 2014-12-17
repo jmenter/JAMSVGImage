@@ -24,9 +24,9 @@
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 {
 #if !TARGET_INTERFACE_BUILDER
-    NSBundle *bundle = [NSBundle mainBundle];
+    NSBundle *bundle = NSBundle.mainBundle;
 #else
-    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    NSBundle *bundle = [NSBundle bundleForClass:self.class];
 #endif
     NSString *fileName = [bundle pathForResource:name ofType:@"svg"];
     
