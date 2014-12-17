@@ -10,7 +10,7 @@
  
  */
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 /** JAMSVGParser uses NSXMLParser to parse SVG documents and extract graphic data. The end result is an array of JAMStyledBezierPaths that are used by JAMSVGImage and JAMSVGImageView to draw these resolution-independent vector graphics. */
 @interface JAMSVGParser : NSObject

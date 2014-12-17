@@ -13,9 +13,13 @@
 #import <UIKit/UIKit.h>
 #import "JAMSVGImage.h"
 
+IB_DESIGNABLE
+
 /** The JAMSVGImageView encapsulates a JAMSVGImage in a UIView. The SVG redraws at every frame/bounds change. */
 @interface JAMSVGImageView : UIView
 
+/** The name of the svg in your app's main bundle. Mostly used by IBInspectable for Interface Builder previews. */
+@property (nonatomic) IBInspectable NSString *svgName;
 /** The SVGImage. Note: setting this does not change the frame of the view; call sizeToFit if needed. */
 @property (nonatomic) JAMSVGImage *svgImage;
 /** We respect the contentMode property.*/

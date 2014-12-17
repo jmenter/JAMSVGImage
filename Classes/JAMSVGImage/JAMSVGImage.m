@@ -23,7 +23,14 @@
 
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 {
-    return [JAMSVGImage imageWithContentsOfFile:[NSBundle.mainBundle pathForResource:name ofType:@"svg"]];
+#if !TARGET_INTERFACE_BUILDER
+    NSBundle *bundle = NSBundle.mainBundle;
+#else
+    NSBundle *bundle = [NSBundle bundleForClass:self.class];
+#endif
+    NSString *fileName = [bundle pathForResource:name ofType:@"svg"];
+    
+    return [JAMSVGImage imageWithContentsOfFile:fileName];
 }
 
 + (JAMSVGImage *)imageWithContentsOfFile:(NSString *)path;

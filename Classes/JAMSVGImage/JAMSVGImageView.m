@@ -10,7 +10,7 @@
  
  */
 
-#import "JAMSVGImageView.h"
+#import "JAMSvgImageView.h"
 
 @implementation JAMSVGImageView
 
@@ -21,6 +21,12 @@
     self.svgImage = svgImage;
     self.backgroundColor = UIColor.clearColor;
     return self;
+}
+
+- (void)setSvgName:(NSString *)imageName;
+{
+    self.backgroundColor = UIColor.clearColor;
+    self.svgImage = [JAMSVGImage imageNamed:imageName];
 }
 
 - (void)sizeToFit;
@@ -122,7 +128,7 @@
     if (![super pointInside:point withEvent:event]) {
         return NO;
     }
-
+    
     return [self.svgImage containsPoint:point];
 }
 
