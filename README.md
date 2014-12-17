@@ -13,6 +13,8 @@ Use JAMSVGImage and JAMSVGImageView in lots of places where you would normally u
 
 There are three main ways to use these classes.
 
+(IMPORTANT NOTE: for now, the IBDesignable and IBInspectable features do not work if you're installing this with cocoapods. You'll have to drag the class files directly into your project. The class files have no dependencies. This will hopefully be fixed soon.)
+
 JAMSVGImageView is IBDesignable and IBInspectable so you can drag a UIView to your layout in Interface Builder, set the class type to "JAMSVGImageView", and then type the name of the SVG image in the inspector like in the example above.
 
 Programmatically alloc and init a new JAMSVGImageView with a JAMSVGImage, and add it to your view heirarchy
