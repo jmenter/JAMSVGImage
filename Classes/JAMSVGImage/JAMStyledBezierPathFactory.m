@@ -321,7 +321,7 @@
         commandString = [commandString stringByAppendingString:@"z"];
     }
     NSScanner *commandScanner = [NSScanner scannerWithString:commandString];
-    NSCharacterSet *knownCommands = [NSCharacterSet characterSetWithCharactersInString:@"MmLlCcVvHhAaSsQqTtZz"];
+    NSCharacterSet *knownCommands = [NSCharacterSet characterSetWithCharactersInString:@"MmLlCcVvHhAaSsQqTtZz#"];
     NSMutableArray *commandList = NSMutableArray.new;
     
     NSString *command;
@@ -331,7 +331,7 @@
         [commandScanner scanUpToCharactersFromSet:knownCommands intoString:&command];
         NSString *fullCommand = [commandString substringWithRange:NSMakeRange(lastLocation, commandScanner.scanLocation - lastLocation)];
         NSString *trimmedFullCommand = [fullCommand stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        if (![trimmedFullCommand isEqualToString:@""])
+        if (![trimmedFullCommand isEqualToString:@""] && ![trimmedFullCommand.firstCharacter isEqualToString:@"#"])
             [commandList addObject:trimmedFullCommand];
         
         lastLocation = commandScanner.scanLocation;
@@ -354,6 +354,7 @@
 - (UIBezierPath *)bezierPathFromCommandList:(NSArray *)commandList;
 {
     UIBezierPath *path = UIBezierPath.new;
+    self.previousCurveOperationControlPoint = CGPointZero;
     for (NSString *command in commandList) {
         NSScanner *commandScanner = [NSScanner scannerWithString:command];
         if ([@[@"M", @"m"] containsObject:commandScanner.currentCharacter])
@@ -385,6 +386,7 @@
         
         else if ([@[@"Z", @"z"] containsObject:commandScanner.currentCharacter]) {
             [path closePath];
+            
         }
     }
     return path;
@@ -404,7 +406,6 @@
         }
     };
     
-    // Multiple move commands are treated as lineto commands.
     while (!commandScanner.isAtEnd) {
         if ([commandScanner scanPoint:&scannedPoint]) {
             [path addLineToPoint:relative ? CGPointAddPoints(scannedPoint, path.currentPoint) : scannedPoint];
@@ -462,77 +463,117 @@
 
 - (void)addCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
+    if (CGPointEqualToPoint(self.previousCurveOperationControlPoint, CGPointZero)) {
+        self.previousCurveOperationControlPoint = path.currentPoint;
+    }
+    BOOL relative = [commandScanner.initialCharacter isEqualToString:@"c"];
     CGPoint curveToPoint = CGPointZero;
     CGPoint controlPoint1 = CGPointZero;
     CGPoint controlPoint2 = CGPointZero;
-    [commandScanner scanPoint:&controlPoint1];
-    [commandScanner scanPoint:&controlPoint2];
-    [commandScanner scanPoint:&curveToPoint];
-    
-    if ([commandScanner.initialCharacter isEqualToString:@"c"]) {
-        curveToPoint = CGPointAddPoints(curveToPoint, path.currentPoint);
-        controlPoint1 = CGPointAddPoints(controlPoint1, path.currentPoint);
-        controlPoint2 = CGPointAddPoints(controlPoint2, path.currentPoint);
+
+    while (!commandScanner.isAtEnd) {
+        if ([commandScanner scanPoint:&controlPoint1] &&
+            [commandScanner scanPoint:&controlPoint2] &&
+            [commandScanner scanPoint:&curveToPoint]) {
+            if (relative) {
+                curveToPoint = CGPointAddPoints(curveToPoint, path.currentPoint);
+                controlPoint1 = CGPointAddPoints(controlPoint1, path.currentPoint);
+                controlPoint2 = CGPointAddPoints(controlPoint2, path.currentPoint);
+            }
+            self.previousCurveOperationControlPoint = controlPoint2;
+            [path addCurveToPoint:curveToPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
+        } else {
+            commandScanner.scanLocation++;
+        }
     }
-    self.previousCurveOperationControlPoint = controlPoint2;
-    [path addCurveToPoint:curveToPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
 }
 
 - (void)addSmoothCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint smoothedPrevious = CGPointSubtractPoints(path.currentPoint, self.previousCurveOperationControlPoint);
-    CGPoint controlPoint1 = CGPointAddPoints(path.currentPoint, smoothedPrevious);
+    if (CGPointEqualToPoint(self.previousCurveOperationControlPoint, CGPointZero)) {
+        self.previousCurveOperationControlPoint = path.currentPoint;
+    }
+    BOOL relative = [commandScanner.initialCharacter isEqualToString:@"s"];
     CGPoint controlPoint2 = CGPointZero;
     CGPoint curveToPoint = CGPointZero;
-    [commandScanner scanPoint:&controlPoint2];
-    [commandScanner scanPoint:&curveToPoint];
-    
-    if ([commandScanner.initialCharacter isEqualToString:@"s"]) {
-        curveToPoint = CGPointAddPoints(curveToPoint, path.currentPoint);
-        controlPoint2 = CGPointAddPoints(controlPoint2, path.currentPoint);
+
+    while (!commandScanner.isAtEnd) {
+        if ([commandScanner scanPoint:&controlPoint2] && [commandScanner scanPoint:&curveToPoint]) {
+            CGPoint smoothedPrevious = CGPointSubtractPoints(path.currentPoint, self.previousCurveOperationControlPoint);
+            CGPoint controlPoint1 = CGPointAddPoints(path.currentPoint, smoothedPrevious);
+            if (relative) {
+                curveToPoint = CGPointAddPoints(curveToPoint, path.currentPoint);
+                controlPoint2 = CGPointAddPoints(controlPoint2, path.currentPoint);
+            }
+            self.previousCurveOperationControlPoint = controlPoint2;
+            [path addCurveToPoint:curveToPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
+        } else {
+            commandScanner.scanLocation++;
+        }
     }
-    self.previousCurveOperationControlPoint = controlPoint2;
-    [path addCurveToPoint:curveToPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
 }
 
 - (void)addQuadCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
+    if (CGPointEqualToPoint(self.previousCurveOperationControlPoint, CGPointZero)) {
+        self.previousCurveOperationControlPoint = path.currentPoint;
+    }
+    BOOL relative = [commandScanner.initialCharacter isEqualToString:@"q"];
     CGPoint controlPoint = CGPointZero;
     CGPoint quadCurveToPoint = CGPointZero;
-    [commandScanner scanPoint:&controlPoint];
-    [commandScanner scanPoint:&quadCurveToPoint];
     
-    if ([commandScanner.initialCharacter isEqualToString:@"q"]) {
-        controlPoint = CGPointAddPoints(controlPoint, path.currentPoint);
-        quadCurveToPoint = CGPointAddPoints(quadCurveToPoint, path.currentPoint);
+    while (!commandScanner.isAtEnd) {
+        if ([commandScanner scanPoint:&controlPoint] && [commandScanner scanPoint:&quadCurveToPoint]) {
+            if (relative) {
+                controlPoint = CGPointAddPoints(controlPoint, path.currentPoint);
+                quadCurveToPoint = CGPointAddPoints(quadCurveToPoint, path.currentPoint);
+            }
+            self.previousCurveOperationControlPoint = controlPoint;
+            [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
+        } else {
+            commandScanner.scanLocation++;
+        }
     }
-    self.previousCurveOperationControlPoint = controlPoint;
-    [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
 }
 
 - (void)addSmoothQuadCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint controlPoint = CGPointAddPoints(path.currentPoint, CGPointSubtractPoints(path.currentPoint, self.previousCurveOperationControlPoint));
-    CGPoint quadCurveToPoint = CGPointZero;
-    [commandScanner scanPoint:&quadCurveToPoint];
-    
-    if ([commandScanner.initialCharacter isEqualToString:@"t"]) {
-        quadCurveToPoint = CGPointAddPoints(quadCurveToPoint, path.currentPoint);
+    if (CGPointEqualToPoint(self.previousCurveOperationControlPoint, CGPointZero)) {
+        self.previousCurveOperationControlPoint = path.currentPoint;
     }
-    self.previousCurveOperationControlPoint = controlPoint;
-    [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
+    BOOL relative = [commandScanner.initialCharacter isEqualToString:@"t"];
+    CGPoint quadCurveToPoint = CGPointZero;
+
+    while (!commandScanner.isAtEnd) {
+        if ([commandScanner scanPoint:&quadCurveToPoint]) {
+            if (relative) {
+                quadCurveToPoint = CGPointAddPoints(quadCurveToPoint, path.currentPoint);
+            }
+            CGPoint controlPoint = CGPointAddPoints(path.currentPoint, CGPointSubtractPoints(path.currentPoint, self.previousCurveOperationControlPoint));
+            self.previousCurveOperationControlPoint = controlPoint;
+            [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
+        } else {
+            commandScanner.scanLocation++;
+        }
+    }    
 }
 
 - (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    CGPoint radii, arcEndPoint, arcStartPoint = path.currentPoint;
-    float xAxisRotation;
-    int largeArcFlag, sweepFlag;
+    while (!commandScanner.isAtEnd) {
+        
+    CGPoint radii = CGPointZero;
+    CGPoint arcEndPoint = CGPointZero;
+    CGPoint arcStartPoint = path.currentPoint;
+    float xAxisRotation = 0;
+    int largeArcFlag = 0;
+    int sweepFlag = 0;
     
+
     [commandScanner scanPoint:&radii];
     [commandScanner scanFloat:&xAxisRotation];
     [commandScanner scanInt:&largeArcFlag];
-    [commandScanner scanThroughToHyphen];
+//    [commandScanner scanThroughToHyphen];
     [commandScanner scanInt:&sweepFlag];
     [commandScanner scanPoint:&arcEndPoint];
     
@@ -574,6 +615,7 @@
     [path applyTransform:CGAffineTransformMakeScale(scale.x, scale.y)];
     [path applyTransform:CGAffineTransformMakeRotation(xAxisRotation)];
     [path applyTransform:CGAffineTransformMakeTranslation(centerPoint.x, centerPoint.y)];
+    }
 }
 
 static CGFloat angle(CGPoint point1, CGPoint point2)
