@@ -33,7 +33,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (NSString *)firstCharacter;
 {
-    return (self.length > 0) ? [NSString stringWithFormat:@"%C", [self characterAtIndex:1]] : nil;
+    return (self.length > 0) ? [NSString stringWithFormat:@"%C", [self characterAtIndex:0]] : nil;
 }
 
 - (NSString *)lastCharacter;
@@ -89,6 +89,9 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)scanThroughToHyphen;
 {
+    if (self.isAtEnd) {
+        return;
+    }
     if (![self.currentCharacter isEqualToString:@"-"])
         self.scanLocation++;
 }
