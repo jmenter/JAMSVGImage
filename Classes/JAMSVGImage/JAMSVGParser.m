@@ -81,7 +81,6 @@
     JAMStyledBezierPath *path = [self.pathFactory styledPathFromElementName:elementName attributes:attributeDict];
     if (path) {
         [self.paths addObject:path];
-        NSLog(@"added path: %@", path);
     }
 }
 
