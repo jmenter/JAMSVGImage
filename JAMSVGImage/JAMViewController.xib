@@ -20,7 +20,7 @@
                     <rect key="frame" x="8" y="8" width="584" height="584"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="tiger"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="paths-data-14-t"/>
                     </userDefinedRuntimeAttributes>
                 </view>
             </subviews>
@@ -31,6 +31,7 @@
                 <constraint firstItem="4lo-Er-aVK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="VGG-ie-kPA"/>
                 <constraint firstAttribute="bottom" secondItem="4lo-Er-aVK" secondAttribute="bottom" constant="8" id="nVy-wK-PJd"/>
             </constraints>
+            <point key="canvasLocation" x="330" y="364"/>
         </view>
     </objects>
 </document>

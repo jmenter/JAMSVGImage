@@ -599,7 +599,7 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     for (NSString *command in commandList) {
         NSScanner *commandScanner = [NSScanner scannerWithString:command];
         if ([@[@"M", @"m"] containsObject:commandScanner.currentCharacter])
-            [self addMoveToPointFromCommandScanner:commandScanner toPath:path];
+            [self addMoveToPointFromCommandScanner:commandScanner toPath:path isFirstCommandInPath:([commandList.firstObject isEqual:command])];
         
         else if ([@[@"L", @"l"] containsObject:commandScanner.currentCharacter])
             [self addLineToPointFromCommandScanner:commandScanner toPath:path];
@@ -634,70 +634,72 @@ static CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 #pragma mark - Path Command Methods
 
-- (void)addMoveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
+- (void)addMoveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path isFirstCommandInPath:(BOOL)isFirstCommandInPath;
 {
-    NSMutableArray *moveToPoints = NSMutableArray.new;
-    while (!commandScanner.isAtEnd) {
-        CGPoint scannedPoint = CGPointZero;
-        if ([commandScanner scanPoint:&scannedPoint]) {
-            [moveToPoints addObject:[NSValue valueWithCGPoint:scannedPoint]];
+    BOOL relative = [commandScanner.initialCharacter isEqualToString:@"m"];
+    CGPoint scannedPoint = CGPointZero;
+    if ([commandScanner scanPoint:&scannedPoint]) {
+        if (relative && !isFirstCommandInPath) {
+            [path moveToPoint:CGPointAddPoints(scannedPoint, path.currentPoint)];
+        } else {
+            [path moveToPoint:relative ? scannedPoint : CGPointAddPoints(scannedPoint, path.currentPoint)];
         }
-    }
+    };
     
-    CGPoint firstPoint = ((NSValue *)moveToPoints.firstObject).CGPointValue;
-    if ([commandScanner.initialCharacter isEqualToString:@"m"])
-        firstPoint = CGPointAddPoints(firstPoint, path.isEmpty ? CGPointZero : path.currentPoint);
-
-    [path moveToPoint:firstPoint];
-    
-    [moveToPoints removeObject:moveToPoints.firstObject];
-    for (NSValue *valuePoint in moveToPoints) {
-        CGPoint point = valuePoint.CGPointValue;
-        if ([commandScanner.initialCharacter isEqualToString:@"m"])
-            point = CGPointAddPoints(point, path.currentPoint);
-        [path addLineToPoint:point];
+    // Multiple move commands are treated as lineto commands.
+    while (!commandScanner.isAtEnd) {
+        if ([commandScanner scanPoint:&scannedPoint]) {
+            [path addLineToPoint:relative ? CGPointAddPoints(scannedPoint, path.isEmpty ? CGPointZero : path.currentPoint) : scannedPoint];
+        } else {
+            commandScanner.scanLocation++;
+        }
     }
 }
 
 - (void)addLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
-    NSMutableArray *lineToPoints = NSMutableArray.new;
+    BOOL relative = [commandScanner.initialCharacter isEqualToString:@"l"];
+    CGPoint scannedPoint = CGPointZero;
+
     while (!commandScanner.isAtEnd) {
-        CGPoint scannedPoint = CGPointZero;
         if ([commandScanner scanPoint:&scannedPoint]) {
-            [lineToPoints addObject:[NSValue valueWithCGPoint:scannedPoint]];
+            [path addLineToPoint:relative ? CGPointAddPoints(scannedPoint, path.isEmpty ? CGPointZero : path.currentPoint) : scannedPoint];
+        } else {
+            commandScanner.scanLocation++;
         }
-    }
-    for (NSValue *valuePoint in lineToPoints) {
-        CGPoint point = valuePoint.CGPointValue;
-        if ([commandScanner.initialCharacter isEqualToString:@"l"])
-            point = CGPointAddPoints(point, path.currentPoint);
-        [path addLineToPoint:point];
     }
 }
 
 - (void)addHorizontalLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
+    BOOL relative = [commandScanner.initialCharacter isEqualToString:@"h"];
     float xPosition;
     [commandScanner scanThroughToHyphen];
-    [commandScanner scanFloat:&xPosition];
-    CGPoint horizontalLineToPoint = CGPointMake(xPosition, path.currentPoint.y);
     
-    if ([commandScanner.initialCharacter isEqualToString:@"h"])
-        horizontalLineToPoint.x += path.currentPoint.x;
-    [path addLineToPoint:horizontalLineToPoint];
+    while (!commandScanner.isAtEnd) {
+        if ([commandScanner scanFloat:&xPosition]) {
+            CGPoint horizontalLineToPoint = CGPointMake(xPosition + path.currentPoint.x, path.currentPoint.y);
+            [path addLineToPoint:relative ? CGPointAddPoints(horizontalLineToPoint, path.currentPoint) : horizontalLineToPoint];
+        } else {
+            commandScanner.scanLocation++;
+        }
+    }
 }
 
 - (void)addVerticalLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
+    BOOL relative = [commandScanner.initialCharacter isEqualToString:@"v"];
     float yPosition;
     [commandScanner scanThroughToHyphen];
-    [commandScanner scanFloat:&yPosition];
-    CGPoint verticalLineToPoint = CGPointMake(path.currentPoint.x, yPosition);
     
-    if ([commandScanner.initialCharacter isEqualToString:@"v"])
-        verticalLineToPoint.y += path.currentPoint.y;
-    [path addLineToPoint:verticalLineToPoint];
+    while (!commandScanner.isAtEnd) {
+        if ([commandScanner scanFloat:&yPosition]) {
+            CGPoint verticalLineToPoint = CGPointMake(path.currentPoint.x, yPosition);
+            [path addLineToPoint:relative ? CGPointAddPoints(verticalLineToPoint, path.currentPoint) : verticalLineToPoint];
+        } else {
+            commandScanner.scanLocation++;
+        }
+    }
 }
 
 - (void)addCurveToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
