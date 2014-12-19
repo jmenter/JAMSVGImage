@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		630E28B01A44CB1E0001106F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 630E28AF1A44CB1E0001106F /* libz.dylib */; };
+		630E28B11A44CB980001106F /* box.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 630E28AE1A44C78A0001106F /* box.svgz */; };
 		6380F68C1A41110300D7C9B4 /* JAMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6380F68A1A41110300D7C9B4 /* JAMViewController.m */; };
 		6380F68D1A41110300D7C9B4 /* JAMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6380F68B1A41110300D7C9B4 /* JAMViewController.xib */; };
 		638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */ = {isa = PBXBuildFile; fileRef = 638E660618F39529007A2EAA /* JAMSVGGradientParts.m */; };
@@ -47,6 +49,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		630E28AE1A44C78A0001106F /* box.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = box.svgz; sourceTree = "<group>"; };
+		630E28AF1A44CB1E0001106F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		6380F6891A41110300D7C9B4 /* JAMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMViewController.h; sourceTree = "<group>"; };
 		6380F68A1A41110300D7C9B4 /* JAMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMViewController.m; sourceTree = "<group>"; };
 		6380F68B1A41110300D7C9B4 /* JAMViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JAMViewController.xib; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				630E28B01A44CB1E0001106F /* libz.dylib in Frameworks */,
 				63D2067918EF501F00FAC851 /* CoreGraphics.framework in Frameworks */,
 				63D2067B18EF501F00FAC851 /* UIKit.framework in Frameworks */,
 				63D2067718EF501F00FAC851 /* Foundation.framework in Frameworks */,
@@ -188,6 +193,7 @@
 		63D2067518EF501F00FAC851 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				630E28AF1A44CB1E0001106F /* libz.dylib */,
 				63D2067618EF501F00FAC851 /* Foundation.framework */,
 				63D2067818EF501F00FAC851 /* CoreGraphics.framework */,
 				63D2067A18EF501F00FAC851 /* UIKit.framework */,
@@ -200,6 +206,7 @@
 			children = (
 				63AD79191A3FBFF800987249 /* path conformance test documents */,
 				63A36B4018EF8F8800AE444E /* tiger.svg */,
+				630E28AE1A44C78A0001106F /* box.svgz */,
 				63D2068518EF501F00FAC851 /* JAMAppDelegate.h */,
 				63D2068618EF501F00FAC851 /* JAMAppDelegate.m */,
 				6380F6891A41110300D7C9B4 /* JAMViewController.h */,
@@ -299,6 +306,7 @@
 				63AD79391A3FBFF800987249 /* paths-data-12-t.svg in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,
 				63AD792F1A3FBFF800987249 /* paths-data-01-t.svg in Resources */,
+				630E28B11A44CB980001106F /* box.svgz in Resources */,
 				63AD79371A3FBFF800987249 /* paths-data-09-t.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

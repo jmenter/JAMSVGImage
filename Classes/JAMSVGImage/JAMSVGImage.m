@@ -29,7 +29,9 @@
     NSBundle *bundle = [NSBundle bundleForClass:self.class];
 #endif
     NSString *fileName = [bundle pathForResource:name ofType:@"svg"];
-    
+    if (!fileName) {
+        fileName = [bundle pathForResource:name ofType:@"svgz"];
+    }
     return [JAMSVGImage imageWithContentsOfFile:fileName];
 }
 

@@ -40,3 +40,6 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2);
 - (NSValue *)affineTransformForKey:(NSString *)key;
 @end
 
+@interface NSData (GZIPUtilities)
+- (NSData *)gunzip:(NSError**)error;
+@end

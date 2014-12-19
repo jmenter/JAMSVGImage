@@ -20,7 +20,7 @@
                     <rect key="frame" x="8" y="8" width="584" height="546"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="paths-data-01-t"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="box"/>
                     </userDefinedRuntimeAttributes>
                 </view>
                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="500" minValue="10" maxValue="10000" translatesAutoresizingMaskIntoConstraints="NO" id="6df-D0-F3w">

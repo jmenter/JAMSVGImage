@@ -13,6 +13,7 @@
 #import "JAMSVGParser.h"
 #import "JAMStyledBezierPath.h"
 #import "JAMStyledBezierPathFactory.h"
+#import "JAMSVGUtilities.h"
 
 @interface JAMStyledBezierPathFactory (Private)
 @property (nonatomic) NSNumber *groupOpacityValue;
@@ -35,7 +36,18 @@
 {
     if (!(self = [super init]) || !path) return nil;
     
-    return [self initWithSVGData:[NSData dataWithContentsOfFile:path]];
+    NSData *fileData;
+    NSError *error;
+    if ([path.lastPathComponent.pathExtension isEqualToString:@"svgz"]) {
+        fileData = [[NSData dataWithContentsOfFile:path] gunzip:&error];
+        if (error) {
+            NSLog(@"error gunzipping svgz: %@, error: %@", path, error);
+            return nil;
+        }
+    } else {
+        fileData = [NSData dataWithContentsOfFile:path];
+    }
+    return [self initWithSVGData:fileData];
 }
 
 - (id)initWithSVGData:(NSData *)data;
