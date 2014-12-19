@@ -5,6 +5,8 @@ A class for parsing and displaying resolution independent SVG image graphics in 
 
 As of version 1.4, JAMSVGImage passes all 19 of the SVG1.1 conformance tests for the "path" element. 
 
+(IMPORTANT NOTE: for now, the IBDesignable and IBInspectable features do not work if you're installing this with cocoapods. You'll have to drag the class files directly into your project. The class files have no dependencies, but you will need to make syre to link to  "libz.dylib". This will hopefully be fixed soon.)
+
 ![JAMSVGImageView Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/master/example.png)
 
 Usage
