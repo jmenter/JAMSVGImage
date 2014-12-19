@@ -14,6 +14,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/jmenter/JAMSVGImage.git", :tag => s.version.to_s }
   s.source_files  = 'Classes', 'Classes/**/*.{h,m}'
   s.requires_arc = true
-  s.libraries    = 'libz'
+  s.libraries    = 'z'
 
 end
