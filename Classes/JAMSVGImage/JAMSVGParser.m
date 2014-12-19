@@ -21,6 +21,8 @@
 - (void)removeGroupOpacityValue;
 - (void)pushGroupTransformWithAttributes:(NSDictionary *)attributes;
 - (void)popGroupTransform;
+- (void)pushGroupAppearanceWithAttributes:(NSDictionary *)attributes;
+- (void)popGroupAppearance;
 @end
 
 @interface JAMSVGParser () <NSXMLParserDelegate>
@@ -28,6 +30,7 @@
 @property (nonatomic) JAMStyledBezierPathFactory *pathFactory;
 @property NSUInteger groupLevel;
 @property (nonatomic) NSMutableDictionary *groupTransforms;
+@property (nonatomic) NSMutableDictionary *groupAppearances;
 @end
 
 @implementation JAMSVGParser
@@ -60,6 +63,7 @@
     self.pathFactory = JAMStyledBezierPathFactory.new;
     self.groupLevel = 0;
     self.groupTransforms = NSMutableDictionary.new;
+    self.groupAppearances = NSMutableDictionary.new;
     return self;
 }
 
@@ -85,6 +89,8 @@
     if ([elementName isEqualToString:@"g"]) {
         self.groupLevel++;
         [self.pathFactory addGroupOpacityValueWithAttributes:attributeDict];
+        self.groupAppearances[@(self.groupLevel)] = attributeDict;
+        [self.pathFactory pushGroupAppearanceWithAttributes:attributeDict];
         if (attributeDict[@"transform"]) {
             self.groupTransforms[@(self.groupLevel)] = attributeDict;
             [self.pathFactory pushGroupTransformWithAttributes:attributeDict];
@@ -102,6 +108,11 @@
         if (self.groupTransforms[@(self.groupLevel)]) {
             [self.pathFactory popGroupTransform];
             [self.groupTransforms removeObjectForKey:@(self.groupLevel)];
+        }
+        
+        if (self.groupAppearances[@(self.groupLevel)]) {
+            [self.pathFactory popGroupAppearance];
+            [self.groupAppearances removeObjectForKey:@(self.groupLevel)];
         }
         
         [self.pathFactory removeGroupOpacityValue];

@@ -32,6 +32,7 @@
 @property CGPoint previousCurveOperationControlPoint;
 @property (nonatomic) NSNumber *groupOpacityValue;
 @property (nonatomic) NSMutableArray *affineTransformStack;
+@property (nonatomic) NSMutableArray *groupAppearanceStack;
 @end
 
 @implementation JAMStyledBezierPathFactory
@@ -44,6 +45,7 @@
     
     self.gradients = NSMutableArray.new;
     self.affineTransformStack = NSMutableArray.new;
+    self.groupAppearanceStack = NSMutableArray.new;
     return self;
 }
 
@@ -107,6 +109,16 @@
 - (void)popGroupTransform;
 {
     [self.affineTransformStack removeLastObject];
+}
+
+- (void)pushGroupAppearanceWithAttributes:(NSDictionary *)attributes;
+{
+    [self.groupAppearanceStack addObject:attributes];
+}
+
+- (void)popGroupAppearance;
+{
+    [self.groupAppearanceStack removeLastObject];
 }
 
 - (CGAffineTransform)concatenatedGroupTransforms;
@@ -241,6 +253,22 @@
 
 #pragma mark - Styled Path Creation Methods
 
+- (NSDictionary *)attributesByAddingGroupAttributesToAttributes:(NSDictionary *)attributes;
+{
+    NSMutableDictionary *concatenatedAppearance = NSMutableDictionary.new;
+
+    for (NSDictionary *groupLevelAttributes in self.groupAppearanceStack) {
+        [groupLevelAttributes enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            concatenatedAppearance[key] = obj;
+        }];
+    }
+    [attributes enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        concatenatedAppearance[key] = obj;
+    }];
+
+    return concatenatedAppearance.copy;
+}
+
 - (JAMStyledBezierPath *)createStyledPath:(UIBezierPath *)path withAttributes:(NSDictionary *)attributes;
 {
     
@@ -252,6 +280,9 @@
             transforms = self.affineTransformStack.copy;
         }
     }
+    attributes = [self attributesByAddingGroupAttributesToAttributes:attributes];
+
+    
     NSString *fillColorString = ((NSString *)attributes[@"fill"]).lowercaseString;
     NSString *strokeColorString = ((NSString *)attributes[@"stroke"]).lowercaseString;
     NSString *fillColorStringValue = self.webColors[fillColorString];
