@@ -3,6 +3,8 @@ JAMSVGImage
 
 A class for parsing and displaying resolution independent SVG image graphics in iOS. The goal with this class is simplicity: it only supports paths and their appearance: primitive shapes, bezier paths (including elliptical arcs), stroke & fill, opacity, gradient fills, and affine transformations, either applied at the element or group level.
 
+As of version 1.4, JAMSVGImage passes all 19 of the SVG1.1 conformance tests for the "path" element. 
+
 ![JAMSVGImageView Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/master/example.png)
 
 Usage
@@ -25,7 +27,7 @@ Secondly, you can programmatically alloc and init a new JAMSVGImageView with a J
     tigerImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.view addSubview:tigerImageView];
 
-The image will draw at high resolution no matter what the density or scale of the device's display.
+The SVG image will draw at high resolution no matter what the density or scale of the device's display.
 
 Lastly, you can create a JAMSVGImage instance and use the drawInCurrentContext method in your current graphics context like so:
 
@@ -65,4 +67,4 @@ SVG Document Properties:
 - viewBox
 - width, height
 
-If there are any svg parts you're missing out on then: fork, fix, and issue a pull request!
+If there are any SVG parts you're missing out on then: fork, fix, and issue a pull request!
