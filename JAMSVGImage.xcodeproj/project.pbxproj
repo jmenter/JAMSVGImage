@@ -35,8 +35,6 @@
 		63AD793F1A3FBFF800987249 /* paths-data-18-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63AD792A1A3FBFF800987249 /* paths-data-18-f.svg */; };
 		63AD79401A3FBFF800987249 /* paths-data-19-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63AD792B1A3FBFF800987249 /* paths-data-19-f.svg */; };
 		63AD79411A3FBFF800987249 /* paths-data-20-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63AD792C1A3FBFF800987249 /* paths-data-20-f.svg */; };
-		63AD79421A3FBFF800987249 /* paths-dom-01-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63AD792D1A3FBFF800987249 /* paths-dom-01-f.svg */; };
-		63AD79431A3FBFF800987249 /* paths-dom-02-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63AD792E1A3FBFF800987249 /* paths-dom-02-f.svg */; };
 		63CA8DFC1A426F870095ECF3 /* JAMSVGUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CA8DFB1A426F870095ECF3 /* JAMSVGUtilities.m */; };
 		63D2067718EF501F00FAC851 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D2067618EF501F00FAC851 /* Foundation.framework */; };
 		63D2067918EF501F00FAC851 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D2067818EF501F00FAC851 /* CoreGraphics.framework */; };
@@ -84,8 +82,6 @@
 		63AD792A1A3FBFF800987249 /* paths-data-18-f.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "paths-data-18-f.svg"; sourceTree = "<group>"; };
 		63AD792B1A3FBFF800987249 /* paths-data-19-f.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "paths-data-19-f.svg"; sourceTree = "<group>"; };
 		63AD792C1A3FBFF800987249 /* paths-data-20-f.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "paths-data-20-f.svg"; sourceTree = "<group>"; };
-		63AD792D1A3FBFF800987249 /* paths-dom-01-f.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "paths-dom-01-f.svg"; sourceTree = "<group>"; };
-		63AD792E1A3FBFF800987249 /* paths-dom-02-f.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "paths-dom-02-f.svg"; sourceTree = "<group>"; };
 		63CA8DFA1A426F870095ECF3 /* JAMSVGUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMSVGUtilities.h; sourceTree = "<group>"; };
 		63CA8DFB1A426F870095ECF3 /* JAMSVGUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMSVGUtilities.m; sourceTree = "<group>"; };
 		63D2067318EF501F00FAC851 /* JAMSVGImage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JAMSVGImage.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,8 +163,6 @@
 				63AD792A1A3FBFF800987249 /* paths-data-18-f.svg */,
 				63AD792B1A3FBFF800987249 /* paths-data-19-f.svg */,
 				63AD792C1A3FBFF800987249 /* paths-data-20-f.svg */,
-				63AD792D1A3FBFF800987249 /* paths-dom-01-f.svg */,
-				63AD792E1A3FBFF800987249 /* paths-dom-02-f.svg */,
 			);
 			path = "path conformance test documents";
 			sourceTree = "<group>";
@@ -301,8 +295,6 @@
 				63AD793E1A3FBFF800987249 /* paths-data-17-f.svg in Resources */,
 				63AD79311A3FBFF800987249 /* paths-data-03-f.svg in Resources */,
 				63AD79321A3FBFF800987249 /* paths-data-04-t.svg in Resources */,
-				63AD79431A3FBFF800987249 /* paths-dom-02-f.svg in Resources */,
-				63AD79421A3FBFF800987249 /* paths-dom-01-f.svg in Resources */,
 				63AD79411A3FBFF800987249 /* paths-data-20-f.svg in Resources */,
 				63AD79391A3FBFF800987249 /* paths-data-12-t.svg in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,
