@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "JAMSVGImage"
-  s.version      = "1.3.0"
+  s.version      = "1.4.0"
   s.summary      = "An easy way to parse and display resolution-independent SVG image graphics in iOS."
 
   s.description  = <<-DESC
