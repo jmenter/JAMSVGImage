@@ -32,7 +32,7 @@ Lastly, you can create a JAMSVGImage instance and use the drawInCurrentContext m
     JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
     [tiger drawInCurrentContext];
 
-You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef and use that anywhere you would use a UIImage or CGImageRef. You can set the scale before getting the image to specify how big you need it.
+You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef and use that anywhere you would use a UIImage or CGImageRef. You can set the scale before getting the image if you need it bigger or smaller.
 
 Supported features/shapes/appearances:
 --------------------------
