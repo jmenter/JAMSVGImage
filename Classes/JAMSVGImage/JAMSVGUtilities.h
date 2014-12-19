@@ -23,6 +23,8 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2);
 - (NSString *)currentCharacter;
 - (void)scanThroughToHyphen;
 - (BOOL)scanPoint:(CGPoint *)point;
+- (BOOL)scanBool:(BOOL *)boolean;
+- (BOOL)scanCGFloat:(CGFloat *)scannedFloat;
 @end
 
 @interface NSDictionary (Utilities)

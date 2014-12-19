@@ -89,15 +89,12 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (void)scanThroughToHyphen;
 {
-    if (self.isAtEnd) {
-        return;
-    }
-    if (![self.currentCharacter isEqualToString:@"-"])
-        self.scanLocation++;
+    [self scanCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@"0123456789.-"].invertedSet intoString:NULL];
 }
 
 - (BOOL)scanPoint:(CGPoint *)point;
 {
+    [self scanUpToCharactersFromSet:NSCharacterSet.whitespaceAndNewlineCharacterSet.invertedSet intoString:NULL];
     float xCoord, yCoord;
     [self scanThroughToHyphen];
     BOOL didScanX = [self scanFloat:&xCoord];
@@ -105,6 +102,43 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     BOOL didScanY = [self scanFloat:&yCoord];
     if (didScanX && didScanY) {
         *point = CGPointMake(xCoord, yCoord);
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)scanBool:(BOOL *)boolean;
+{
+
+    while (!self.isAtEnd && ([self.currentCharacter isEqualToString:@" "] || [self.currentCharacter isEqualToString:@","])) {
+        self.scanLocation++;
+    }
+    if (!self.isAtEnd) {
+        if ([self.currentCharacter isEqualToString:@"-"]) {
+            return NO;
+        }
+        if (![@[@"0", @"1"] containsObject:self.currentCharacter]) {
+            self.scanLocation++;
+        }
+        if (!self.isAtEnd) {
+            if ([@[@"0", @"1"] containsObject:self.currentCharacter]) {
+                *boolean = (BOOL)[self.currentCharacter intValue];
+                if (!self.isAtEnd) {
+                    self.scanLocation++;
+                }
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (BOOL)scanCGFloat:(CGFloat *)scannedFloat;
+{
+    [self scanUpToCharactersFromSet:NSCharacterSet.whitespaceAndNewlineCharacterSet.invertedSet intoString:NULL];
+    float floatValue;
+    if ([self scanFloat:&floatValue]) {
+        *scannedFloat = (CGFloat)floatValue;
         return YES;
     }
     return NO;

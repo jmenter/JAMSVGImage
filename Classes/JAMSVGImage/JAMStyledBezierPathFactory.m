@@ -129,13 +129,13 @@
         }
     }
     
-    float xPosition, yPosition, width, height;
+    CGFloat xPosition, yPosition, width, height;
     NSScanner *viewBoxScanner = [NSScanner scannerWithString:attributes[@"viewBox"]];
     
-    [viewBoxScanner scanFloat:&xPosition];
-    [viewBoxScanner scanFloat:&yPosition];
-    [viewBoxScanner scanFloat:&width];
-    [viewBoxScanner scanFloat:&height];
+    [viewBoxScanner scanCGFloat:&xPosition];
+    [viewBoxScanner scanCGFloat:&yPosition];
+    [viewBoxScanner scanCGFloat:&width];
+    [viewBoxScanner scanCGFloat:&height];
     
     return CGRectMake(xPosition, yPosition, width, height);
 }
@@ -149,8 +149,8 @@
     };
     if ([colorScanner scanUpToString:@"stop-opacity:" intoString:NULL]) {
         [colorScanner scanString:@"stop-opacity:" intoString:NULL];
-        float opacity = 1;
-        [colorScanner scanFloat:&opacity];
+        CGFloat opacity = 1;
+        [colorScanner scanCGFloat:&opacity];
         color = [color colorWithAlphaComponent:opacity];
     }
     return color;
@@ -410,7 +410,9 @@
         if ([commandScanner scanPoint:&scannedPoint]) {
             [path addLineToPoint:relative ? CGPointAddPoints(scannedPoint, path.currentPoint) : scannedPoint];
         } else {
-            commandScanner.scanLocation++;
+            if (!commandScanner.isAtEnd) {
+                commandScanner.scanLocation++;
+            }
         }
     }
 }
@@ -424,7 +426,9 @@
         if ([commandScanner scanPoint:&scannedPoint]) {
             [path addLineToPoint:relative ? CGPointAddPoints(scannedPoint, path.isEmpty ? CGPointZero : path.currentPoint) : scannedPoint];
         } else {
-            commandScanner.scanLocation++;
+            if (!commandScanner.isAtEnd) {
+                commandScanner.scanLocation++;
+            }
         }
     }
 }
@@ -432,15 +436,17 @@
 - (void)addHorizontalLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
     BOOL relative = [commandScanner.initialCharacter isEqualToString:@"h"];
-    float xPosition;
+    CGFloat xPosition;
     [commandScanner scanThroughToHyphen];
     
     while (!commandScanner.isAtEnd) {
-        if ([commandScanner scanFloat:&xPosition]) {
+        if ([commandScanner scanCGFloat:&xPosition]) {
             xPosition += (relative) ? path.currentPoint.x : 0;
             [path addLineToPoint:CGPointMake(xPosition, path.currentPoint.y)];
         } else {
-            commandScanner.scanLocation++;
+            if (!commandScanner.isAtEnd) {
+                commandScanner.scanLocation++;
+            }
         }
     }
 }
@@ -448,15 +454,17 @@
 - (void)addVerticalLineToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
     BOOL relative = [commandScanner.initialCharacter isEqualToString:@"v"];
-    float yPosition;
+    CGFloat yPosition;
     [commandScanner scanThroughToHyphen];
     
     while (!commandScanner.isAtEnd) {
-        if ([commandScanner scanFloat:&yPosition]) {
+        if ([commandScanner scanCGFloat:&yPosition]) {
             yPosition += (relative) ? path.currentPoint.y : 0;
             [path addLineToPoint:CGPointMake(path.currentPoint.x, yPosition)];
         } else {
-            commandScanner.scanLocation++;
+            if (!commandScanner.isAtEnd) {
+                commandScanner.scanLocation++;
+            }
         }
     }
 }
@@ -483,7 +491,9 @@
             self.previousCurveOperationControlPoint = controlPoint2;
             [path addCurveToPoint:curveToPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
         } else {
-            commandScanner.scanLocation++;
+            if (!commandScanner.isAtEnd) {
+                commandScanner.scanLocation++;
+            }
         }
     }
 }
@@ -508,7 +518,9 @@
             self.previousCurveOperationControlPoint = controlPoint2;
             [path addCurveToPoint:curveToPoint controlPoint1:controlPoint1 controlPoint2:controlPoint2];
         } else {
-            commandScanner.scanLocation++;
+            if (!commandScanner.isAtEnd) {
+                commandScanner.scanLocation++;
+            }
         }
     }
 }
@@ -531,7 +543,9 @@
             self.previousCurveOperationControlPoint = controlPoint;
             [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
         } else {
-            commandScanner.scanLocation++;
+            if (!commandScanner.isAtEnd) {
+                commandScanner.scanLocation++;
+            }
         }
     }
 }
@@ -553,7 +567,9 @@
             self.previousCurveOperationControlPoint = controlPoint;
             [path addQuadCurveToPoint:quadCurveToPoint controlPoint:controlPoint];
         } else {
-            commandScanner.scanLocation++;
+            if (!commandScanner.isAtEnd) {
+                commandScanner.scanLocation++;
+            }
         }
     }    
 }
@@ -561,60 +577,64 @@
 - (void)addEllipticalArcToPointFromCommandScanner:(NSScanner *)commandScanner toPath:(UIBezierPath *)path;
 {
     while (!commandScanner.isAtEnd) {
+        CGPoint radii = CGPointZero;
+        CGPoint arcEndPoint = CGPointZero;
+        CGPoint arcStartPoint = path.currentPoint;
+        CGFloat xAxisRotation = 0;
+        BOOL largeArcFlag = 0;
+        BOOL sweepFlag = 0;
         
-    CGPoint radii = CGPointZero;
-    CGPoint arcEndPoint = CGPointZero;
-    CGPoint arcStartPoint = path.currentPoint;
-    float xAxisRotation = 0;
-    int largeArcFlag = 0;
-    int sweepFlag = 0;
-    
-
-    [commandScanner scanPoint:&radii];
-    [commandScanner scanFloat:&xAxisRotation];
-    [commandScanner scanInt:&largeArcFlag];
-//    [commandScanner scanThroughToHyphen];
-    [commandScanner scanInt:&sweepFlag];
-    [commandScanner scanPoint:&arcEndPoint];
-    
-    if ([commandScanner.initialCharacter isEqualToString:@"a"]) {
-        arcEndPoint = CGPointAddPoints(arcEndPoint, path.currentPoint);
-    }
-    
-    xAxisRotation *= M_PI / 180.f;
-    CGPoint currentPoint = CGPointMake(cos(xAxisRotation) * (arcStartPoint.x - arcEndPoint.x) / 2.0 + sin(xAxisRotation) * (arcStartPoint.y - arcEndPoint.y) / 2.0, -sin(xAxisRotation) * (arcStartPoint.x - arcEndPoint.x) / 2.0 + cos(xAxisRotation) * (arcStartPoint.y - arcEndPoint.y) / 2.0);
-
-    CGFloat radiiAdjustment = pow(currentPoint.x, 2) / pow(radii.x, 2) + pow(currentPoint.y, 2) / pow(radii.y, 2);
-    radii.x *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
-    radii.y *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
-
-    CGFloat sweep = (largeArcFlag == sweepFlag ? -1 : 1) * sqrt(((pow(radii.x, 2) * pow(radii.y, 2)) - (pow(radii.x, 2) * pow(currentPoint.y, 2)) - (pow(radii.y, 2) * pow(currentPoint.x, 2))) / (pow(radii.x, 2) * pow(currentPoint.y, 2) + pow(radii.y, 2) * pow(currentPoint.x, 2)));
-    sweep = (sweep != sweep) ? 0 : sweep;
-    CGPoint preCenterPoint = CGPointMake(sweep * radii.x * currentPoint.y / radii.y, sweep * -radii.y * currentPoint.x / radii.x);
-
-    CGPoint centerPoint = CGPointMake((arcStartPoint.x + arcEndPoint.x) / 2.0 + cos(xAxisRotation) * preCenterPoint.x - sin(xAxisRotation) * preCenterPoint.y, (arcStartPoint.y + arcEndPoint.y) / 2.0 + sin(xAxisRotation) * preCenterPoint.x + cos(xAxisRotation) * preCenterPoint.y);
-    
-    CGFloat startAngle = angle(CGPointMake(1, 0), CGPointMake((currentPoint.x-preCenterPoint.x)/radii.x,
-                                                              (currentPoint.y-preCenterPoint.y)/radii.y));
-
-    CGPoint deltaU = CGPointMake((currentPoint.x - preCenterPoint.x) / radii.x,
-                                 (currentPoint.y - preCenterPoint.y) / radii.y);
-    CGPoint deltaV = CGPointMake((-currentPoint.x - preCenterPoint.x) / radii.x,
-                                 (-currentPoint.y - preCenterPoint.y) / radii.y);
-    CGFloat angleDelta = (deltaU.x * deltaV.y < deltaU.y * deltaV.x ? -1 : 1) * acos(ratio(deltaU, deltaV));
-    
-    angleDelta = (ratio(deltaU, deltaV) <= -1) ? M_PI : (ratio(deltaU, deltaV) >= 1) ? 0 : angleDelta;
-    
-    CGFloat radius = MAX(radii.x, radii.y);
-    CGPoint scale = (radii.x > radii.y) ? CGPointMake(1, radii.y / radii.x) : CGPointMake(radii.x / radii.y, 1);
-    
-    [path applyTransform:CGAffineTransformMakeTranslation(-centerPoint.x, -centerPoint.y)];
-    [path applyTransform:CGAffineTransformMakeRotation(-xAxisRotation)];
-    [path applyTransform:CGAffineTransformMakeScale(1 / scale.x, 1 / scale.y)];
-    [path addArcWithCenter:CGPointZero radius:radius startAngle:startAngle endAngle:startAngle + angleDelta clockwise:sweepFlag];
-    [path applyTransform:CGAffineTransformMakeScale(scale.x, scale.y)];
-    [path applyTransform:CGAffineTransformMakeRotation(xAxisRotation)];
-    [path applyTransform:CGAffineTransformMakeTranslation(centerPoint.x, centerPoint.y)];
+        BOOL didScanRadii = [commandScanner scanPoint:&radii];
+        BOOL didScanXAxisRotation = [commandScanner scanCGFloat:&xAxisRotation];
+        BOOL didScanLargeArcFlag = [commandScanner scanBool:&largeArcFlag];
+        BOOL didScanSweepFlag = [commandScanner scanBool:&sweepFlag];
+        BOOL didScanArcEndPoint = [commandScanner scanPoint:&arcEndPoint];
+        
+        if (!(didScanRadii && didScanXAxisRotation && didScanLargeArcFlag && didScanSweepFlag && didScanArcEndPoint)) {
+            return;
+        }
+        if ([commandScanner.initialCharacter isEqualToString:@"a"]) {
+            arcEndPoint = CGPointAddPoints(arcEndPoint, path.currentPoint);
+        }
+        
+        xAxisRotation *= M_PI / 180.f;
+        CGPoint currentPoint = CGPointMake(cos(xAxisRotation) * (arcStartPoint.x - arcEndPoint.x) / 2.0 + sin(xAxisRotation) * (arcStartPoint.y - arcEndPoint.y) / 2.0, -sin(xAxisRotation) * (arcStartPoint.x - arcEndPoint.x) / 2.0 + cos(xAxisRotation) * (arcStartPoint.y - arcEndPoint.y) / 2.0);
+        
+        CGFloat radiiAdjustment = pow(currentPoint.x, 2) / pow(radii.x, 2) + pow(currentPoint.y, 2) / pow(radii.y, 2);
+        radii.x *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
+        radii.y *= (radiiAdjustment > 1) ? sqrt(radiiAdjustment) : 1;
+        
+        CGFloat sweep = (largeArcFlag == sweepFlag ? -1 : 1) * sqrt(((pow(radii.x, 2) * pow(radii.y, 2)) - (pow(radii.x, 2) * pow(currentPoint.y, 2)) - (pow(radii.y, 2) * pow(currentPoint.x, 2))) / (pow(radii.x, 2) * pow(currentPoint.y, 2) + pow(radii.y, 2) * pow(currentPoint.x, 2)));
+        sweep = (sweep != sweep) ? 0 : sweep;
+        CGPoint preCenterPoint = CGPointMake(sweep * radii.x * currentPoint.y / radii.y, sweep * -radii.y * currentPoint.x / radii.x);
+        
+        CGPoint centerPoint = CGPointMake((arcStartPoint.x + arcEndPoint.x) / 2.0 + cos(xAxisRotation) * preCenterPoint.x - sin(xAxisRotation) * preCenterPoint.y, (arcStartPoint.y + arcEndPoint.y) / 2.0 + sin(xAxisRotation) * preCenterPoint.x + cos(xAxisRotation) * preCenterPoint.y);
+        
+        CGFloat startAngle = angle(CGPointMake(1, 0), CGPointMake((currentPoint.x-preCenterPoint.x)/radii.x,
+                                                                  (currentPoint.y-preCenterPoint.y)/radii.y));
+        
+        CGPoint deltaU = CGPointMake((currentPoint.x - preCenterPoint.x) / radii.x,
+                                     (currentPoint.y - preCenterPoint.y) / radii.y);
+        CGPoint deltaV = CGPointMake((-currentPoint.x - preCenterPoint.x) / radii.x,
+                                     (-currentPoint.y - preCenterPoint.y) / radii.y);
+        CGFloat angleDelta = (deltaU.x * deltaV.y < deltaU.y * deltaV.x ? -1 : 1) * acos(ratio(deltaU, deltaV));
+        
+        angleDelta = (ratio(deltaU, deltaV) <= -1) ? M_PI : (ratio(deltaU, deltaV) >= 1) ? 0 : angleDelta;
+        
+        CGFloat radius = MAX(radii.x, radii.y);
+        CGPoint scale = (radii.x > radii.y) ? CGPointMake(1, radii.y / radii.x) : CGPointMake(radii.x / radii.y, 1);
+        
+        [path applyTransform:CGAffineTransformMakeTranslation(-centerPoint.x, -centerPoint.y)];
+        [path applyTransform:CGAffineTransformMakeRotation(-xAxisRotation)];
+        [path applyTransform:CGAffineTransformMakeScale(1 / scale.x, 1 / scale.y)];
+        [path addArcWithCenter:CGPointZero radius:radius startAngle:startAngle endAngle:startAngle + angleDelta clockwise:sweepFlag];
+        [path applyTransform:CGAffineTransformMakeScale(scale.x, scale.y)];
+        [path applyTransform:CGAffineTransformMakeRotation(xAxisRotation)];
+        [path applyTransform:CGAffineTransformMakeTranslation(centerPoint.x, centerPoint.y)];
+        
+        if (!commandScanner.isAtEnd) {
+            commandScanner.scanLocation++;
+        }
     }
 }
 

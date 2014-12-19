@@ -5,7 +5,20 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 {
-    self.svgImageView.frame = CGRectMake(0, 0, [touches.anyObject locationInView:self.view].x, [touches.anyObject locationInView:self.view].y);
+    CGPoint center = self.svgImageView.center;
+    center.x += ([touches.anyObject locationInView:self.view].x - [touches.anyObject previousLocationInView:self.view].x);
+    center.y += ([touches.anyObject locationInView:self.view].y - [touches.anyObject previousLocationInView:self.view].y);
+    self.svgImageView.center = center;
+}
+
+- (IBAction)sliderSlid:(UISlider *)sender
+{
+    CGPoint center = self.svgImageView.center;
+    CGRect frame = self.svgImageView.frame;
+    frame.size.width = sender.value;
+    frame.size.height = sender.value;
+    self.svgImageView.frame = frame;
+    self.svgImageView.center = center;
 }
 
 @end

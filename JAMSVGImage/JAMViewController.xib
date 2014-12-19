@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C81f" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6254"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JAMViewController">
@@ -17,20 +17,37 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="4lo-Er-aVK" customClass="JAMSVGImageView">
-                    <rect key="frame" x="8" y="8" width="584" height="584"/>
+                    <rect key="frame" x="8" y="8" width="584" height="546"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="paths-data-19-f"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="paths-data-01-t"/>
                     </userDefinedRuntimeAttributes>
                 </view>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="500" minValue="10" maxValue="10000" translatesAutoresizingMaskIntoConstraints="NO" id="6df-D0-F3w">
+                    <rect key="frame" x="6" y="562" width="588" height="31"/>
+                    <connections>
+                        <action selector="sliderSlid:" destination="-1" eventType="valueChanged" id="tUo-fr-b7j"/>
+                    </connections>
+                </slider>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="4lo-Er-aVK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="4gH-Ci-6Vg"/>
                 <constraint firstAttribute="trailing" secondItem="4lo-Er-aVK" secondAttribute="trailing" constant="8" id="5qY-kx-N9j"/>
+                <constraint firstItem="6df-D0-F3w" firstAttribute="top" secondItem="4lo-Er-aVK" secondAttribute="bottom" constant="8" id="C8C-cR-QdD"/>
+                <constraint firstAttribute="trailing" secondItem="6df-D0-F3w" secondAttribute="trailing" constant="8" id="P9O-mq-YfZ"/>
                 <constraint firstItem="4lo-Er-aVK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="VGG-ie-kPA"/>
+                <constraint firstItem="6df-D0-F3w" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="VhI-JT-8JP"/>
+                <constraint firstAttribute="bottom" secondItem="6df-D0-F3w" secondAttribute="bottom" constant="8" id="d0q-P1-ngq"/>
                 <constraint firstAttribute="bottom" secondItem="4lo-Er-aVK" secondAttribute="bottom" constant="8" id="nVy-wK-PJd"/>
+                <constraint firstItem="4lo-Er-aVK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="vRE-D3-lw3"/>
             </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="nVy-wK-PJd"/>
+                    <exclude reference="vRE-D3-lw3"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="330" y="364"/>
         </view>
     </objects>
