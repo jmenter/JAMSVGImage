@@ -1,14 +1,28 @@
 
 #import "JAMViewController.h"
+#import "JAMSVGUtilities.h"
+
+@interface UITouch (Utilities)
+
+- (CGPoint)previousTouchDeltaInView:(UIView *)view;
+
+@end
+
+@implementation UITouch (Utilities)
+
+- (CGPoint)previousTouchDeltaInView:(UIView *)view;
+{
+    return CGPointMake([self locationInView:view].x - [self previousLocationInView:view].x,
+                       [self locationInView:view].y - [self previousLocationInView:view].y);
+}
+
+@end
 
 @implementation JAMViewController
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 {
-    CGPoint center = self.svgImageView.center;
-    center.x += ([touches.anyObject locationInView:self.view].x - [touches.anyObject previousLocationInView:self.view].x);
-    center.y += ([touches.anyObject locationInView:self.view].y - [touches.anyObject previousLocationInView:self.view].y);
-    self.svgImageView.center = center;
+    self.svgImageView.center = CGPointAddPoints(self.svgImageView.center, [touches.anyObject previousTouchDeltaInView:self.view]);
 }
 
 - (IBAction)sliderSlid:(UISlider *)sender
@@ -19,6 +33,11 @@
     frame.size.height = sender.value;
     self.svgImageView.frame = frame;
     self.svgImageView.center = center;
+}
+
+- (IBAction)buttonTapped:(UIButton *)sender;
+{
+    
 }
 
 @end

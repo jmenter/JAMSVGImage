@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="JAMViewController">
             <connections>
+                <outlet property="button" destination="iOO-tv-aHz" id="Qhc-6Q-PgH"/>
                 <outlet property="svgImageView" destination="4lo-Er-aVK" id="4oO-qp-PHP"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -16,12 +17,6 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="500" minValue="10" maxValue="10000" translatesAutoresizingMaskIntoConstraints="NO" id="6df-D0-F3w">
-                    <rect key="frame" x="6" y="562" width="588" height="31"/>
-                    <connections>
-                        <action selector="sliderSlid:" destination="-1" eventType="valueChanged" id="tUo-fr-b7j"/>
-                    </connections>
-                </slider>
                 <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="4lo-Er-aVK" customClass="JAMSVGImageView">
                     <rect key="frame" x="8" y="8" width="584" height="546"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -29,23 +24,79 @@
                         <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="tiger_compressed"/>
                     </userDefinedRuntimeAttributes>
                 </view>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="500" minValue="10" maxValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="6df-D0-F3w">
+                    <rect key="frame" x="114" y="562" width="480" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="KvD-Ru-Dy3"/>
+                    </constraints>
+                    <connections>
+                        <action selector="sliderSlid:" destination="-1" eventType="valueChanged" id="tUo-fr-b7j"/>
+                    </connections>
+                </slider>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iOO-tv-aHz" customClass="JAMSVGButton">
+                    <rect key="frame" x="8" y="562" width="100" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="7lC-Hp-f4h"/>
+                        <constraint firstAttribute="width" constant="100" id="Xad-7z-lQ7"/>
+                        <constraint firstAttribute="height" constant="30" id="boT-w1-Djt"/>
+                        <constraint firstAttribute="width" constant="100" id="vVX-KT-HhY"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="AvenirNextCondensed-DemiBold" family="Avenir Next Condensed" pointSize="15"/>
+                    <state key="normal" title="Fancy Button">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="fancyButton"/>
+                    </userDefinedRuntimeAttributes>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="boT-w1-Djt"/>
+                            <exclude reference="vVX-KT-HhY"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="buttonTapped:" destination="-1" eventType="touchUpInside" id="PdU-uK-tjF"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="6df-D0-F3w" firstAttribute="leading" secondItem="iOO-tv-aHz" secondAttribute="trailing" constant="8" id="0cq-5k-wuj"/>
                 <constraint firstItem="4lo-Er-aVK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="4gH-Ci-6Vg"/>
                 <constraint firstAttribute="trailing" secondItem="4lo-Er-aVK" secondAttribute="trailing" constant="8" id="5qY-kx-N9j"/>
+                <constraint firstItem="6df-D0-F3w" firstAttribute="leading" secondItem="iOO-tv-aHz" secondAttribute="trailing" constant="8" id="6ch-qK-SoJ"/>
                 <constraint firstItem="6df-D0-F3w" firstAttribute="top" secondItem="4lo-Er-aVK" secondAttribute="bottom" constant="8" id="C8C-cR-QdD"/>
+                <constraint firstItem="iOO-tv-aHz" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="Dgj-UH-iOq"/>
+                <constraint firstItem="iOO-tv-aHz" firstAttribute="top" secondItem="4lo-Er-aVK" secondAttribute="bottom" constant="8" id="HQT-Tk-aNI"/>
+                <constraint firstAttribute="bottom" secondItem="6df-D0-F3w" secondAttribute="bottom" constant="8" id="N8B-YG-gZC"/>
                 <constraint firstAttribute="trailing" secondItem="6df-D0-F3w" secondAttribute="trailing" constant="8" id="P9O-mq-YfZ"/>
                 <constraint firstItem="4lo-Er-aVK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="VGG-ie-kPA"/>
+                <constraint firstItem="iOO-tv-aHz" firstAttribute="top" secondItem="4lo-Er-aVK" secondAttribute="bottom" constant="8" id="VU2-8B-ztj"/>
                 <constraint firstItem="6df-D0-F3w" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="VhI-JT-8JP"/>
+                <constraint firstAttribute="trailing" secondItem="6df-D0-F3w" secondAttribute="trailing" constant="8" id="baI-vU-TaT"/>
                 <constraint firstAttribute="bottom" secondItem="6df-D0-F3w" secondAttribute="bottom" constant="8" id="d0q-P1-ngq"/>
+                <constraint firstItem="6df-D0-F3w" firstAttribute="leading" secondItem="iOO-tv-aHz" secondAttribute="trailing" constant="8" id="ewl-KG-4iF"/>
+                <constraint firstItem="6df-D0-F3w" firstAttribute="top" secondItem="4lo-Er-aVK" secondAttribute="bottom" constant="8" id="exM-5e-BER"/>
+                <constraint firstAttribute="bottom" secondItem="iOO-tv-aHz" secondAttribute="bottom" constant="8" id="jZJ-4d-qEW"/>
                 <constraint firstAttribute="bottom" secondItem="4lo-Er-aVK" secondAttribute="bottom" constant="8" id="nVy-wK-PJd"/>
+                <constraint firstItem="6df-D0-F3w" firstAttribute="leading" secondItem="iOO-tv-aHz" secondAttribute="trailing" constant="8" id="tUF-8Z-Se5"/>
+                <constraint firstAttribute="bottom" secondItem="iOO-tv-aHz" secondAttribute="bottom" constant="8" id="ufx-gj-YOU"/>
                 <constraint firstItem="4lo-Er-aVK" firstAttribute="top" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="8" id="vRE-D3-lw3"/>
             </constraints>
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="nVy-wK-PJd"/>
                     <exclude reference="vRE-D3-lw3"/>
+                    <exclude reference="HQT-Tk-aNI"/>
+                    <exclude reference="jZJ-4d-qEW"/>
+                    <exclude reference="0cq-5k-wuj"/>
+                    <exclude reference="C8C-cR-QdD"/>
+                    <exclude reference="P9O-mq-YfZ"/>
+                    <exclude reference="VhI-JT-8JP"/>
+                    <exclude reference="d0q-P1-ngq"/>
+                    <exclude reference="ewl-KG-4iF"/>
+                    <exclude reference="tUF-8Z-Se5"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="493" y="150"/>
