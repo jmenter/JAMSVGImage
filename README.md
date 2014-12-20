@@ -63,6 +63,7 @@ Shape Appearance:
 - Line Dashes
 - Line Join/Cap (Butt/Round/Miter)
 - Opacity
+- "style =" for all the above
 - Affine Transformations
 - Group level appearance
 
