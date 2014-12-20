@@ -19,6 +19,23 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
     return CGPointMake(point1.x - point2.x, point1.y - point2.y);
 }
 
+CGFloat angle(CGPoint point1, CGPoint point2)
+{
+    return (point1.x * point2.y < point1.y * point2.x ? -1 : 1) * acos(ratio(point1, point2));
+}
+
+CGFloat ratio(CGPoint point1, CGPoint point2)
+{
+    return (point1.x * point2.x + point1.y * point2.y) / (magnitude(point1) * magnitude(point2));
+}
+
+CGFloat magnitude(CGPoint point)
+{
+    return sqrt(pow(point.x, 2) + pow(point.y, 2));
+}
+
+
+
 #pragma mark - Hella useful categories.
 
 @implementation NSString (Utilities)
@@ -171,6 +188,7 @@ CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2)
 
 - (NSArray *)dashArrayForKey:(NSString *)key;
 {
+    if ([key isEqualToString:@"none"]) { return nil; }
     NSMutableArray *floatValues = NSMutableArray.new;
     for (NSString *value in [self[key] componentsSeparatedByString:@","]) {
         [floatValues addObject:@(value.floatValue)];

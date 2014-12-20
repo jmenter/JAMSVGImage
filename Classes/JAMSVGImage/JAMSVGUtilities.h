@@ -5,6 +5,10 @@ CGAffineTransform CGAffineTransformSkew(CGAffineTransform transform, CGFloat ske
 CGPoint CGPointAddPoints(CGPoint point1, CGPoint point2);
 CGPoint CGPointSubtractPoints(CGPoint point1, CGPoint point2);
 
+CGFloat angle(CGPoint point1, CGPoint point2);
+CGFloat ratio(CGPoint point1, CGPoint point2);
+CGFloat magnitude(CGPoint point);
+
 @interface NSString (Utilities)
 - (NSString *)stringByTrimmingWhitespace;
 - (NSString *)characterStringAtIndex:(NSUInteger)index;
