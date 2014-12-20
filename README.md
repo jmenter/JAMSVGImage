@@ -5,7 +5,8 @@ A class for parsing and displaying resolution independent SVG image graphics in 
 
 As of version 1.4, JAMSVGImage passes all 19 of the SVG1.1 conformance tests for the "path" element. 
 
-(IMPORTANT NOTE: for now, the IBDesignable and IBInspectable features do not work if you're installing this with cocoapods. You'll have to drag the class files directly into your project. The class files have no dependencies, but you will need to make syre to link to  "libz.dylib". This will hopefully be fixed soon.)
+(IMPORTANT NOTE: for now, the IBDesignable and IBInspectable features do not work if you're installing this with Cocoapods: [Link to issue](https://github.com/CocoaPods/CocoaPods/issues/2792). You'll have to drag the class files directly into your project. The class files have no dependencies, but you will need to make sure to link to "libz.dylib". This will hopefully be fixed soon.)
+
 
 ![JAMSVGImageView Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/master/example.png)
 
@@ -69,4 +70,4 @@ SVG Document Properties:
 - viewBox
 - width, height
 
-If there are any SVG parts you're missing out on then: fork, fix, and issue a pull request!
+If you're using this in production, please let me know! I'd love to get feedback and figure out how to make it better. If there are any SVG parts you're missing out on you should fork, fix, and issue a pull request.
