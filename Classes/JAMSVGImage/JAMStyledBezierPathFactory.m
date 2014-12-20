@@ -136,7 +136,7 @@
         if (attributes[@"width"] && attributes[@"height"]) {
             return CGRectMake(0, 0, [attributes[@"width"] floatValue], [attributes[@"height"] floatValue]);
         } else {
-            // No viewbox or width or height? I guess that's possible.
+            // No viewbox or width or height? I guess that's possible. Either way, we need a viewBox of some kind.
             return CGRectMake(0, 0, 256, 256);
         }
     }
@@ -269,9 +269,35 @@
     return concatenatedAppearance.copy;
 }
 
+- (NSDictionary *)attributesByApplyingStyleAttributeToAttributes:(NSDictionary *)attributes;
+{
+    if (!attributes[@"style"]) { return attributes; }
+    
+    NSMutableDictionary *appliedAttributes = attributes.mutableCopy;
+    NSScanner *attributeNameScanner = [NSScanner scannerWithString:attributes[@"style"]];
+    
+    while (!attributeNameScanner.isAtEnd) {
+        NSString *attributeName;
+        NSString *attributeValue;
+        if ([attributeNameScanner scanUpToString:@":" intoString:&attributeName]) {
+            attributeNameScanner.scanLocation++;
+            if ([attributeNameScanner scanUpToString:@";" intoString:&attributeValue]) {
+                appliedAttributes[attributeName.stringByTrimmingWhitespace] = attributeValue.stringByTrimmingWhitespace;
+            }
+            if (!attributeNameScanner.isAtEnd) {
+                attributeNameScanner.scanLocation++;
+            }
+        } else {
+            if (!attributeNameScanner.isAtEnd) {
+                attributeNameScanner.scanLocation++;
+            }
+        }
+    }
+    return appliedAttributes.copy;
+}
+
 - (JAMStyledBezierPath *)createStyledPath:(UIBezierPath *)path withAttributes:(NSDictionary *)attributes;
 {
-    
     NSArray *transforms = nil;
     if (attributes[@"transform"] || self.affineTransformStack.count > 0) {
         if (attributes[@"transform"]) {
@@ -281,7 +307,7 @@
         }
     }
     attributes = [self attributesByAddingGroupAttributesToAttributes:attributes];
-
+    attributes = [self attributesByApplyingStyleAttributeToAttributes:attributes];
     
     NSString *fillColorString = ((NSString *)attributes[@"fill"]).lowercaseString;
     NSString *strokeColorString = ((NSString *)attributes[@"stroke"]).lowercaseString;
@@ -667,21 +693,6 @@
             commandScanner.scanLocation++;
         }
     }
-}
-
-static CGFloat angle(CGPoint point1, CGPoint point2)
-{
-    return (point1.x * point2.y < point1.y * point2.x ? -1 : 1) * acos(ratio(point1, point2));
-}
-
-static CGFloat ratio(CGPoint point1, CGPoint point2)
-{
-    return (point1.x * point2.x + point1.y * point2.y) / (magnitude(point1) * magnitude(point2));
-}
-
-static CGFloat magnitude(CGPoint point)
-{
-    return sqrt(pow(point.x, 2) + pow(point.y, 2));
 }
 
 - (NSDictionary *)webColors;
