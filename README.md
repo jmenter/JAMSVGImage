@@ -18,8 +18,9 @@ Usage
 Use JAMSVGImage and JAMSVGImageView in places where you would normally use a UIImageView or where you would programmatically draw your own graphics. The benefits of using SVG are:
 
 1. Graphics are scalable and maintain quality at any size
-2. Graphic file sizes tend to be much smaller (especially .svgz)
-3. Built-in "flat look" (haha)
+2. No need to generate @2x, @3x, or any specific resolution assets for optimum quality
+3. Graphic file sizes tend to be much smaller (especially .svgz)
+4. Built-in "flat look" (haha)
 
 There are three main ways to use these classes.
 

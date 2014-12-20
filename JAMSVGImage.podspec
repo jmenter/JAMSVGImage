@@ -1,10 +1,10 @@
 Pod::Spec.new do |s|
   s.name         = "JAMSVGImage"
-  s.version      = "1.4.0"
-  s.summary      = "An easy way to parse and display resolution-independent SVG image graphics in iOS."
+  s.version      = "1.5.0"
+  s.summary      = "An easy way to display resolution-independent SVG image graphics in iOS."
 
   s.description  = <<-DESC
-                   JAMSVGImage is used to parse and display SVG image graphics in iOS. SVG images are resolution independent so they look good at any size and don't require @2x or @3x versions. The JAMSVGImageView is IBDesignable and IBInspectable so you can see your SVGs in Interface Builder.
+                   JAMSVGImage is used to parse and display SVG image graphics in iOS. SVG images are resolution independent so they look good at any size and don't require @2x or @3x versions. The JAMSVGImageView is IBDesignable and IBInspectable so you can see your SVGs right in Interface Builder.
                    DESC
   s.homepage     = "https://github.com/jmenter/JAMSVGImage"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
