@@ -10,6 +10,8 @@
 		630E28B01A44CB1E0001106F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 630E28AF1A44CB1E0001106F /* libz.dylib */; };
 		630E28B71A44D8190001106F /* tiger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 630E28B61A44D8190001106F /* tiger.svg */; };
 		630E28B91A44D8280001106F /* tiger_compressed.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 630E28B81A44D8280001106F /* tiger_compressed.svgz */; };
+		632459441A460ABF00C64553 /* fancyButton.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 632459431A460A6300C64553 /* fancyButton.svgz */; };
+		632459471A461EB200C64553 /* JAMSVGButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 632459461A461EB200C64553 /* JAMSVGButton.m */; };
 		6380F68C1A41110300D7C9B4 /* JAMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6380F68A1A41110300D7C9B4 /* JAMViewController.m */; };
 		6380F68D1A41110300D7C9B4 /* JAMViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6380F68B1A41110300D7C9B4 /* JAMViewController.xib */; };
 		638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */ = {isa = PBXBuildFile; fileRef = 638E660618F39529007A2EAA /* JAMSVGGradientParts.m */; };
@@ -52,6 +54,9 @@
 		630E28AF1A44CB1E0001106F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		630E28B61A44D8190001106F /* tiger.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tiger.svg; sourceTree = "<group>"; };
 		630E28B81A44D8280001106F /* tiger_compressed.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = tiger_compressed.svgz; sourceTree = "<group>"; };
+		632459431A460A6300C64553 /* fancyButton.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = fancyButton.svgz; sourceTree = "<group>"; };
+		632459451A461EB200C64553 /* JAMSVGButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMSVGButton.h; sourceTree = "<group>"; };
+		632459461A461EB200C64553 /* JAMSVGButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMSVGButton.m; sourceTree = "<group>"; };
 		6380F6891A41110300D7C9B4 /* JAMViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JAMViewController.h; sourceTree = "<group>"; };
 		6380F68A1A41110300D7C9B4 /* JAMViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JAMViewController.m; sourceTree = "<group>"; };
 		6380F68B1A41110300D7C9B4 /* JAMViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = JAMViewController.xib; sourceTree = "<group>"; };
@@ -207,6 +212,7 @@
 				63AD79191A3FBFF800987249 /* path conformance test documents */,
 				630E28B81A44D8280001106F /* tiger_compressed.svgz */,
 				630E28B61A44D8190001106F /* tiger.svg */,
+				632459431A460A6300C64553 /* fancyButton.svgz */,
 				63D2068518EF501F00FAC851 /* JAMAppDelegate.h */,
 				63D2068618EF501F00FAC851 /* JAMAppDelegate.m */,
 				6380F6891A41110300D7C9B4 /* JAMViewController.h */,
@@ -214,6 +220,8 @@
 				6380F68B1A41110300D7C9B4 /* JAMViewController.xib */,
 				63D2069118EF501F00FAC851 /* Images.xcassets */,
 				63D2067D18EF501F00FAC851 /* Supporting Files */,
+				632459451A461EB200C64553 /* JAMSVGButton.h */,
+				632459461A461EB200C64553 /* JAMSVGButton.m */,
 			);
 			path = JAMSVGImage;
 			sourceTree = "<group>";
@@ -294,6 +302,7 @@
 				6380F68D1A41110300D7C9B4 /* JAMViewController.xib in Resources */,
 				63AD79381A3FBFF800987249 /* paths-data-10-t.svg in Resources */,
 				63AD793F1A3FBFF800987249 /* paths-data-18-f.svg in Resources */,
+				632459441A460ABF00C64553 /* fancyButton.svgz in Resources */,
 				EB5881E019D5CE2900797A2E /* Launch.xib in Resources */,
 				63AD793A1A3FBFF800987249 /* paths-data-13-t.svg in Resources */,
 				63AD79341A3FBFF800987249 /* paths-data-06-t.svg in Resources */,
@@ -328,6 +337,7 @@
 				63A36B3418EF512F00AE444E /* JAMStyledBezierPath.m in Sources */,
 				638E660718F39529007A2EAA /* JAMSVGGradientParts.m in Sources */,
 				63A36B3718EF512F00AE444E /* JAMSVGParser.m in Sources */,
+				632459471A461EB200C64553 /* JAMSVGButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
