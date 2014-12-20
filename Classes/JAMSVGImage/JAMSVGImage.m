@@ -23,10 +23,11 @@
 
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 {
+    NSBundle *bundle;
 #if !TARGET_INTERFACE_BUILDER
-    NSBundle *bundle = NSBundle.mainBundle;
+    bundle = NSBundle.mainBundle;
 #else
-    NSBundle *bundle = [NSBundle bundleForClass:self.class];
+    bundle = [NSBundle bundleForClass:self.class];
 #endif
     NSString *fileName = [bundle pathForResource:name ofType:@"svg"];
     if (!fileName) {
@@ -120,6 +121,15 @@
         }
     }
     return NO;
+}
+
+- (UIImage *)imageAtSize:(CGSize)size;
+{
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.f);
+    [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 @end

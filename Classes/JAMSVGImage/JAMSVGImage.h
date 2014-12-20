@@ -38,4 +38,7 @@
 /** Returns a Boolean value indicating whether the area enclosed by the path contains the specified point. */
 - (BOOL)containsPoint:(CGPoint)point;
 
+/** Returns a UIImage with the SVG rendered "scale to fill" the provided size. */
+- (UIImage *)imageAtSize:(CGSize)size;
+
 @end
