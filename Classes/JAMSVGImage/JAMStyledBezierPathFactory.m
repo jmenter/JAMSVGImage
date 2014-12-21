@@ -157,7 +157,7 @@
     UIColor *color;
     NSScanner *colorScanner = [NSScanner scannerWithString:styleColor];
     if ([colorScanner scanString:@"stop-color:" intoString:NULL]) {
-        color = [UIColor colorFromHexString:[styleColor substringFromIndex:colorScanner.scanLocation]];
+        color = [UIColor colorFromString:[styleColor substringFromIndex:colorScanner.scanLocation]];
     };
     if ([colorScanner scanUpToString:@"stop-opacity:" intoString:NULL]) {
         [colorScanner scanString:@"stop-opacity:" intoString:NULL];
@@ -313,8 +313,8 @@
     NSString *strokeColorString = ((NSString *)attributes[@"stroke"]).lowercaseString;
     NSString *fillColorStringValue = self.webColors[fillColorString];
     NSString *strokeColorStringValue = self.webColors[strokeColorString];
-    UIColor *fillColor = fillColorStringValue ? [UIColor colorFromHexString:fillColorStringValue] : [attributes fillColorForKey:@"fill"];
-    UIColor *strokeColor = strokeColorStringValue ? [UIColor colorFromHexString:strokeColorStringValue] : [attributes strokeColorForKey:@"stroke"];
+    UIColor *fillColor = fillColorStringValue ? [UIColor colorFromString:fillColorStringValue] : [attributes fillColorForKey:@"fill"];
+    UIColor *strokeColor = strokeColorStringValue ? [UIColor colorFromString:strokeColorStringValue] : [attributes strokeColorForKey:@"stroke"];
     
     return [JAMStyledBezierPath styledPathWithPath:[self applyStrokeAttributes:attributes toPath:path]
                                          fillColor:fillColor

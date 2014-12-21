@@ -61,6 +61,19 @@ CGFloat magnitude(CGPoint point)
 @end
 
 @implementation UIColor (HexUtilities)
+
++ (UIColor *)colorFromString:(NSString *)string;
+{
+    if ([string containsString:@"rgb"]) {
+        return [UIColor colorFromRGBString:string];
+    } else if ([string containsString:@"#"]) {
+        return [UIColor colorFromHexString:string];
+    } else if ([string containsString:@"hsl"]) {
+        return [UIColor colorFromHSLString:string];
+    }
+    return nil;
+}
+
 + (UIColor *)colorFromHexString:(NSString *)hexString;
 {
     if (!hexString || [hexString isEqualToString:@"none"] || !(hexString.length == 3 || hexString.length == 4 || hexString.length == 6 || hexString.length == 7))
@@ -79,6 +92,57 @@ CGFloat magnitude(CGPoint point)
                             blue:(rgbValue & 0xFF)/255.0
                            alpha:1.0];
 }
+
++ (UIColor *)colorFromRGBString:(NSString *)rgbString;
+{
+    if (!rgbString || [rgbString containsString:@"none"]) { return nil; }
+    
+    NSScanner *scanner = [NSScanner scannerWithString:rgbString];
+    BOOL hasAlpha = [rgbString containsString:@"rgba"];
+    if (![scanner scanString: hasAlpha ? @"rgba(" : @"rgb(" intoString:NULL]) { return nil; }
+    
+    float red = 0, green = 0, blue = 0, alpha = 1;
+    BOOL redWasScanned = [scanner scanFloat:&red];
+    [scanner scanCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@", "] intoString:NULL];
+    BOOL greenWasScanned = [scanner scanFloat:&green];
+    [scanner scanCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@", "] intoString:NULL];
+    BOOL blueWasScanned = [scanner scanFloat:&blue];
+    [scanner scanCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@", "] intoString:NULL];
+    
+    if (!(redWasScanned && greenWasScanned && blueWasScanned)) {
+        return nil;
+    }
+    if (hasAlpha && ![scanner scanFloat:&alpha]) {
+        return nil;
+    }
+    return [UIColor colorWithRed:red/255.f green:green/255.f blue:blue/255.f alpha:alpha];
+}
+
++ (UIColor *)colorFromHSLString:(NSString *)hslString;
+{
+    if (!hslString || [hslString containsString:@"none"]) { return nil; }
+    
+    NSScanner *scanner = [NSScanner scannerWithString:hslString];
+    BOOL hasAlpha = [hslString containsString:@"hsla"];
+    if (![scanner scanString: hasAlpha ? @"hsla(" : @"hsl(" intoString:NULL]) { return nil; }
+    
+    float hue = 0, saturation = 0, lightness = 0, alpha = 1;
+    BOOL hueWasScanned = [scanner scanFloat:&hue];
+    [scanner scanCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@", %"] intoString:NULL];
+    BOOL saturationWasScanned = [scanner scanFloat:&saturation];
+    [scanner scanCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@", %"] intoString:NULL];
+    BOOL lightnessWasScanned = [scanner scanFloat:&lightness];
+    [scanner scanCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@", %"] intoString:NULL];
+    
+    if (!(hueWasScanned && saturationWasScanned && lightnessWasScanned)) {
+        return nil;
+    }
+    if (hasAlpha && ![scanner scanFloat:&alpha]) {
+        return nil;
+    }
+    return [UIColor colorWithHue:hue / 360.f saturation:saturation / 100.f brightness:lightness / 100.f alpha:alpha];
+}
+
 @end
 
 @implementation NSScanner (Utilities)
@@ -178,12 +242,15 @@ CGFloat magnitude(CGPoint point)
 
 - (UIColor *)strokeColorForKey:(NSString *)key;
 {
-    return [UIColor colorFromHexString:self[key]];
+    return [UIColor colorFromString:self[key]];
 }
 
 - (UIColor *)fillColorForKey:(NSString *)key;
 {
-    return [UIColor colorFromHexString:self[key] ?: @"#000000"];
+    if (!self[key]) {
+        return [UIColor colorFromString:@"#000000"];
+    }
+    return [UIColor colorFromString:self[key]];
 }
 
 - (NSArray *)dashArrayForKey:(NSString *)key;

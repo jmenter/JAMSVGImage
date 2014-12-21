@@ -17,7 +17,7 @@ CGFloat magnitude(CGPoint point);
 @end
 
 @interface UIColor (HexUtilities)
-+ (UIColor *)colorFromHexString:(NSString *)hexString;
++ (UIColor *)colorFromString:(NSString *)string;
 @end
 
 @interface NSScanner (Utilities)
