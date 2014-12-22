@@ -25,12 +25,12 @@
 @property (nonatomic, readonly) CGImageRef CGImage;
 @property (nonatomic, readonly) UIImage *image;
 
-//* Initializes a new SVG image from a file or data source. */
+/** Initializes a new SVG image from a file or data source. */
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 + (JAMSVGImage *)imageWithContentsOfFile:(NSString *)path;
 + (JAMSVGImage *)imageWithSVGData:(NSData *)svgData;
 
-//* Draws the SVG image either in the current context, or at a specific point, or in a specific rect. */
+/** Draws the SVG image either in the current context, or at a specific point, or in a specific rect. */
 - (void)drawInCurrentContext;
 - (void)drawAtPoint:(CGPoint)point;
 - (void)drawInRect:(CGRect)rect;

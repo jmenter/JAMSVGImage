@@ -69,11 +69,11 @@
 
 - (BOOL)parseSVGDocument;
 {
-    BOOL didSucceed = [self.xmlParser parse];
+    BOOL success = [self.xmlParser parse];
     if (self.xmlParser.parserError)
         NSLog(@"parserError: %@", self.xmlParser.parserError);
 
-    return didSucceed;
+    return success;
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict

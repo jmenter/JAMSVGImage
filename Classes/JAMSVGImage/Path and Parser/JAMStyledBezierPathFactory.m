@@ -26,7 +26,6 @@
 @property (nonatomic) NSNumber *opacity;
 @end
 
-
 @interface JAMStyledBezierPathFactory ()
 @property (nonatomic) NSMutableArray *gradients;
 @property CGPoint previousCurveOperationControlPoint;
@@ -64,10 +63,10 @@
         return [self pathWithAttributes:attributes];
     
     if ([elementName isEqualToString:@"polyline"])
-        return [self polylineWithAttributes:attributes];
+        return [self polyWithAttributes:attributes closed:NO];
     
     if ([elementName isEqualToString:@"polygon"])
-        return [self polygonWithAttributes:attributes];
+        return [self polyWithAttributes:attributes closed:YES];
     
     if ([elementName isEqualToString:@"line"])
         return [self lineWithAttributes:attributes];
@@ -225,20 +224,14 @@
     return [self createStyledPath:commandListPath withAttributes:attributes];
 }
 
-- (JAMStyledBezierPath *)polygonWithAttributes:(NSDictionary *)attributes;
+- (JAMStyledBezierPath *)polyWithAttributes:(NSDictionary *)attributes closed:(BOOL)closed;
 {
     NSString *commandString = attributes[@"points"];
     NSArray *commandList = [self commandListForPolylineString:commandString];
     UIBezierPath *commandListPath = [self bezierPathFromCommandList:commandList];
-    [commandListPath closePath];
-    return [self createStyledPath:commandListPath withAttributes:attributes];
-}
-
-- (JAMStyledBezierPath *)polylineWithAttributes:(NSDictionary *)attributes;
-{
-    NSString *commandString = attributes[@"points"];
-    NSArray *commandList = [self commandListForPolylineString:commandString];
-    UIBezierPath *commandListPath = [self bezierPathFromCommandList:commandList];
+    if (closed) {
+        [commandListPath closePath];
+    }
     return [self createStyledPath:commandListPath withAttributes:attributes];
 }
 
@@ -257,11 +250,13 @@
 {
     NSMutableDictionary *concatenatedAppearance = NSMutableDictionary.new;
 
+    // Grab group level attributes from the stack, replacing as we nest in.
     for (NSDictionary *groupLevelAttributes in self.groupAppearanceStack) {
         [groupLevelAttributes enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             concatenatedAppearance[key] = obj;
         }];
     }
+    // Use the final appearances from the object, if any.
     [attributes enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         concatenatedAppearance[key] = obj;
     }];
@@ -273,6 +268,7 @@
 {
     if (!attributes[@"style"]) { return attributes; }
     
+    // These attributes come via the "style" attribute rather than directly attached to the path.
     NSMutableDictionary *appliedAttributes = attributes.mutableCopy;
     NSScanner *attributeNameScanner = [NSScanner scannerWithString:attributes[@"style"]];
     
@@ -344,6 +340,7 @@
 
 - (NSNumber *)opacityFromAttributes:(NSDictionary *)attributes;
 {
+    // TODO: Not sure if this is really how multiple opacities stack up with each other.
     NSNumber *opacity = [attributes opacityForKey:@"opacity"];
     if (self.groupOpacityValue) {
         if (opacity) {
