@@ -1,9 +1,7 @@
 JAMSVGImage
 ===========
 
-A class for parsing and displaying resolution independent SVG image graphics in iOS. The goal with this class is simplicity: it only supports paths and their appearance: primitive shapes, bezier paths (including elliptical arcs), stroke & fill, opacity, gradient fills, and affine transformations, either applied at the element or group level.
-
-JAMSVGImage passes all 19 of the SVG1.1 conformance tests for the "path" element. 
+A class for displaying resolution-independent SVG (Scalable Vector Graphics) in your iOS projects. SVG files are produced with 2D drawing applications such as Adobe Illustrator and Inkscape. For now, the only supported SVG elements are "path" elements and associated styling information. JAMSVGImage passes all 19 of the SVG1.1 conformance tests for the "path" element. 
 
 (IMPORTANT NOTE: for now, the IBDesignable and IBInspectable features do not work if you're installing this with Cocoapods: https://github.com/CocoaPods/CocoaPods/issues/2792 To work around this, you'll have to drag the class files directly into your project. The class files have no dependencies, but you will need to make sure to link to "libz.dylib". This will hopefully be fixed soon.)
 
