@@ -255,7 +255,7 @@ CGFloat magnitude(CGPoint point)
 
 - (NSArray *)dashArrayForKey:(NSString *)key;
 {
-    if ([key isEqualToString:@"none"]) { return nil; }
+    if ([self[key] isEqualToString:@"none"]) { return nil; }
     NSMutableArray *floatValues = NSMutableArray.new;
     for (NSString *value in [self[key] componentsSeparatedByString:@","]) {
         [floatValues addObject:@(value.floatValue)];
