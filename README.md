@@ -1,14 +1,14 @@
 JAMSVGImage
 ===========
 
-A class for displaying resolution-independent SVG (Scalable Vector Graphics) in your iOS projects. SVG files are produced with 2D drawing applications such as Adobe Illustrator and Inkscape.
+A set of classes for displaying resolution-independent SVG (Scalable Vector Graphics) in your iOS projects. SVG files are produced with 2D drawing applications such as Adobe Illustrator and Inkscape.
 
 ![JAMSVGImageView Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/master/example.png)
 
 Why SVG?
 --------
 
-__Look__: since SVG images are described with mathematical curves rather than discrete pixels (as with PNG or JPG), they look great no matter if they are scaled up or down.
+__Look__: they look great no matter if they are scaled up or down since SVG images are described with mathematical curves rather than discrete pixels as with PNG or JPG.
 
 __Convenience__: there's no need to generate @2x and @3x versions of your art assets. A single SVG is all you need.
 
@@ -17,7 +17,7 @@ __File Size__: SVGZ (gzipped SVG) is typically a fraction of the file size of a 
 Usage
 -----
 
-Use JAMSVGImage and JAMSVGImageView in places where you would normally use a UIImageView or where you would programmatically draw your own graphics. There are a few ways to use these classes:
+Use JAMSVGImage and JAMSVGImageView in places where you would normally use a UIImage, UIImageView or where you would programmatically draw your own graphics. There are a few ways to use these classes:
 
 JAMSVGImageView is IBDesignable and IBInspectable so you can drag a UIView to your layout in Interface Builder, set the class type to "JAMSVGImageView", and then type the name of the SVG image like so.
 
@@ -37,7 +37,7 @@ Third, you can create a JAMSVGImage instance and use the drawInCurrentContext me
     JAMSVGImage *tiger = [JAMSVGImage imageNamed:@"tiger"];
     [tiger drawInCurrentContext];
 
-You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef and use that anywhere you would use a UIImage or CGImageRef. You can set the scale before getting the image if you need it bigger or smaller, or you can pass in a rect to have the SVG rendered at the proper scale for your device (whether it's a @1x, @2x, or @3x screen):
+You can also call [tiger image] or .CGImage to get a raster UIImage or CGImageRef and use that anywhere you would use a UIImage or CGImageRef. You can set the scale before getting the image if you need it bigger or smaller, or you can pass in a rect to have the SVG rendered in that rect at the proper scale for your device (whether it's a @1x, @2x, or @3x screen):
 
     [self.button setBackgroundImage:[[JAMSVGImage imageNamed:@"fancyButton"] imageAtSize:self.button.bounds.size] forState:UIControlStateNormal];
     
@@ -45,7 +45,7 @@ Last, there is a JAMSVGButton subclass of UIButton that allows setting the four 
 
 ![JAMSVGButton Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/develop/svgButtonExample.png)
 
-Supported features/shapes/appearances:
+Supported SVG features/shapes/appearances:
 --------------------------
 
 File Formats:
