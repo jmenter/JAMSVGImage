@@ -10,6 +10,13 @@
 		630E28B01A44CB1E0001106F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 630E28AF1A44CB1E0001106F /* libz.dylib */; };
 		630E28B71A44D8190001106F /* tiger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 630E28B61A44D8190001106F /* tiger.svg */; };
 		630E28B91A44D8280001106F /* tiger_compressed.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 630E28B81A44D8280001106F /* tiger_compressed.svgz */; };
+		631522241A55DD7600680632 /* apple.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6315221B1A55DD7600680632 /* apple.jpg */; };
+		631522251A55DD7600680632 /* apple@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6315221C1A55DD7600680632 /* apple@2x.jpg */; };
+		631522261A55DD7600680632 /* apple@3x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6315221D1A55DD7600680632 /* apple@3x.jpg */; };
+		631522271A55DD7600680632 /* apple.png in Resources */ = {isa = PBXBuildFile; fileRef = 6315221F1A55DD7600680632 /* apple.png */; };
+		631522281A55DD7600680632 /* apple@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 631522201A55DD7600680632 /* apple@2x.png */; };
+		631522291A55DD7600680632 /* apple@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 631522211A55DD7600680632 /* apple@3x.png */; };
+		6315222A1A55DD7600680632 /* apple.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 631522231A55DD7600680632 /* apple.svgz */; };
 		632459441A460ABF00C64553 /* fancyButton.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 632459431A460A6300C64553 /* fancyButton.svgz */; };
 		632459471A461EB200C64553 /* JAMSVGButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 632459461A461EB200C64553 /* JAMSVGButton.m */; };
 		6380F68C1A41110300D7C9B4 /* JAMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6380F68A1A41110300D7C9B4 /* JAMViewController.m */; };
@@ -54,6 +61,13 @@
 		630E28AF1A44CB1E0001106F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		630E28B61A44D8190001106F /* tiger.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tiger.svg; sourceTree = "<group>"; };
 		630E28B81A44D8280001106F /* tiger_compressed.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = tiger_compressed.svgz; sourceTree = "<group>"; };
+		6315221B1A55DD7600680632 /* apple.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = apple.jpg; sourceTree = "<group>"; };
+		6315221C1A55DD7600680632 /* apple@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "apple@2x.jpg"; sourceTree = "<group>"; };
+		6315221D1A55DD7600680632 /* apple@3x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "apple@3x.jpg"; sourceTree = "<group>"; };
+		6315221F1A55DD7600680632 /* apple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = apple.png; sourceTree = "<group>"; };
+		631522201A55DD7600680632 /* apple@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "apple@2x.png"; sourceTree = "<group>"; };
+		631522211A55DD7600680632 /* apple@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "apple@3x.png"; sourceTree = "<group>"; };
+		631522231A55DD7600680632 /* apple.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = apple.svgz; sourceTree = "<group>"; };
 		632459431A460A6300C64553 /* fancyButton.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = fancyButton.svgz; sourceTree = "<group>"; };
 		632459451A461EB200C64553 /* JAMSVGButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JAMSVGButton.h; path = "UI and View/JAMSVGButton.h"; sourceTree = "<group>"; };
 		632459461A461EB200C64553 /* JAMSVGButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JAMSVGButton.m; path = "UI and View/JAMSVGButton.m"; sourceTree = "<group>"; };
@@ -122,6 +136,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		631522111A55D89900680632 /* Examples */ = {
+			isa = PBXGroup;
+			children = (
+				6315221A1A55DD7600680632 /* jpg */,
+				6315221E1A55DD7600680632 /* png */,
+				631522221A55DD7600680632 /* svg */,
+			);
+			name = Examples;
+			sourceTree = "<group>";
+		};
+		6315221A1A55DD7600680632 /* jpg */ = {
+			isa = PBXGroup;
+			children = (
+				6315221B1A55DD7600680632 /* apple.jpg */,
+				6315221C1A55DD7600680632 /* apple@2x.jpg */,
+				6315221D1A55DD7600680632 /* apple@3x.jpg */,
+			);
+			path = jpg;
+			sourceTree = "<group>";
+		};
+		6315221E1A55DD7600680632 /* png */ = {
+			isa = PBXGroup;
+			children = (
+				6315221F1A55DD7600680632 /* apple.png */,
+				631522201A55DD7600680632 /* apple@2x.png */,
+				631522211A55DD7600680632 /* apple@3x.png */,
+			);
+			path = png;
+			sourceTree = "<group>";
+		};
+		631522221A55DD7600680632 /* svg */ = {
+			isa = PBXGroup;
+			children = (
+				631522231A55DD7600680632 /* apple.svgz */,
+			);
+			path = svg;
+			sourceTree = "<group>";
+		};
 		63A36B2A18EF512F00AE444E /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +251,7 @@
 		63D2067C18EF501F00FAC851 /* JAMSVGImage */ = {
 			isa = PBXGroup;
 			children = (
+				631522111A55D89900680632 /* Examples */,
 				63AD79191A3FBFF800987249 /* path conformance test documents */,
 				630E28B81A44D8280001106F /* tiger_compressed.svgz */,
 				630E28B61A44D8190001106F /* tiger.svg */,
@@ -327,7 +380,9 @@
 				63D2069218EF501F00FAC851 /* Images.xcassets in Resources */,
 				63AD79351A3FBFF800987249 /* paths-data-07-t.svg in Resources */,
 				63AD79301A3FBFF800987249 /* paths-data-02-t.svg in Resources */,
+				631522271A55DD7600680632 /* apple.png in Resources */,
 				63AD79401A3FBFF800987249 /* paths-data-19-f.svg in Resources */,
+				631522281A55DD7600680632 /* apple@2x.png in Resources */,
 				63AD793C1A3FBFF800987249 /* paths-data-15-t.svg in Resources */,
 				63AD79331A3FBFF800987249 /* paths-data-05-t.svg in Resources */,
 				63AD793D1A3FBFF800987249 /* paths-data-16-t.svg in Resources */,
@@ -340,12 +395,17 @@
 				63AD79341A3FBFF800987249 /* paths-data-06-t.svg in Resources */,
 				630E28B91A44D8280001106F /* tiger_compressed.svgz in Resources */,
 				63AD793B1A3FBFF800987249 /* paths-data-14-t.svg in Resources */,
+				631522261A55DD7600680632 /* apple@3x.jpg in Resources */,
 				63AD793E1A3FBFF800987249 /* paths-data-17-f.svg in Resources */,
 				63AD79311A3FBFF800987249 /* paths-data-03-f.svg in Resources */,
 				630E28B71A44D8190001106F /* tiger.svg in Resources */,
 				63AD79321A3FBFF800987249 /* paths-data-04-t.svg in Resources */,
 				63AD79411A3FBFF800987249 /* paths-data-20-f.svg in Resources */,
+				631522241A55DD7600680632 /* apple.jpg in Resources */,
+				6315222A1A55DD7600680632 /* apple.svgz in Resources */,
+				631522251A55DD7600680632 /* apple@2x.jpg in Resources */,
 				63AD79391A3FBFF800987249 /* paths-data-12-t.svg in Resources */,
+				631522291A55DD7600680632 /* apple@3x.png in Resources */,
 				63D2068118EF501F00FAC851 /* InfoPlist.strings in Resources */,
 				63AD792F1A3FBFF800987249 /* paths-data-01-t.svg in Resources */,
 				63AD79371A3FBFF800987249 /* paths-data-09-t.svg in Resources */,
