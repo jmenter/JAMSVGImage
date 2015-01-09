@@ -19,9 +19,9 @@ __File Size__: SVG and SVGZ (gzipped SVG) are typically a fraction of the file s
 Usage
 -----
 
-Use JAMSVGImage and JAMSVGImageView in places where you would normally use a UIImage, UIImageView or where you would programmatically draw your own graphics. There are a few ways to use these classes:
+Use JAMSVGImage and JAMSVGImageView in places where you would normally use UIImage, UIImageView, or where you would programmatically draw your own graphics. There are a few ways to use these classes.
 
-JAMSVGImageView is IBDesignable and IBInspectable so you can drag a UIView to your layout in Interface Builder, set the class type to "JAMSVGImageView", and then type the name of the SVG image like so.
+JAMSVGImageView is IBDesignable and IBInspectable so you can drag a UIView to your layout in Interface Builder, set the class type to "JAMSVGImageView", and then type the name of the SVG image like so:
 
 ![JAMSVGImageView Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/develop/svgImageViewExample.png)
 
@@ -47,7 +47,7 @@ Last, there is a JAMSVGButton subclass of UIButton that allows setting the four 
 
 ![JAMSVGButton Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/develop/svgButtonExample.png)
 
-Supported SVG features/shapes/appearances:
+Supported SVG Shape Features & Appearance:
 --------------------------
 
 File Formats:
@@ -65,15 +65,14 @@ Shape Primitives:
 Shape Appearance:
 - Fill Color
 - Fill Rules
-- Stroke Color
 - Gradient Fill
+- Opacity
+- Stroke Color
 - Stroke Weight
 - Line Dashes
 - Line Join/Cap (Butt/Round/Miter)
-- Opacity
-- "style =" for all the above
 - Affine Transformations
-- Group level appearance
+- Inherited Group Level Appearance
 
 SVG Document Properties:
 - viewBox
@@ -82,7 +81,7 @@ SVG Document Properties:
 Etc.
 ----
 
-Why not use vector PDF with Xcode 6+ and iOS 7+? Xcode's vector PDF functionality is limited to rendering @1x, @2x, and @3x bitmaps at their natural size at build time. JAMSVGImage is far more versatile since SVGs are rendered at runtime.
+Why not use vector PDF with Xcode 6+ and iOS 7+? Xcode's vector PDF functionality is limited to rendering @1x, @2x, and @3x bitmaps at their natural size at build time. JAMSVGImage is far more versatile since SVGs are rendered at arbitrary size at runtime.
 
 If you're using this in a production app, please let me know! I'd love to get feedback and figure out how to make it better. If there are any SVG parts you're missing out on you should fork, fix, and issue a pull request. The only supported SVG elements are "path" elements and associated styling information. JAMSVGImage passes all 19 of the SVG1.1 conformance tests for the "path" element.
 
