@@ -1,7 +1,7 @@
 JAMSVGImage
 ===========
 
-A set of classes for displaying resolution-independent SVG (Scalable Vector Graphics) in your iOS projects. SVG files are produced with 2D drawing applications such as Adobe Illustrator and Inkscape.
+A set of classes for parsing and rendering resolution-independent SVG (Scalable Vector Graphics) in your iOS projects. JAMSVGImage parses SVG and transforms the "path" element into collections of stylized UIBezierPath objects. SVG files are produced with 2D drawing applications such as Adobe Illustrator and Inkscape.
 
 ![JAMSVGImageView Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/master/example.png)
 
@@ -12,7 +12,7 @@ __Look__: they look great no matter if they are scaled up or down since SVG imag
 
 __Convenience__: there's no need to generate @2x and @3x versions of your art assets. A single SVG is all you need.
 
-__File Size__: SVGZ (gzipped SVG) is typically a fraction of the file size of a set of PNG or JPG art assets.
+__File Size__: SVG and SVGZ (gzipped SVG) are typically a fraction of the file size of a set of PNG or JPG art assets.
 
 Usage
 -----
@@ -79,6 +79,8 @@ SVG Document Properties:
 
 Etc.
 ----
+
+Why not use vector PDF with Xcode 6+ and iOS 7+? Xcode's vector PDF functionality is limited to rendering @1x, @2x, and @3x bitmaps at their natural size at build time. JAMSVGImage is far more versatile since SVGs are rendered at runtime.
 
 If you're using this in a production app, please let me know! I'd love to get feedback and figure out how to make it better. If there are any SVG parts you're missing out on you should fork, fix, and issue a pull request. The only supported SVG elements are "path" elements and associated styling information. JAMSVGImage passes all 19 of the SVG1.1 conformance tests for the "path" element.
 
