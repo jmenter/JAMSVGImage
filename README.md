@@ -1,7 +1,9 @@
 JAMSVGImage
 ===========
 
-A set of classes for parsing and rendering resolution-independent SVG (Scalable Vector Graphics) in your iOS projects. JAMSVGImage parses SVG and transforms the 'path' element into collections of stylized UIBezierPath objects which are rendered at native device resolution when necessary. SVG files are produced with 2D drawing applications such as Adobe Illustrator and Inkscape.
+A set of classes for parsing and rendering resolution-independent SVG (Scalable Vector Graphics) in your iOS projects.
+
+JAMSVGImage parses SVG and transforms the 'path' element into collections of stylized UIBezierPath objects which are rendered at native device resolution when necessary at runtime. SVG files are produced with 2D drawing applications such as Adobe Illustrator and Inkscape.
 
 ![JAMSVGImageView Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/master/example.png)
 
