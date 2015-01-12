@@ -35,7 +35,7 @@
                     <rect key="frame" x="99" y="307" width="200" height="200"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="cloud"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="apple"/>
                     </userDefinedRuntimeAttributes>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="En4-YD-JUf" customClass="JAMSVGImageView">
