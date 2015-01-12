@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		630A5D301A637DA90051D2D5 /* UIImage+SVG.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A5D2F1A637DA90051D2D5 /* UIImage+SVG.m */; };
 		630E28B01A44CB1E0001106F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 630E28AF1A44CB1E0001106F /* libz.dylib */; };
 		630E28B71A44D8190001106F /* tiger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 630E28B61A44D8190001106F /* tiger.svg */; };
 		630E28B91A44D8280001106F /* tiger_compressed.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 630E28B81A44D8280001106F /* tiger_compressed.svgz */; };
@@ -58,6 +59,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		630A5D2E1A637DA90051D2D5 /* UIImage+SVG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+SVG.h"; path = "SVG Image/UIImage+SVG.h"; sourceTree = "<group>"; };
+		630A5D2F1A637DA90051D2D5 /* UIImage+SVG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+SVG.m"; path = "SVG Image/UIImage+SVG.m"; sourceTree = "<group>"; };
 		630E28AF1A44CB1E0001106F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		630E28B61A44D8190001106F /* tiger.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tiger.svg; sourceTree = "<group>"; };
 		630E28B81A44D8280001106F /* tiger_compressed.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = tiger_compressed.svgz; sourceTree = "<group>"; };
@@ -284,6 +287,8 @@
 			children = (
 				63A36B3018EF512F00AE444E /* JAMSVGImage.h */,
 				63A36B3118EF512F00AE444E /* JAMSVGImage.m */,
+				630A5D2E1A637DA90051D2D5 /* UIImage+SVG.h */,
+				630A5D2F1A637DA90051D2D5 /* UIImage+SVG.m */,
 			);
 			name = "SVG Image";
 			sourceTree = "<group>";
@@ -419,6 +424,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				630A5D301A637DA90051D2D5 /* UIImage+SVG.m in Sources */,
 				63A36B3518EF512F00AE444E /* JAMStyledBezierPathFactory.m in Sources */,
 				63D2068318EF501F00FAC851 /* main.m in Sources */,
 				63CA8DFC1A426F870095ECF3 /* JAMSVGUtilities.m in Sources */,

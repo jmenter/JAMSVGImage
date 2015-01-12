@@ -2,12 +2,6 @@
 #import "JAMViewController.h"
 #import "JAMSVGUtilities.h"
 
-@interface UITouch (Utilities)
-
-- (CGPoint)previousTouchDeltaInView:(UIView *)view;
-
-@end
-
 @implementation UITouch (Utilities)
 
 - (CGPoint)previousTouchDeltaInView:(UIView *)view;
