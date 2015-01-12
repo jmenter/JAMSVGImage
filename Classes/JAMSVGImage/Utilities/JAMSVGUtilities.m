@@ -39,6 +39,15 @@ CGFloat magnitude(CGPoint point)
 #pragma mark - Hella useful categories.
 
 @implementation NSString (Utilities)
+
+- (BOOL)doesContainString:(NSString *)aString;
+{
+    if ([self respondsToSelector:@selector(containsString:)]) {
+        return [self containsString:aString];
+    }
+    return [self rangeOfString:aString].location != NSNotFound;
+}
+
 - (NSString *)stringByTrimmingWhitespace;
 {
     return [self stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet];
@@ -64,11 +73,11 @@ CGFloat magnitude(CGPoint point)
 
 + (UIColor *)colorFromString:(NSString *)string;
 {
-    if ([string containsString:@"rgb"]) {
+    if ([string doesContainString:@"rgb"]) {
         return [UIColor colorFromRGBString:string];
-    } else if ([string containsString:@"#"]) {
+    } else if ([string doesContainString:@"#"]) {
         return [UIColor colorFromHexString:string];
-    } else if ([string containsString:@"hsl"]) {
+    } else if ([string doesContainString:@"hsl"]) {
         return [UIColor colorFromHSLString:string];
     }
     return nil;
@@ -95,10 +104,10 @@ CGFloat magnitude(CGPoint point)
 
 + (UIColor *)colorFromRGBString:(NSString *)rgbString;
 {
-    if (!rgbString || [rgbString containsString:@"none"]) { return nil; }
+    if (!rgbString || [rgbString doesContainString:@"none"]) { return nil; }
     
     NSScanner *scanner = [NSScanner scannerWithString:rgbString];
-    BOOL hasAlpha = [rgbString containsString:@"rgba"];
+    BOOL hasAlpha = [rgbString doesContainString:@"rgba"];
     if (![scanner scanString: hasAlpha ? @"rgba(" : @"rgb(" intoString:NULL]) { return nil; }
     
     float red = 0, green = 0, blue = 0, alpha = 1;
@@ -120,10 +129,10 @@ CGFloat magnitude(CGPoint point)
 
 + (UIColor *)colorFromHSLString:(NSString *)hslString;
 {
-    if (!hslString || [hslString containsString:@"none"]) { return nil; }
+    if (!hslString || [hslString doesContainString:@"none"]) { return nil; }
     
     NSScanner *scanner = [NSScanner scannerWithString:hslString];
-    BOOL hasAlpha = [hslString containsString:@"hsla"];
+    BOOL hasAlpha = [hslString doesContainString:@"hsla"];
     if (![scanner scanString: hasAlpha ? @"hsla(" : @"hsl(" intoString:NULL]) { return nil; }
     
     float hue = 0, saturation = 0, lightness = 0, alpha = 1;
