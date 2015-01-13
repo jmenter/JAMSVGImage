@@ -78,6 +78,17 @@ SVG Document Properties:
 - viewBox
 - width, height
 
+Note on using JAMSVGImage with Cocoapods
+----
+
+To use the IBDesignable and IBInspectable attributes in Interface Builder while bringing JAMSVGImage in via cocoapods requires a bit of hackery:
+
+1. Make sure you're using Cocoapods 0.36.0.beta.1 or newer
+2. Add use_frameworks! at the top of your Podfile to enable Framework opt-in
+3. Add all SVGs have to a "Copy Files" build phase for the JAMSVGImage framework in your Pods project, like so:
+
+![Pods Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/develop/podsInstructions.png)
+
 Etc.
 ----
 
