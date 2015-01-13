@@ -89,11 +89,10 @@ To use the IBDesignable and IBInspectable attributes in Interface Builder while 
 
 ![Pods Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/develop/podsInstructions.png)
 
+An alternative to this workaround is to just drag the class files directly to your project (make sure you link to "libz.dylb").
 Etc.
 ----
 
 Why not use vector PDF with Xcode 6+ and iOS 7+? Xcode's vector PDF functionality is limited to rendering @1x, @2x, and @3x bitmaps at their natural size at build time. JAMSVGImage is far more versatile since SVGs are rendered at arbitrary size at runtime.
 
 If you're using this in a production app, please let me know! I'd love to get feedback and figure out how to make it better. If there are any SVG parts you're missing out on you should fork, fix, and issue a pull request. The only supported SVG elements are "path" elements and associated styling information. JAMSVGImage passes all 19 of the SVG1.1 conformance tests for the "path" element.
-
-(IMPORTANT NOTE: for now, the IBDesignable and IBInspectable features do not work if you're installing this with Cocoapods: https://github.com/CocoaPods/CocoaPods/issues/2792 To work around this, you'll have to drag the class files directly into your project. The class files have no dependencies, but you will need to make sure to link to "libz.dylib". This will hopefully be fixed soon.)
