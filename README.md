@@ -89,7 +89,10 @@ To use the IBDesignable and IBInspectable attributes in Interface Builder while 
 
 ![Pods Example](https://raw.githubusercontent.com/jmenter/JAMSVGImage/develop/podsInstructions.png)
 
+Keep in mind that if you go this route, you will probably have to repeat these steps every time you run pod install.
+
 An alternative to this workaround is to just drag the class files directly to your project (make sure you link to "libz.dylb").
+
 Etc.
 ----
 
