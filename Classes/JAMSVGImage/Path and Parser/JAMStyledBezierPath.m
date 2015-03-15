@@ -56,7 +56,10 @@
         CGContextSetAlpha(context, self.opacity.floatValue);
     }
     if (self.gradient) {
-        [self fillWithGradient];
+        CGContextSaveGState(context);
+        [self.path addClip];
+        [self.gradient drawInCurrentContext];
+        CGContextRestoreGState(context);
     } else if (self.fillColor) {
         [self.fillColor setFill];
         [self.path fill];
@@ -66,38 +69,6 @@
         [self.path stroke];
     }
     CGContextRestoreGState(context);
-}
-
-- (void)fillWithGradient;
-{
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    NSMutableArray *colors = NSMutableArray.new;
-    CGFloat locations[self.gradient.colorStops.count];
-    for (JAMSVGGradientColorStop *stop in self.gradient.colorStops) {
-        [colors addObject:(id)stop.color.CGColor];
-        CGFloat location = ((JAMSVGGradientColorStop *)self.gradient.colorStops[[self.gradient.colorStops indexOfObject:stop]]).position;
-        locations[[self.gradient.colorStops indexOfObject:stop]] = location;
-    }
-    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFMutableArrayRef)colors, locations);
-    
-    CGContextSaveGState(context);
-    [self.path addClip];
-    
-    if (self.gradient.gradientTransform) {
-        CGContextConcatCTM(context, self.gradient.gradientTransform.CGAffineTransformValue);
-    }
-
-    if (self.gradient.gradientType == JAMSVGGradientTypeRadial) {
-        JAMSVGRadialGradient *radialGradient = (JAMSVGRadialGradient *)self.gradient;
-        CGContextDrawRadialGradient(context, gradient, radialGradient.position, 0.f, radialGradient.position, radialGradient.radius, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
-    } else if (self.gradient.gradientType == JAMSVGGradientTypeLinear) {
-        JAMSVGLinearGradient *linearGradient = (JAMSVGLinearGradient *)self.gradient;
-        CGContextDrawLinearGradient(context, gradient, linearGradient.startPosition, linearGradient.endPosition, kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
-    }
-    CGContextRestoreGState(UIGraphicsGetCurrentContext());
-    CGColorSpaceRelease(colorSpace);
-    CGGradientRelease(gradient);
 }
 
 - (BOOL)containsPoint:(CGPoint)point;

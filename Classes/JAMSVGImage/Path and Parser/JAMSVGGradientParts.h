@@ -24,6 +24,9 @@ typedef NS_ENUM(NSInteger, JAMSVGGradientType) {
 @property (nonatomic) NSMutableArray *colorStops;
 @property (nonatomic) NSValue *gradientTransform;
 @property (nonatomic, readonly) JAMSVGGradientType gradientType;
+
+- (void)drawInCurrentContext;
+
 @end
 
 @interface JAMSVGLinearGradient : JAMSVGGradient
