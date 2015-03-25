@@ -43,6 +43,14 @@
     }
 }
 
+- (void)setSvgImage:(JAMSVGImage *)svgImage
+{
+    if (_svgImage != svgImage) {
+        _svgImage = svgImage;
+        [self setNeedsDisplay];
+    }
+}
+
 - (void)layoutSubviews;
 {
     [self setNeedsDisplay];
