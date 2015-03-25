@@ -21,8 +21,15 @@
 
 @implementation JAMSVGImage
 
+static NSCache *imageCache = nil;
+
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        imageCache = [[NSCache alloc] init];
+    });
+    
     NSBundle *bundle;
 #if !TARGET_INTERFACE_BUILDER
     bundle = NSBundle.mainBundle;
@@ -33,7 +40,14 @@
     if (!fileName) {
         fileName = [bundle pathForResource:name ofType:@"svgz"];
     }
-    return [JAMSVGImage imageWithContentsOfFile:fileName];
+    
+    JAMSVGImage *image = [imageCache objectForKey:fileName];
+    if (!image) {
+        image = [JAMSVGImage imageWithContentsOfFile:fileName];
+        [imageCache setObject:image forKey:fileName];
+    }
+
+    return image;
 }
 
 + (JAMSVGImage *)imageWithContentsOfFile:(NSString *)path;
