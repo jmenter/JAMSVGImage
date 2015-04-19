@@ -86,7 +86,19 @@
 {
     JAMSVGGradientColorStop *colorStop = JAMSVGGradientColorStop.new;
     colorStop.position = [attributes floatForKey:@"offset"];
-    colorStop.color = [self parseStyleColor:attributes[@"style"]];
+    if (colorStop.position > 1) {
+        colorStop.position /= 100.f;
+    }
+    UIColor *stopColor;
+    if (attributes[@"stop-color"]) {
+        stopColor = [UIColor colorFromString:attributes[@"stop-color"]];
+        if (attributes[@"stop-opacity"]) {
+            stopColor = [stopColor colorWithAlphaComponent:[attributes[@"stop-opacity"] floatValue]];
+        }
+    } else if (attributes[@"style"]) {
+        stopColor = [self parseStyleColor:attributes[@"style"]];
+    }
+    colorStop.color = stopColor;
     [((JAMSVGGradient *)self.gradients.lastObject).colorStops addObject:colorStop];
 }
 
