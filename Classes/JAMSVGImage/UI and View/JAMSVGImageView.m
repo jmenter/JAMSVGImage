@@ -59,6 +59,11 @@
 
 - (void)drawRect:(CGRect)rect
 {
+    [self.svgImage drawInRect:[self destinationRectForRect:rect]];
+}
+
+- (CGRect)destinationRectForRect:(CGRect)rect;
+{
     CGRect destinationRect = CGRectZero;
     CGFloat scalingFactor = 1.f;
     CGFloat halfRectWidth = rect.size.width / 2.0;
@@ -129,7 +134,7 @@
             destinationRect = rect;
             break;
     }
-    [self.svgImage drawInRect:destinationRect];
+    return destinationRect;
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event;
