@@ -24,6 +24,35 @@
 
 @implementation JAMStyledBezierPath
 
+
+#pragma mark - NSCoding Methods
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+{
+    if (!(self = [super init])) { return nil; }
+    
+    self.path = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(path))];
+    self.fillColor = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(fillColor))];
+    self.strokeColor = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(strokeColor))];
+    self.gradient = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(gradient))];
+    self.affineTransforms = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(affineTransforms))];
+    self.opacity = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(opacity))];
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder;
+{
+    [aCoder encodeObject:self.path forKey:NSStringFromSelector(@selector(path))];
+    [aCoder encodeObject:self.fillColor forKey:NSStringFromSelector(@selector(fillColor))];
+    [aCoder encodeObject:self.strokeColor forKey:NSStringFromSelector(@selector(strokeColor))];
+    [aCoder encodeObject:self.gradient forKey:NSStringFromSelector(@selector(gradient))];
+    [aCoder encodeObject:self.affineTransforms forKey:NSStringFromSelector(@selector(affineTransforms))];
+    [aCoder encodeObject:self.opacity forKey:NSStringFromSelector(@selector(opacity))];
+}
+
+#pragma mark - Initializers
+
 + (instancetype)styledPathWithPath:(UIBezierPath *)path
                          fillColor:(UIColor *)fillColor
                        strokeColor:(UIColor *)strokeColor

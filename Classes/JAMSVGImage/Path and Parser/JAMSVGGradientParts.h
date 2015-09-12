@@ -19,12 +19,12 @@ typedef NS_ENUM(NSInteger, JAMSVGGradientType) {
 };
 
 /** The SVG Gradient object and its two subtypes */
-@interface JAMSVGGradient : NSObject
+@interface JAMSVGGradient : NSObject <NSCoding>
 @property (nonatomic) NSString *identifier;
 @property (nonatomic) NSMutableArray *colorStops;
 @property (nonatomic) NSValue *gradientTransform;
-@property (nonatomic, readonly) JAMSVGGradientType gradientType;
 
+- (JAMSVGGradientType)gradientType;
 - (void)drawInCurrentContext;
 
 @end
@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, JAMSVGGradientType) {
 @end
 
 /** ColorStop wraps up a color and position. */
-@interface JAMSVGGradientColorStop : NSObject
+@interface JAMSVGGradientColorStop : NSObject <NSCoding>
 - (id)initWithColor:(UIColor *)color position:(CGFloat)position;
 @property (nonatomic) UIColor *color;
 @property CGFloat position;

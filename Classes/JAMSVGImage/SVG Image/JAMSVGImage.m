@@ -15,6 +15,7 @@
 #import "JAMStyledBezierPath.h"
 
 @interface JAMSVGImage ()
+@property (nonatomic, readwrite) CGSize size;
 @property (nonatomic) NSArray *styledPaths;
 @property (nonatomic) CGRect viewBox;
 @end
@@ -22,6 +23,30 @@
 @implementation JAMSVGImage
 
 static NSCache *imageCache = nil;
+
+#pragma mark - NSCoding Methods
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+{
+    if (!(self = [super init])) { return nil; }
+    
+    self.size = [aDecoder decodeCGSizeForKey:NSStringFromSelector(@selector(size))];
+    self.scale = [aDecoder decodeFloatForKey:NSStringFromSelector(@selector(scale))];
+    self.styledPaths = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(styledPaths))];
+    self.viewBox = [aDecoder decodeCGRectForKey:NSStringFromSelector(@selector(viewBox))];
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder;
+{
+    [aCoder encodeCGSize:self.size forKey:NSStringFromSelector(@selector(size))];
+    [aCoder encodeFloat:self.scale forKey:NSStringFromSelector(@selector(scale))];
+    [aCoder encodeObject:self.styledPaths forKey:NSStringFromSelector(@selector(styledPaths))];
+    [aCoder encodeCGRect:self.viewBox forKey:NSStringFromSelector(@selector(viewBox))];
+}
+
+#pragma mark - Initializers
 
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 {

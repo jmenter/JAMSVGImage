@@ -14,6 +14,28 @@
 
 @implementation JAMSVGGradient
 
+#pragma mark - NSCoding Methods
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+{
+    if (!(self = [super init])) { return nil; }
+    
+    self.identifier = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(identifier))];
+    self.colorStops = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(colorStops))];
+    self.gradientTransform = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(gradientTransform))];
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder;
+{
+    [aCoder encodeObject:self.identifier forKey:NSStringFromSelector(@selector(identifier))];
+    [aCoder encodeObject:self.colorStops forKey:NSStringFromSelector(@selector(colorStops))];
+    [aCoder encodeObject:self.gradientTransform forKey:NSStringFromSelector(@selector(gradientTransform))];
+}
+
+#pragma mark - Initializers
+
 - (id)init;
 {
     if (!(self = [super init])) return nil;
@@ -70,6 +92,25 @@
 @end
 
 @implementation JAMSVGGradientColorStop
+
+#pragma mark - NSCoding Methods
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder;
+{
+    if (!(self = [super init])) { return nil; }
+    
+    self.color = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(color))];
+    self.position = [aDecoder decodeFloatForKey:NSStringFromSelector(@selector(position))];
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder;
+{
+    [aCoder encodeObject:self.color forKey:NSStringFromSelector(@selector(color))];
+    [aCoder encodeFloat:self.position forKey:NSStringFromSelector(@selector(position))];
+}
+
 
 - (id)initWithColor:(UIColor *)color position:(CGFloat)position;
 {

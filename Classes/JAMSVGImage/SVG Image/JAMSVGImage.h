@@ -13,7 +13,7 @@
 #import <UIKit/UIKit.h>
 
 /** JAMSVGImage class is used for drawing resolution-independent vector graphics from an SVG file or data. Use JAMSVGImage to draw in any graphics context (most likely your custom view's drawRect: method) or, use it to populate a JAMSVGImageView and enjoy resolution-independent graphics at any size anywhere in your app! */
-@interface JAMSVGImage : NSObject
+@interface JAMSVGImage : NSObject <NSCoding>
 
 /** Size of the SVG image, in points. This reflects the size of the 'viewBox' element of the SVG document. */
 @property (nonatomic, readonly) CGSize size;
@@ -22,8 +22,8 @@
 @property (nonatomic) CGFloat scale;
 
 /** Returns a CGImageRef or UIImage of the SVG image at the current scale. */
-@property (nonatomic, readonly) CGImageRef CGImage;
-@property (nonatomic, readonly) UIImage *image;
+- (CGImageRef)CGImage;
+- (UIImage *)image;
 
 /** Initializes a new SVG image from a file or data source. */
 + (JAMSVGImage *)imageNamed:(NSString *)name;
