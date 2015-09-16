@@ -105,7 +105,8 @@ static NSCache *imageCache = nil;
 {
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(self.size.width * self.scale,
                                                       self.size.height * self.scale), NO, 0.f);
-    [self drawInCurrentContext];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [self drawInContext:context];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
@@ -121,31 +122,29 @@ static NSCache *imageCache = nil;
     return self.image.CGImage;
 }
 
-- (void)drawInCurrentContext;
+- (void)drawInContext:(CGContextRef)context
 {
-    CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, -self.viewBox.origin.x, -self.viewBox.origin.y);
     CGContextScaleCTM(context, self.scale, self.scale);
     for (JAMStyledBezierPath *styledPath in self.styledPaths) {
-        [styledPath drawStyledPath];
+        [styledPath drawStyledPathInContext:context];
     }
     CGContextRestoreGState(context);
 }
 
-- (void)drawAtPoint:(CGPoint)point
+- (void)drawAtPoint:(CGPoint)point inContext:(CGContextRef)context
 {
-    [self drawInRect:CGRectMake(point.x, point.y, self.size.width, self.size.height)];
+    [self drawInRect:CGRectMake(point.x, point.y, self.size.width, self.size.height) inContext:context];
 }
 
-- (void)drawInRect:(CGRect)rect;
+- (void)drawInRect:(CGRect)rect inContext:(CGContextRef)context
 {
-    CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     CGContextTranslateCTM(context, rect.origin.x, rect.origin.y);
     CGContextScaleCTM(context, rect.size.width / self.size.width, rect.size.height / self.size.height);
 
-    [self drawInCurrentContext];
+    [self drawInContext:context];
     CGContextRestoreGState(context);
 }
 
@@ -165,7 +164,8 @@ static NSCache *imageCache = nil;
 - (UIImage *)imageAtSize:(CGSize)size;
 {
     UIGraphicsBeginImageContextWithOptions(size, NO, 0.f);
-    [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [self drawInRect:CGRectMake(0, 0, size.width, size.height) inContext:context];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;

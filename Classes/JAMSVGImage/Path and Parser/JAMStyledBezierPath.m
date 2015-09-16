@@ -72,9 +72,8 @@
     return styledPath;
 }
 
-- (void)drawStyledPath;
+- (void)drawStyledPathInContext:(CGContextRef)context
 {
-    CGContextRef context = UIGraphicsGetCurrentContext();
     if (!context) return;
 
     CGContextSaveGState(context);
@@ -85,17 +84,19 @@
         CGContextSetAlpha(context, self.opacity.floatValue);
     }
     if (self.gradient) {
-        CGContextSaveGState(context);
-        [self.path addClip];
-        [self.gradient drawInCurrentContext];
+        CGContextAddPath(context, self.path.CGPath);
+        CGContextClip(context);
+        [self.gradient drawInContext:context];
         CGContextRestoreGState(context);
     } else if (self.fillColor) {
-        [self.fillColor setFill];
-        [self.path fill];
+        CGContextSetFillColorWithColor(context, self.fillColor.CGColor);
+        CGContextAddPath(context, self.path.CGPath);
+        CGContextFillPath(context);
     }
     if (self.strokeColor && self.path.lineWidth > 0.f) {
-        [self.strokeColor setStroke];
-        [self.path stroke];
+        CGContextSetStrokeColorWithColor(context, self.strokeColor.CGColor);
+        CGContextAddPath(context, self.path.CGPath);
+        CGContextStrokePath(context);
     }
     CGContextRestoreGState(context);
 }
