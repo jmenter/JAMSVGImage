@@ -122,6 +122,19 @@ static NSCache *imageCache = nil;
     return self.image.CGImage;
 }
 
+- (void)drawInCurrentContext
+{
+    [self drawInContext:UIGraphicsGetCurrentContext()];
+}
+- (void)drawAtPoint:(CGPoint)point
+{
+    [self drawAtPoint:point inContext:UIGraphicsGetCurrentContext()];
+}
+- (void)drawInRect:(CGRect)rect
+{
+    [self drawInRect:rect inContext:UIGraphicsGetCurrentContext()];
+}
+
 - (void)drawInContext:(CGContextRef)context
 {
     CGContextSaveGState(context);

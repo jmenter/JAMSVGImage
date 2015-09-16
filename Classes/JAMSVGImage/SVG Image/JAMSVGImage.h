@@ -35,6 +35,10 @@
 - (void)drawAtPoint:(CGPoint)point inContext:(CGContextRef)context;
 - (void)drawInRect:(CGRect)rect inContext:(CGContextRef)context;
 
+- (void)drawInCurrentContext;
+- (void)drawAtPoint:(CGPoint)point;
+- (void)drawInRect:(CGRect)rect;
+
 /** Returns a Boolean value indicating whether the area enclosed by the path contains the specified point. */
 - (BOOL)containsPoint:(CGPoint)point;
 
