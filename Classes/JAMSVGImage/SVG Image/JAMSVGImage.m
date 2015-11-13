@@ -50,17 +50,22 @@ static NSCache *imageCache = nil;
 
 + (JAMSVGImage *)imageNamed:(NSString *)name;
 {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        imageCache = [[NSCache alloc] init];
-    });
-    
     NSBundle *bundle;
 #if !TARGET_INTERFACE_BUILDER
     bundle = NSBundle.mainBundle;
 #else
     bundle = [NSBundle bundleForClass:self.class];
 #endif
+    return [self imageNamed:name inBundle:bundle];
+}
+
++ (JAMSVGImage *)imageNamed:(NSString *)name inBundle:(NSBundle *)bundle
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        imageCache = [[NSCache alloc] init];
+    });
+    
     NSString *fileName = [bundle pathForResource:name ofType:@"svg"];
     if (!fileName) {
         fileName = [bundle pathForResource:name ofType:@"svgz"];
@@ -71,7 +76,7 @@ static NSCache *imageCache = nil;
         image = [JAMSVGImage imageWithContentsOfFile:fileName];
         [imageCache setObject:image forKey:fileName];
     }
-
+    
     return image;
 }
 
