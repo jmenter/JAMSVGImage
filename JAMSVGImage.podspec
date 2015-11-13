@@ -11,6 +11,7 @@ Pod::Spec.new do |s|
   s.author             = { "Jeff Menter" => "jmenter@gmail.com" }
   s.social_media_url = "http://twitter.com/jmenter"
   s.platform     = :ios, '6.0'
+  s.tvos.deployment_target = '9.0'
   s.source       = { :git => "https://github.com/jmenter/JAMSVGImage.git", :tag => s.version.to_s }
   s.source_files  = 'Classes', 'Classes/**/*.{h,m}'
   s.requires_arc = true
