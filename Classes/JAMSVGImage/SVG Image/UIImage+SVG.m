@@ -22,7 +22,7 @@
 
 + (UIImage *)imageFromSVGNamed:(NSString *)svgName inBundle:(NSBundle *)bundle
 {
-    return [JAMSVGImage imageNamed:svgName inBundle:bundle];
+    return [JAMSVGImage imageNamed:svgName inBundle:bundle].image;
 }
 
 + (UIImage *)imageFromSVGNamed:(NSString *)svgName atSize:(CGSize)size;
