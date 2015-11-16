@@ -20,6 +20,11 @@
     return [JAMSVGImage imageNamed:svgName].image;
 }
 
++ (UIImage *)imageFromSVGNamed:(NSString *)svgName inBundle:(NSBundle *)bundle
+{
+    return [JAMSVGImage imageNamed:svgName inBundle:bundle];
+}
+
 + (UIImage *)imageFromSVGNamed:(NSString *)svgName atSize:(CGSize)size;
 {
     return [[JAMSVGImage imageNamed:svgName] imageAtSize:size];
