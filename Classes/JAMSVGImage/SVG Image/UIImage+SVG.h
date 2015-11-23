@@ -17,6 +17,7 @@
 @interface UIImage (SVG)
 
 + (UIImage *)imageFromSVGNamed:(NSString *)svgName;
++ (UIImage *)imageFromSVGNamed:(NSString *)svgName inBundle:(NSBundle *)bundle;
 + (UIImage *)imageFromSVGNamed:(NSString *)svgName atSize:(CGSize)size;
 + (UIImage *)imageFromSVGNamed:(NSString *)svgName atScale:(CGFloat)scale;
 

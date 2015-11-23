@@ -27,6 +27,7 @@
 
 /** Initializes a new SVG image from a file or data source. */
 + (JAMSVGImage *)imageNamed:(NSString *)name;
++ (JAMSVGImage *)imageNamed:(NSString *)name inBundle:(NSBundle *)bundle;
 + (JAMSVGImage *)imageWithContentsOfFile:(NSString *)path;
 + (JAMSVGImage *)imageWithSVGData:(NSData *)svgData;
 
