@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, JAMSVGGradientType) {
 @property (nonatomic) NSValue *gradientTransform;
 
 - (JAMSVGGradientType)gradientType;
-- (void)drawInCurrentContext;
+- (void)drawInContext:(CGContextRef)context;
 
 @end
 

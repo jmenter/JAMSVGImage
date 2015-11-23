@@ -26,7 +26,7 @@
                            opacity:(NSNumber *)opacity;
 
 /** Draws the styled path in the current graphics context. */
-- (void)drawStyledPath;
+- (void)drawStyledPathInContext:(CGContextRef)context;
 
 /** Returns a Boolean value indicating whether the area enclosed by the path contains the specified point. */
 - (BOOL)containsPoint:(CGPoint)point;

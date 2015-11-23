@@ -55,9 +55,8 @@
     return JAMSVGGradientTypeUnknown;
 }
 
-- (void)drawInCurrentContext;
+- (void)drawInContext:(CGContextRef)context
 {
-    CGContextRef context = UIGraphicsGetCurrentContext();
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     NSMutableArray *colors = NSMutableArray.new;
     CGFloat locations[self.colorStops.count];

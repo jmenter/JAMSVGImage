@@ -59,7 +59,8 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    [self.svgImage drawInRect:[self destinationRectForRect:rect]];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [self.svgImage drawInRect:[self destinationRectForRect:rect] inContext:context];
 }
 
 - (CGRect)destinationRectForRect:(CGRect)rect;

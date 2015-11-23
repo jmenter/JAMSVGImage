@@ -30,7 +30,11 @@
 + (JAMSVGImage *)imageWithContentsOfFile:(NSString *)path;
 + (JAMSVGImage *)imageWithSVGData:(NSData *)svgData;
 
-/** Draws the SVG image either in the current context, or at a specific point, or in a specific rect. */
+/** Draws the SVG image either in the context, or at a specific point, or in a specific rect. */
+- (void)drawInContext:(CGContextRef)context;
+- (void)drawAtPoint:(CGPoint)point inContext:(CGContextRef)context;
+- (void)drawInRect:(CGRect)rect inContext:(CGContextRef)context;
+
 - (void)drawInCurrentContext;
 - (void)drawAtPoint:(CGPoint)point;
 - (void)drawInRect:(CGRect)rect;
