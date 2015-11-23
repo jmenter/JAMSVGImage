@@ -355,7 +355,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = JAM;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Jeff Menter";
 			};
 			buildConfigurationList = 63D2066E18EF501F00FAC851 /* Build configuration list for PBXProject "JAMSVGImage" */;
@@ -471,6 +471,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -534,6 +535,7 @@
 				GCC_PREFIX_HEADER = "JAMSVGImage/JAMSVGImage-Prefix.pch";
 				INFOPLIST_FILE = "JAMSVGImage/JAMSVGImage-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -548,6 +550,7 @@
 				GCC_PREFIX_HEADER = "JAMSVGImage/JAMSVGImage-Prefix.pch";
 				INFOPLIST_FILE = "JAMSVGImage/JAMSVGImage-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
