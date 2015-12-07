@@ -84,6 +84,7 @@
         CGContextSetAlpha(context, self.opacity.floatValue);
     }
     if (self.gradient) {
+        CGContextSaveGState(context);
         CGContextAddPath(context, self.path.CGPath);
         CGContextClip(context);
         [self.gradient drawInContext:context];
