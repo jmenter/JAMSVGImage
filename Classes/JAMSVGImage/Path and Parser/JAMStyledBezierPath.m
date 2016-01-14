@@ -95,6 +95,18 @@
     }
     if (self.strokeColor && self.path.lineWidth > 0.f) {
         CGContextSetStrokeColorWithColor(context, self.strokeColor.CGColor);
+        CGContextSetLineWidth(context, self.path.lineWidth);
+        CGContextSetLineJoin(context, self.path.lineJoinStyle);
+        CGContextSetLineCap(context, self.path.lineCapStyle);
+        
+        NSInteger lineDashCount = 0;
+        [self.path getLineDash:NULL count:&lineDashCount phase:NULL];
+        if (lineDashCount > 0) {
+            CGFloat *dashArr = malloc(lineDashCount * sizeof(CGFloat));
+            [self.path getLineDash:dashArr count:NULL phase:NULL];
+            CGContextSetLineDash(context, 0, dashArr, lineDashCount);
+        }
+        
         CGContextAddPath(context, self.path.CGPath);
         CGContextStrokePath(context);
     }
