@@ -21,6 +21,7 @@
 + (instancetype)styledPathWithPath:(UIBezierPath *)path
                          fillColor:(UIColor *)fillColor
                        strokeColor:(UIColor *)strokeColor
+                        strokeWidth:(CGFloat)strokeWidth
                           gradient:(JAMSVGGradient *)gradient
                   affineTransforms:(NSArray *)transforms
                            opacity:(NSNumber *)opacity;

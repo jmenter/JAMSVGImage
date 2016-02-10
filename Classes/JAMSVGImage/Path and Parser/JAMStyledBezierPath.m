@@ -20,6 +20,7 @@
 @property (nonatomic) JAMSVGGradient *gradient;
 @property (nonatomic) NSArray *affineTransforms;
 @property (nonatomic) NSNumber *opacity;
+@property (nonatomic) CGFloat strokeWidth;
 @end
 
 @implementation JAMStyledBezierPath
@@ -56,6 +57,7 @@
 + (instancetype)styledPathWithPath:(UIBezierPath *)path
                          fillColor:(UIColor *)fillColor
                        strokeColor:(UIColor *)strokeColor
+                        strokeWidth:(CGFloat)strokeWidth
                           gradient:(JAMSVGGradient *)gradient
                   affineTransforms:(NSArray *)transforms
                            opacity:(NSNumber *)opacity;
@@ -68,6 +70,7 @@
     styledPath.gradient = gradient;
     styledPath.affineTransforms = transforms;
     styledPath.opacity = opacity;
+    styledPath.strokeWidth = strokeWidth;
     
     return styledPath;
 }
@@ -94,6 +97,9 @@
         CGContextFillPath(context);
     }
     if (self.strokeColor && self.path.lineWidth > 0.f) {
+        if (self.strokeWidth) {
+          CGContextSetLineWidth(context, self.strokeWidth);
+        }
         CGContextSetStrokeColorWithColor(context, self.strokeColor.CGColor);
         CGContextAddPath(context, self.path.CGPath);
         CGContextStrokePath(context);

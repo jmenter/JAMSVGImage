@@ -21,6 +21,7 @@
 @property (nonatomic) UIBezierPath *path;
 @property (nonatomic) UIColor *fillColor;
 @property (nonatomic) UIColor *strokeColor;
+@property (nonatomic) CGFloat strokeWidth;
 @property (nonatomic) JAMSVGGradient *gradient;
 @property (nonatomic) NSValue *transform;
 @property (nonatomic) NSNumber *opacity;
@@ -323,10 +324,12 @@
     NSString *strokeColorStringValue = self.webColors[strokeColorString];
     UIColor *fillColor = fillColorStringValue ? [UIColor colorFromString:fillColorStringValue] : [attributes fillColorForKey:@"fill"];
     UIColor *strokeColor = strokeColorStringValue ? [UIColor colorFromString:strokeColorStringValue] : [attributes strokeColorForKey:@"stroke"];
+    CGFloat strokeWidth = [attributes strokeWeightForKey:@"stroke-width"];
     
     return [JAMStyledBezierPath styledPathWithPath:[self applyStrokeAttributes:attributes toPath:path]
                                          fillColor:fillColor
                                        strokeColor:strokeColor
+                                        strokeWidth: strokeWidth
                                           gradient:[self gradientForFillURL:attributes[@"fill"]]
                                   affineTransforms:transforms
                                            opacity:[self opacityFromAttributes:attributes]];
