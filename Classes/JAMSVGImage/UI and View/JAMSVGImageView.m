@@ -10,7 +10,7 @@
  
  */
 
-#import "JAMSvgImageView.h"
+#import "JAMSVGImageView.h"
 
 @implementation JAMSVGImageView
 

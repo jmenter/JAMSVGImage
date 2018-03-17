@@ -301,7 +301,7 @@ CGFloat magnitude(CGPoint point)
     NSScanner *floatScanner = [NSScanner scannerWithString:self[key]];
     
     while (!floatScanner.isAtEnd) {
-        a = 1, b = 0, c = 0, d = 1, tx = 0, ty = 0, angle = 0;
+        a = 1; b = 0; c = 0; d = 1; tx = 0; ty = 0; angle = 0;
         if ([floatScanner scanString:@"matrix(" intoString:NULL]) {
             [floatScanner scanFloatAndAdvance:&a];
             [floatScanner scanFloatAndAdvance:&b];
