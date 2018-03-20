@@ -42,16 +42,16 @@
 - (void)layoutSubviews;
 {
     [super layoutSubviews];
-    if (self.normalSvg) {
+    if (self.normalSvg && !CGSizeEqualToSize(self.bounds.size, [self backgroundImageForState:UIControlStateNormal].size)) {
         [self setBackgroundImage:[[JAMSVGImage imageNamed:self.normalSvg] imageAtSize:self.bounds.size] forState:UIControlStateNormal];
     }
-    if (self.highlightedSvg) {
+    if (self.highlightedSvg && !CGSizeEqualToSize(self.bounds.size, [self backgroundImageForState:UIControlStateHighlighted].size)) {
         [self setBackgroundImage:[[JAMSVGImage imageNamed:self.highlightedSvg] imageAtSize:self.bounds.size] forState:UIControlStateHighlighted];
     }
-    if (self.disabledSvg) {
+    if (self.disabledSvg && !CGSizeEqualToSize(self.bounds.size, [self backgroundImageForState:UIControlStateDisabled].size)) {
         [self setBackgroundImage:[[JAMSVGImage imageNamed:self.disabledSvg] imageAtSize:self.bounds.size] forState:UIControlStateDisabled];
     }
-    if (self.selectedSvg) {
+    if (self.selectedSvg && !CGSizeEqualToSize(self.bounds.size, [self backgroundImageForState:UIControlStateSelected].size)) {
         [self setBackgroundImage:[[JAMSVGImage imageNamed:self.selectedSvg] imageAtSize:self.bounds.size] forState:UIControlStateSelected];
     }
 }
