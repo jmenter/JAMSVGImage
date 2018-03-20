@@ -79,12 +79,7 @@
     self.rightMaskLayer.path = [UIBezierPath bezierPathWithRect:CGRectMake(xPosition, 0, self.bounds.size.width - xPosition, self.bounds.size.height)].CGPath;
 }
 
-- (void)setContentMode:(UIViewContentMode)contentMode;
-{
-    [super setContentMode:contentMode];
-    self.leftImageView.contentMode = self.rightImageView.contentMode = contentMode;
-}
-
+- (void)setContentMode:(UIViewContentMode)contentMode; { self.leftImageView.contentMode = self.rightImageView.contentMode = super.contentMode = contentMode; }
 - (void)setLeftImage:(UIImage *)leftImage; { self.leftImageView.image = leftImage; }
 - (void)setRightImage:(UIImage *)rightImage; { self.rightImageView.image = rightImage; }
 - (UIImage *)leftImage; { return self.leftImageView.image; }
