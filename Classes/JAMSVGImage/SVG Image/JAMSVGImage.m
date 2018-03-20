@@ -178,12 +178,18 @@
 
 - (UIImage *)imageAtSize:(CGSize)size;
 {
-    UIGraphicsBeginImageContextWithOptions(size, NO, 1.f);
+    return [self imageAtSize:size scale:0.f];
+}
+
+- (UIImage *)imageAtSize:(CGSize)size scale:(CGFloat)scale;
+{
+    UIGraphicsBeginImageContextWithOptions(size, NO, scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
     [self drawInRect:CGRectMake(0, 0, size.width, size.height) inContext:context];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
+
 }
 
 @end
