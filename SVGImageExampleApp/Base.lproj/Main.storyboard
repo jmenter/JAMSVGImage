@@ -22,48 +22,56 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="apple_jpg" translatesAutoresizingMaskIntoConstraints="NO" id="N1x-hc-Ptl">
-                                <rect key="frame" x="16" y="20" width="100" height="100"/>
+                                <rect key="frame" x="20" y="20" width="100" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="apple_png" translatesAutoresizingMaskIntoConstraints="NO" id="fbB-ly-mGo">
-                                <rect key="frame" x="124" y="20" width="100" height="100"/>
+                                <rect key="frame" x="128" y="20" width="100" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m3V-q1-s4m" userLabel="apple Image View" customClass="JAMSVGImageView">
-                                <rect key="frame" x="232" y="20" width="100" height="100"/>
+                                <rect key="frame" x="236" y="20" width="100" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="apple"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tiger_jpg" translatesAutoresizingMaskIntoConstraints="NO" id="PP6-g4-EeV">
-                                <rect key="frame" x="16" y="128" width="100" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tiger_png" translatesAutoresizingMaskIntoConstraints="NO" id="cd1-AK-lFs">
-                                <rect key="frame" x="124" y="128" width="100" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <view contentMode="TopLeft" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sGo-7C-bVG" userLabel="tiger Image View" customClass="JAMSVGImageView">
-                                <rect key="frame" x="232" y="128" width="100" height="100"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <view contentMode="scaleAspectFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BLY-Y9-0ny" userLabel="tiger Image View" customClass="JAMSVGImageView">
+                                <rect key="frame" x="20" y="236" width="374" height="442"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="tiger"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xfM-P0-jVx">
-                                <rect key="frame" x="16" y="686" width="382" height="30"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <state key="normal" title="Run Tests"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xfM-P0-jVx" customClass="JAMSVGButton">
+                                <rect key="frame" x="157" y="686" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="7ZM-3P-Was"/>
+                                    <constraint firstAttribute="height" constant="30" id="90C-ke-4nI"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Run Tests">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="normalSvg" value="fancyButton"/>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <segue destination="gcI-K5-Ob9" kind="presentation" id="Hdh-Sk-6qp"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleAspectFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BLY-Y9-0ny" userLabel="tiger Image View" customClass="JAMSVGImageView">
-                                <rect key="frame" x="16" y="236" width="382" height="442"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tiger_jpg" translatesAutoresizingMaskIntoConstraints="NO" id="PP6-g4-EeV">
+                                <rect key="frame" x="20" y="128" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tiger_png" translatesAutoresizingMaskIntoConstraints="NO" id="cd1-AK-lFs">
+                                <rect key="frame" x="128" y="128" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <view contentMode="TopLeft" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sGo-7C-bVG" userLabel="tiger Image View" customClass="JAMSVGImageView">
+                                <rect key="frame" x="236" y="128" width="100" height="100"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="svgName" value="tiger"/>
@@ -71,6 +79,10 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="xfM-P0-jVx" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="OwT-A4-8Gz"/>
+                            <constraint firstItem="wk6-GL-tVs" firstAttribute="top" secondItem="xfM-P0-jVx" secondAttribute="bottom" constant="20" id="wN5-TX-M3H"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="tigerImageView" destination="BLY-Y9-0ny" id="ofD-9r-xHQ"/>
@@ -78,7 +90,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="24.800000000000001" y="29.23538230884558"/>
+            <point key="canvasLocation" x="24.637681159420293" y="28.532608695652176"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bFz-L0-9I4">

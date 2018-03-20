@@ -25,8 +25,7 @@
 		637837FF205D6DF2003C612C /* UIImage+SVG.m in Sources */ = {isa = PBXBuildFile; fileRef = 637837F3205D6DB8003C612C /* UIImage+SVG.m */; };
 		637838B2205D6FA0003C612C /* apple.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 637838A7205D6F94003C612C /* apple.svgz */; };
 		637838B6205D7006003C612C /* fancyButton.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 637838B3205D6FFF003C612C /* fancyButton.svgz */; };
-		637838B7205D7006003C612C /* tiger_compressed.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 637838B4205D6FFF003C612C /* tiger_compressed.svgz */; };
-		637838B8205D7006003C612C /* tiger.svg in Resources */ = {isa = PBXBuildFile; fileRef = 637838B5205D6FFF003C612C /* tiger.svg */; };
+		637838B7205D7006003C612C /* tiger.svgz in Resources */ = {isa = PBXBuildFile; fileRef = 637838B4205D6FFF003C612C /* tiger.svgz */; };
 		63EADE1B205F1339001151A6 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63EADE1A205F1339001151A6 /* MainViewController.m */; };
 		63EADE2F205F187F001151A6 /* paths-data-20-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63EADE1C205F187E001151A6 /* paths-data-20-f.svg */; };
 		63EADE30205F187F001151A6 /* paths-data-19-f.svg in Resources */ = {isa = PBXBuildFile; fileRef = 63EADE1D205F187E001151A6 /* paths-data-19-f.svg */; };
@@ -82,8 +81,7 @@
 		637837F6205D6DB8003C612C /* JAMSVGImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JAMSVGImage.m; sourceTree = "<group>"; };
 		637838A7205D6F94003C612C /* apple.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = apple.svgz; sourceTree = "<group>"; };
 		637838B3205D6FFF003C612C /* fancyButton.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = fancyButton.svgz; sourceTree = "<group>"; };
-		637838B4205D6FFF003C612C /* tiger_compressed.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = tiger_compressed.svgz; sourceTree = "<group>"; };
-		637838B5205D6FFF003C612C /* tiger.svg */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = tiger.svg; sourceTree = "<group>"; };
+		637838B4205D6FFF003C612C /* tiger.svgz */ = {isa = PBXFileReference; lastKnownFileType = file; path = tiger.svgz; sourceTree = "<group>"; };
 		63EADE19205F1339001151A6 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		63EADE1A205F1339001151A6 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		63EADE1C205F187E001151A6 /* paths-data-20-f.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "paths-data-20-f.svg"; sourceTree = "<group>"; };
@@ -118,7 +116,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		636B0991205EF9FB00CA68BE /* Path Conformance */ = {
+		636B0991205EF9FB00CA68BE /* Path Conformance SVGs */ = {
 			isa = PBXGroup;
 			children = (
 				63EADE29205F187F001151A6 /* paths-data-01-t.svg */,
@@ -141,7 +139,7 @@
 				63EADE1D205F187E001151A6 /* paths-data-19-f.svg */,
 				63EADE1C205F187E001151A6 /* paths-data-20-f.svg */,
 			);
-			path = "Path Conformance";
+			path = "Path Conformance SVGs";
 			sourceTree = "<group>";
 		};
 		637837BD205D6D17003C612C = {
@@ -174,7 +172,7 @@
 				636B096A205ECFDF00CA68BE /* SplitImageView.h */,
 				636B096B205ECFDF00CA68BE /* SplitImageView.m */,
 				637838A1205D6F8B003C612C /* Example Images */,
-				636B0991205EF9FB00CA68BE /* Path Conformance */,
+				636B0991205EF9FB00CA68BE /* Path Conformance SVGs */,
 				637837D2205D6D17003C612C /* Assets.xcassets */,
 				637837D7205D6D17003C612C /* Info.plist */,
 				637837D4205D6D17003C612C /* LaunchScreen.storyboard */,
@@ -252,8 +250,7 @@
 			isa = PBXGroup;
 			children = (
 				637838B3205D6FFF003C612C /* fancyButton.svgz */,
-				637838B4205D6FFF003C612C /* tiger_compressed.svgz */,
-				637838B5205D6FFF003C612C /* tiger.svg */,
+				637838B4205D6FFF003C612C /* tiger.svgz */,
 				637838A7205D6F94003C612C /* apple.svgz */,
 			);
 			path = "Example Images";
@@ -323,8 +320,7 @@
 				63EADE38205F187F001151A6 /* paths-data-06-t.svg in Resources */,
 				63EADE2F205F187F001151A6 /* paths-data-20-f.svg in Resources */,
 				63EADE3A205F187F001151A6 /* paths-data-16-t.svg in Resources */,
-				637838B7205D7006003C612C /* tiger_compressed.svgz in Resources */,
-				637838B8205D7006003C612C /* tiger.svg in Resources */,
+				637838B7205D7006003C612C /* tiger.svgz in Resources */,
 				63EADE33205F187F001151A6 /* paths-data-07-t.svg in Resources */,
 				63EADE34205F187F001151A6 /* paths-data-14-t.svg in Resources */,
 				63EADE31205F187F001151A6 /* paths-data-12-t.svg in Resources */,
