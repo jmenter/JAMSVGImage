@@ -15,4 +15,11 @@
                                            location.x - self.tigerImageView.frame.origin.x, location.y - self.tigerImageView.frame.origin.y);
 }
 
+- (IBAction)pdfTap:(UITapGestureRecognizer *)sender;
+{
+    CGRect senderFrame = sender.view.frame;
+    senderFrame.size.height += 1;
+    sender.view.frame = senderFrame;
+}
+
 @end
